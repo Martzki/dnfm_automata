@@ -1,0 +1,231 @@
+character:
+  &evangelist Evangelist:
+    id:
+      - OALeave
+    skill:
+      &evangelist_attack attack:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &christening_light christening_light:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &crux_of_victoria crux_of_victoria:
+        type: swipe_up
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &grand_crashing_cross grand_crashing_cross:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &purifying_lightning purifying_lightning:
+        type: swipe_down
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &saint_wall saint_wall:
+        type: touch
+        duration: 0.5
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &shining_cross shining_cross:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &spear_of_victory spear_of_victory:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &valiant_aria valiant_aria:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+  &hell_bringer HellBringer:
+    id:
+      - 典狱长牢马
+    skill:
+      &hell_bringer_attack attack:
+        type: touch
+        duration: 1
+        cool_down: 0
+        exec_limit:
+          min_distance: 50
+      &blood_sword blood_sword:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &bloody_twister bloody_twister:
+        type: touch
+        duration: 5
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &derange derange:
+        type: swipe_right
+        duration: 0.8
+        cool_down: 1
+        delay: 0.2
+        exec_limit:
+          min_distance: 10
+      &enrage enrage:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &extreme_overkill extreme_overkill:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &mountainous_wheel mountainous_wheel:
+        type: touch
+        duration: 0.5
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &outrage_break outrage_break:
+        type: touch
+        duration: 2.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &raging_fury raging_fury:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      &thirst thirst:
+        type: swipe_left
+        duration: 0.5
+        cool_down: 1
+        delay: 0.2
+        exec_limit:
+          min_distance: 10
+scenario:
+  base:
+    loading:
+      key_img:
+        - res/scenario/base/loading_0.png
+  dungeon:
+    bwanga:
+      room_0:
+        key_img:
+          - res/scenario/dungeon/bwanga/room_0_*.png
+      room_1:
+        key_img:
+          - res/scenario/dungeon/bwanga/room_1_*.png
+      room_2:
+        key_img:
+          - res/scenario/dungeon/bwanga/room_2_*.png
+      room_3:
+        key_img:
+          - res/scenario/dungeon/bwanga/room_3_*.png
+      room_4:
+        key_img:
+          - res/scenario/dungeon/bwanga/room_4_*.png
+      room_5:
+        key_img:
+          - res/scenario/dungeon/bwanga/room_5_*.png
+      room_6:
+        key_img:
+          - res/scenario/dungeon/bwanga/room_6_*.png
+      room_7:
+        key_img:
+          - res/scenario/dungeon/bwanga/room_7_*.png
+      room_8:
+        key_img:
+          - res/scenario/dungeon/bwanga/room_8_*.png
+#      room_9:
+#        key_img:
+#        - res/scenario/dungeon/bwanga/room_9_*.png
+ui:
+  base:
+    move:
+      coordinate:
+        - 311
+        - 791
+  skill:
+    *evangelist :
+      *evangelist_attack :
+        key_img:
+          - res/ui/skill/evangelist/attack.png
+      *christening_light :
+        key_img:
+          - res/ui/skill/evangelist/christening_light.png
+      *crux_of_victoria :
+        key_img:
+          - res/ui/skill/evangelist/crux_of_victoria.png
+      *grand_crashing_cross :
+        key_img:
+          - res/ui/skill/evangelist/grand_crashing_cross*.png
+      *purifying_lightning :
+        coordinate:
+          - 1860
+          - 926
+        key_img:
+          - res/ui/skill/evangelist/purifying_lightning.png
+      *saint_wall :
+        key_img:
+          - res/ui/skill/evangelist/saint_wall.png
+      *shining_cross :
+        key_img:
+          - res/ui/skill/evangelist/shining_cross.png
+      *spear_of_victory :
+        key_img:
+          - res/ui/skill/evangelist/spear_of_victory.png
+      *valiant_aria :
+        key_img:
+          - res/ui/skill/evangelist/valiant_aria.png
+    *hell_bringer :
+      *hell_bringer_attack :
+        key_img:
+          - res/ui/skill/hell_bringer/attack*.png
+      *blood_sword :
+        key_img:
+          - res/ui/skill/hell_bringer/blood_sword.png
+      *bloody_twister :
+        key_img:
+          - res/ui/skill/hell_bringer/bloody_twister.png
+      *derange :
+        key_img:
+          - res/ui/skill/hell_bringer/derange*.png
+      *enrage :
+        key_img:
+          - res/ui/skill/hell_bringer/enrage.png
+      *extreme_overkill :
+        key_img:
+          - res/ui/skill/hell_bringer/extreme_overkill.png
+      *mountainous_wheel :
+        key_img:
+          - res/ui/skill/hell_bringer/mountainous_wheel.png
+      *outrage_break :
+        key_img:
+          - res/ui/skill/hell_bringer/outrage_break.png
+      *raging_fury :
+        key_img:
+          - res/ui/skill/hell_bringer/raging_fury.png
+      *thirst :
+        key_img:
+          - res/ui/skill/hell_bringer/thirst*.png
