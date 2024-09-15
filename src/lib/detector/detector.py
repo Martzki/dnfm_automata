@@ -1,4 +1,4 @@
-from paddleocr import PaddleOCR
+# from paddleocr import PaddleOCR
 
 from src.lib.detector.onnx import *
 
@@ -24,7 +24,8 @@ class BfMatchKpDes(object):
 
 class Detector(object):
     def __init__(self, weights):
-        self.ocr = PaddleOCR(use_angle_cls=True, lang="ch", show_log=False)
+        # self.ocr = PaddleOCR(use_angle_cls=True, lang="ch", show_log=False)
+        self.ocr = None
         self.sift = cv2.SIFT_create()
         self.bf_matcher = cv2.BFMatcher()
         self.model = Onnx(weights)

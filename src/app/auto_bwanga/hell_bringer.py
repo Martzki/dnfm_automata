@@ -1,7 +1,6 @@
 from src.app.auto_bwanga.room_handler import *
 from src.lib.character.character import CharacterClass
 from src.lib.character.hell_bringer import HellBringer
-from src.lib.dungeon.dungeon import DungeonRoomHandler
 from src.lib.dungeon.strategy import BattleStrategy
 
 default_battle_strategy = BattleStrategy()
@@ -165,9 +164,9 @@ class Room7Handler(BwangaRoom7Handler):
         self.move_to_next_room(hell_bringer, enter_times)
 
 
-class Room8Handler(DungeonRoomHandler):
+class Room8Handler(BwangaRoom8Handler):
     def __init__(self, detector, last_frame, detect_room):
-        super().__init__(8, CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer):
         if enter_times > 1:
@@ -177,9 +176,6 @@ class Room8Handler(DungeonRoomHandler):
         hell_bringer.exec_skill(hell_bringer.outrage_break)
         hell_bringer.move(0, 0.1)
         hell_bringer.exec_skill(hell_bringer.attack, 3)
-
-    def post_handler(self, enter_times, hell_bringer: HellBringer):
-        pass
 
 
 # class Room9Handler(DungeonRoomHandler):

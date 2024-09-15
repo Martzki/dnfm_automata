@@ -21,7 +21,6 @@ class Room0Handler(BwangaRoom0Handler):
 
     def post_handler(self, enter_times, evangelist: Evangelist):
         if enter_times == 1:
-            print("cool down")
             evangelist.wait_skill_cool_down(evangelist.saint_wall)
             evangelist.wait_skill_cool_down(evangelist.purifying_lightning)
 

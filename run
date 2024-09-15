@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DEVICE="R3CN509VDWH"
+CHARACTER=${1}
+
+#conda activate dnf
+
+export PYTHONPATH=/workspace/bwanga
+
+trap "pkill -f bwanga" 2
+
+cd src/app/auto_bwanga/
+python3 bwanga.py ${DEVICE} ${CHARACTER}
+

@@ -2,6 +2,10 @@ import glob
 
 import cv2
 
+from src.common.log import Logger
+
+LOGGER = Logger(__name__).logger
+
 
 class Scenario(object):
     def __init__(self, name, key_img_list=None, key_text_list=None):
@@ -14,7 +18,7 @@ class Scenario(object):
         self.key_img_list = []
         for key_img in key_img_list:
             for each in glob.glob(key_img):
-                print("add key img {}".format(each))
+                LOGGER.debug("add key img {}".format(each))
                 self.key_img_list.append(cv2.imread(each))
         self.key_text_list = key_text_list
 

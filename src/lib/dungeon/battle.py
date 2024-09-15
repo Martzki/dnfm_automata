@@ -130,7 +130,7 @@ class BattleMetadata(object):
 
     def has_open_gate(self):
         return (self.left_gate and self.left_gate.is_open) or (self.right_gate and self.right_gate.is_open) or (
-                    self.up_gate and self.up_gate.is_open) or (self.down_gate and self.down_gate.is_open)
+                self.up_gate and self.up_gate.is_open) or (self.down_gate and self.down_gate.is_open)
 
     @staticmethod
     def get_distance(src, dst, vertical_only=False):

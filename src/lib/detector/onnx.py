@@ -2,7 +2,6 @@ import onnxruntime
 import torch.nn as nn
 from ultralytics.utils.plotting import Annotator, colors
 
-from src.common.log import Logger
 from src.lib.detector.yolo import *
 
 LOGGER = Logger(__name__).logger
@@ -51,7 +50,7 @@ class OnnxModel(nn.Module):
         # warmup_types = self.onnx
         if self.device.type != "cpu":
             im = torch.empty(*imgsz, dtype=torch.half if self.fp16 else torch.float, device=self.device)  # input
-            for _ in range(2 if self.jit else 1):  #
+            for _ in range(2):  #
                 self.forward(im)  # warmup
 
 
@@ -88,7 +87,7 @@ class Onnx(object):
             agnostic_nms=False,  # class-agnostic NMS
     ):
         seen, windows, dt = 0, [], (
-        Profile(device=self.device), Profile(device=self.device), Profile(device=self.device))
+            Profile(device=self.device), Profile(device=self.device), Profile(device=self.device))
 
         im = letterbox(im0s, self.imgsz, stride=self.stride, auto=False)[0]  # padded resize
         im = im.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB

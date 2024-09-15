@@ -473,3 +473,35 @@ class BwangaRoom7Handler(DungeonRoomHandler):
             LOGGER.info("room changed, return")
 
             return
+
+
+class BwangaRoom8Handler(DungeonRoomHandler):
+    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
+        super().__init__(8, character_class, detector, last_frame, detect_room, strategy)
+
+    def post_handler(self, enter_times, character: Character):
+        # Wait finish.
+        while True:
+            finish = self.detector.img_match(self.last_frame(), [self.finish_img])
+            if finish.confidence > 0.9:
+                break
+
+        # Pick up items.
+        while True:
+            frame = self.last_frame()
+            meta = BattleMetadata(frame, self.detector)
+
+            if not meta.has_item():
+                break
+
+            self.pick_items(character, meta)
+
+        # Re-enter dungeon.
+        while True:
+            frame = self.last_frame()
+            re_enter = self.detector.img_match(frame, [self.re_enter_img])
+            if finish.confidence > 0.9:
+                break
+
+        LOGGER.info("re-enter dungeon")
+        character.device.touch(re_enter.center)

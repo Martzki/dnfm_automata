@@ -16,7 +16,8 @@ class DungeonRoomHandler(object):
         self.detect_room = detect_room
         self.last_frame = last_frame
         self.finish_img = cv2.imread('res/scenario/base/dungeon_finish.png')
-        self.in_dungeon_img = cv2.imread('res/scenario/base/in_dungeon.png')
+        self.in_dungeon_img = cv2.imread('res/scenario/base/in_dungeon_2.png')
+        self.re_enter_img = cv2.imread('res/scenario/base/re_enter.png')
         self.search_angle = (20, 270, 160, 270)
         self.search_angle_index = 0
         if strategy is None:
@@ -61,11 +62,11 @@ class DungeonRoomHandler(object):
 
         if skill.exec_limit.min_distance < distance:
             duration = BattleMetadata.get_move_duration(distance)
-            move_duration = 0.5 if duration > 0.5 else duration
+            move_duration = 1 if duration > 1 else duration
             LOGGER.info(f"Move toward monster with {move_duration}")
             character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()),
                                     move_duration)
-            return duration > 0.5
+            return duration > 1
         else:
             LOGGER.info(f"Change direction")
             character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()), 0.1)
@@ -108,8 +109,7 @@ class DungeonRoomHandler(object):
             LOGGER.info(f"Move toward item from {meta.character.coordinate()} to {item.coordinate()}")
             character.move_toward(meta.character.coordinate(), item.coordinate(), self.room_changed)
         else:
-            character.move(0, 0.3)
-            character.move(180, 0.3)
+            self.refind_character(character)
 
     def maintain_equipments(self):
         pass
@@ -210,7 +210,7 @@ class DungeonRoom(object):
 
         handler = self.handler_map[character.character_class]
         handler.pre_handler(self.enter_times, character)
-        if handler.handler(self.enter_times, character):
+        if handler.handler(self.enter_times, character) and self.room_id != 8:
             LOGGER.info("room changed, break")
             return
         handler.post_handler(self.enter_times, character)
@@ -255,6 +255,7 @@ class DungeonCtx(object):
         #     cv2.imwrite("match_result_{}.png".format(i), debug)
         #     i += 1
 
-        LOGGER.debug(f"Get room {best_match_room.room_id} with confidence {best_match_confidence}")
+        if best_match_room:
+            LOGGER.debug(f"Get room {best_match_room.room_id} with confidence {best_match_confidence}")
 
         return best_match_room

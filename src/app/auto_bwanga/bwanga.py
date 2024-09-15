@@ -30,7 +30,7 @@ class BwangaApp(BaseApp):
         while True:
             frame = self.device.last_frame()
             room = self.dungeon_ctx.detect_room(frame)
-            if room is None:
+            if not room:
                 continue
 
             LOGGER.info("detect room {}".format(room.room_id))
@@ -38,6 +38,7 @@ class BwangaApp(BaseApp):
             room.exec(self.character)
 
             if room.room_id == 8:
+                LOGGER.info("Dungeon finished")
                 self.dungeon_ctx.clear()
 
     def frame_handler(self, frame):
@@ -49,64 +50,17 @@ if __name__ == '__main__':
         config = yaml.load(config_file, Loader=yaml.Loader)
     device = ScrcpyDevice(sys.argv[1])
     detector = Detector('weights/dnf.onnx')
-
-    # img = cv2.imread('../../../training_data/20240911/20240911014535.png')
-    # res = detector.inference(img, save_img=True)
-    # for each in res:
-    #     print(each)
-    # exit(0)
-
     ui_ctx = UIElementCtx(device, detector)
     ui_ctx.load(config["ui"])
     evangelist = Evangelist(device, ui_ctx, config["character"]["Evangelist"])
     hell_bringer = HellBringer(device, ui_ctx, config["character"]["HellBringer"])
-    c = hell_bringer
+    if sys.argv[2] == "0":
+        c = hell_bringer
+    else:
+        c = evangelist
     app = BwangaApp(device, detector, c, ui_ctx)
     room.register_room(app, config["scenario"]["dungeon"]["bwanga"], detector)
 
     app.init()
 
-    # while True:
-    #     c.move_toward((1219, 891), (272, 683))
-    #     input("next")
-    #
-    # exit(0)
-
-    # c.move(135, 0.3)
-    # c.move(45, 0.3)
-
-    # hell_bringer.move(BattleMetadata.get_angle((2022.5, 744), (624.0, 835)), 0.5)
-    # hell_bringer.move(rad=BattleMetadata.get_rad((100, 100), (1000, 1000)), duration=0.5)
-    # time.sleep(0.1)
-    # hell_bringer.move(rad=BattleMetadata.get_rad((100, 100), (1000, 0)), duration=0.5)
-    # time.sleep(0.1)
-    # hell_bringer.move(rad=BattleMetadata.get_rad((100, 100), (0, 0)), duration=0.5)
-    # time.sleep(0.1)
-    # hell_bringer.move(rad=BattleMetadata.get_rad((100, 100), (0, 1000)), duration=0.5)
-    # exit(0)
-
-    # c.exec_skill(c.attack, 1)
-
     app.start()
-
-    # import threading
-    # t = threading.Thread(target=app.start)
-    # t.start()
-    #
-    # while True:
-    #     frame = app.frame
-    #     if frame is None:
-    #         continue
-    #
-    #     result = detector.onnx.inference(frame)
-    #     for each in result:
-    #         cv2.rectangle(frame, each.left_top, each.right_bottom, (255, 0, 0), lineType=cv2.LINE_AA, thickness=10)
-    #     cv2.imshow("frame", frame)
-    #
-    #     cv2.waitKey(1)
-
-    # while app.frame is None:
-    #     time.sleep(1)
-    #
-    # cv2.imshow("frame", app.frame)
-    # cv2.waitKey(0)
