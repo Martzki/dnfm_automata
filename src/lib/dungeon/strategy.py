@@ -1,3 +1,6 @@
+import time
+
+
 class SkillStrategy(object):
     def __init__(self, skill, pre_attack_duration, priority):
         self.skill = skill
@@ -13,9 +16,10 @@ class BattleStrategy(object):
         self.skill_strategy_list.append(SkillStrategy(skill, pre_attack_duration, priority))
         self.skill_strategy_list = sorted(self.skill_strategy_list, key=lambda x: x.priority)
 
-    def get_next_skill(self):
+    def get_next_skill(self, character):
         for skill_strategy in self.skill_strategy_list:
-            if skill_strategy.skill.is_cool_down():
-                return skill_strategy
+            skill = getattr(character, skill_strategy.skill, None)
+            if skill and skill.is_cool_down():
+                return skill
 
         return None

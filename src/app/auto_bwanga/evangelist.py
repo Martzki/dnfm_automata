@@ -5,7 +5,7 @@ from src.lib.dungeon.dungeon import DungeonRoomHandler
 from src.lib.dungeon.strategy import BattleStrategy
 
 default_battle_strategy = BattleStrategy()
-default_battle_strategy.register_skill(Evangelist.GrandCrashingCross, 10, 0)
+# default_battle_strategy.register_skill(Evangelist., 10, 0)
 
 
 class Room0Handler(BwangaRoom0Handler):
@@ -57,7 +57,7 @@ class Room2Handler(BwangaRoom2Handler):
             return
 
         evangelist.move(280, 0.3)
-        evangelist.exec_skill(evangelist.spear_of_victory, delay=0.1)
+        evangelist.exec_skill(evangelist.spear_of_victory, delay=0.25)
         evangelist.exec_skill(evangelist.purifying_lightning)
 
     def post_handler(self, enter_times, evangelist: Evangelist):
@@ -112,8 +112,11 @@ class Room5Handler(BwangaRoom5Handler):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
     def pre_handler(self, enter_times, evangelist: Evangelist):
-        if enter_times == 1:
-            evangelist.exec_skill(evangelist.crux_of_victoria)
+        if enter_times > 1:
+            return
+
+        evangelist.move(270, 0.5)
+        evangelist.exec_skill(evangelist.crux_of_victoria)
 
     def post_handler(self, enter_times, evangelist: Evangelist):
         self.move_to_next_room(evangelist, enter_times)
@@ -159,20 +162,17 @@ class Room7Handler(BwangaRoom7Handler):
         self.move_to_next_room(evangelist, enter_times)
 
 
-class Room8Handler(DungeonRoomHandler):
+class Room8Handler(BwangaRoom8Handler):
     def __init__(self, detector, last_frame, detect_room):
-        super().__init__(8, CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
+        super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
     def pre_handler(self, enter_times, evangelist: Evangelist):
         if enter_times > 1:
             return
 
         evangelist.move(0, 0.5)
-        evangelist.exec_skill(evangelist.grand_crashing_cross)
+        evangelist.exec_skill(evangelist.grand_crashing_cross, delay=0.15)
         evangelist.exec_skill(evangelist.shining_cross)
-
-    def post_handler(self, enter_times, character: Evangelist):
-        pass
 
 
 # class Room9Handler(DungeonRoomHandler):

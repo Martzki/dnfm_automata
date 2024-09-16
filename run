@@ -7,7 +7,7 @@ CHARACTER=${1}
 
 export PYTHONPATH=/workspace/bwanga
 
-trap "pkill -f bwanga" 2
+trap "pkill -9 -f bwanga" 2
 
 cd src/app/auto_bwanga/
 python3 bwanga.py ${DEVICE} ${CHARACTER}

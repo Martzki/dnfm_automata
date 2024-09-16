@@ -273,7 +273,7 @@ class BwangaRoom4Handler(DungeonRoomHandler):
 
                 if meta.up_gate:
                     if enter_times == 1:
-                        dst = (meta.up_gate.left_top[0] - 332, meta.up_gate.right_bottom[1] + 100)
+                        dst = (meta.up_gate.left_top[0] - 400, meta.up_gate.right_bottom[1] + 100)
                     else:
                         dst = (meta.up_gate.right_bottom[0] + 100, meta.up_gate.right_bottom[1] + 150)
 
@@ -504,4 +504,6 @@ class BwangaRoom8Handler(DungeonRoomHandler):
                 break
 
         LOGGER.info("re-enter dungeon")
-        character.device.touch(re_enter.center)
+        for i in range(3):
+            character.device.touch(re_enter.center)
+            time.sleep(0.1)

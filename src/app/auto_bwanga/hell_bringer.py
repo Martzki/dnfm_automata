@@ -15,11 +15,11 @@ class Room0Handler(BwangaRoom0Handler):
         if enter_times > 1:
             return
 
-        hell_bringer.exec_skill(hell_bringer.derange, delay=0.2)
+        hell_bringer.exec_skill(hell_bringer.derange, delay=0.5)
         # time.sleep(0.3)
-        hell_bringer.exec_skill(hell_bringer.thirst, delay=0.1)
+        hell_bringer.exec_skill(hell_bringer.thirst, delay=0.4)
         # time.sleep(0.3)
-        hell_bringer.move(345, 0.8)
+        hell_bringer.move(345, 0.6)
         hell_bringer.exec_skill(hell_bringer.enrage)
 
     def post_handler(self, enter_times, hell_bringer: HellBringer):
@@ -57,7 +57,7 @@ class Room2Handler(BwangaRoom2Handler):
         if enter_times > 1:
             return
 
-        hell_bringer.move(340, 0.7)
+        hell_bringer.move(340, 0.6)
         hell_bringer.move(0, 0.2)
         hell_bringer.exec_skill(hell_bringer.raging_fury)
         hell_bringer.exec_skill(hell_bringer.extreme_overkill)

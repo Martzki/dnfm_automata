@@ -1,3 +1,5 @@
+import time
+
 import cv2
 
 from src.common.log import Logger
@@ -19,9 +21,10 @@ class DungeonRoomHandler(object):
         self.in_dungeon_img = cv2.imread('res/scenario/base/in_dungeon_2.png')
         self.re_enter_img = cv2.imread('res/scenario/base/re_enter.png')
         self.search_angle = (20, 270, 160, 270)
-        self.search_angle_index = 0
-        if strategy is None:
-            self.battle_strategy = BattleStrategy()
+        self.search_times = 0
+        self.last_search_time = time.time()
+        self.last_exec_skill_time = time.time()
+        self.battle_strategy = strategy if strategy else BattleStrategy()
 
     def room_changed(self, frame=None):
         frame = self.last_frame() if frame is None else frame
@@ -42,9 +45,14 @@ class DungeonRoomHandler(object):
         return True
 
     def refind_character(self, character):
-        angle = self.search_angle[self.search_angle_index % 4]
-        character.move(angle, 0.2)
-        self.search_angle_index += 1
+        if time.time() - self.last_search_time > 3:
+            self.search_times = 0
+
+        angle = self.search_angle[self.search_times % 4]
+        character.move(angle, 0.2 + 0.1 * (self.search_times // 4))
+        self.search_times += 1
+        self.last_search_time = time.time()
+
 
     def move_toward_monster(self, character, skill, meta):
         """
@@ -60,6 +68,9 @@ class DungeonRoomHandler(object):
 
         monster, distance = meta.get_closest_monster(skill.exec_limit.vertical_only)
 
+        LOGGER.info(f"Change direction")
+        character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()), 0.15)
+
         if skill.exec_limit.min_distance < distance:
             duration = BattleMetadata.get_move_duration(distance)
             move_duration = 1 if duration > 1 else duration
@@ -67,31 +78,26 @@ class DungeonRoomHandler(object):
             character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()),
                                     move_duration)
             return duration > 1
-        else:
-            LOGGER.info(f"Change direction")
-            character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()), 0.1)
 
         return False
 
     def battle(self, character, meta):
-        # skill_strategy = self.battle_strategy.get_next_skill()
-        # skill = skill_strategy.skill if skill_strategy else character.skill_attack
-        skill = character.attack
-
-        # Need attach before execute skill.
-        # if skill_strategy and skill_strategy.pre_attack_duration:
-        #     # Need move closer.
-        #     if self.move_toward_monster(character, character.skill_attack, meta):
-        #         return
-        #
-        #     character.attack(skill.pre_attack_duration)
+        now = time.time()
+        if now - self.last_exec_skill_time > 3:
+            skill = self.battle_strategy.get_next_skill(character)
+            skill = skill if skill else character.attack
+        else:
+            skill = character.attack
 
         # Need move closer.
         if self.move_toward_monster(character, skill, meta):
             return
 
         LOGGER.info(f"Exec skill {skill}")
-        character.exec_skill(skill, 0.8)
+        character.exec_skill(skill)
+
+        if skill != character.attack:
+            self.last_exec_skill_time = now
 
     def pick_items(self, character, meta):
         """
@@ -138,9 +144,6 @@ class DungeonRoomHandler(object):
         if enter_times > 1:
             return False
 
-        search_left = 0
-        search_right = 0
-
         while True:
             frame = self.last_frame()
             if self.room_changed(frame):
@@ -151,7 +154,6 @@ class DungeonRoomHandler(object):
             # Find monster and battle.
             if meta.has_monster():
                 LOGGER.info("Found monster")
-                # time.sleep(1)
                 self.battle(character, meta)
             # Find items and pick then.
             elif meta.has_item():
@@ -166,14 +168,16 @@ class DungeonRoomHandler(object):
                 break
             # Search open gate.
             else:
-                if search_left < 3:
-                    search_left += 1
-                    character.move(180, 0.5)
-                elif search_right == 0:
-                    character.move(0, 1.5)
-                elif search_right < 3:
-                    search_right += 1
-                    character.move(0, 0.5)
+                LOGGER.info("Search open gate")
+                self.refind_character(character)
+                # if search_left < 3:
+                #     search_left += 1
+                #     character.move(180, 0.5)
+                # elif search_right == 0:
+                #     character.move(0, 1.5)
+                # elif search_right < 3:
+                #     search_right += 1
+                #     character.move(0, 0.5)
 
         return False
 
@@ -199,6 +203,8 @@ class DungeonRoom(object):
 
     def clear(self):
         self.enter_times = 0
+        for handler in self.handler_map.values():
+            handler.last_exec_skill_time = time.time() - 3600
 
     def register_handler(self, handler):
         self.handler_map[handler.character_class] = handler
