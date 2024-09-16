@@ -7,7 +7,7 @@ from src.lib.dungeon.battle import BattleMetadata
 
 LOGGER = Logger(__name__).logger
 
-DEFAULT_SWIPE_DISTANCE = 150
+DEFAULT_SWIPE_DISTANCE = 200
 DEFAULT_MOVE_LENGTH = 150
 
 
@@ -15,7 +15,8 @@ class CharacterClass(object):
     Unknown = "Unknown"
     Evangelist = "Evangelist"
     HellBringer = "HellBringer"
-    class_map = {"Evangelist": Evangelist, "HellBringer": HellBringer}
+    Trickster = "Trickster"
+    class_map = {"Evangelist": Evangelist, "HellBringer": HellBringer, "Trickster": Trickster}
 
     @classmethod
     def from_str(cls, class_str):

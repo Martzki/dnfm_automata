@@ -1,4 +1,5 @@
 import sys
+import time
 
 import yaml
 
@@ -8,6 +9,7 @@ from src.common.log import Logger
 from src.lib.character.character import Character
 from src.lib.character.evangelist import Evangelist
 from src.lib.character.hell_bringer import HellBringer
+from src.lib.character.trickster import Trickster
 from src.lib.detector.detector import Detector
 from src.lib.device.device import Device
 from src.lib.device.scrcpy_device import ScrcpyDevice
@@ -54,10 +56,13 @@ if __name__ == '__main__':
     ui_ctx.load(config["ui"])
     evangelist = Evangelist(device, ui_ctx, config["character"]["Evangelist"])
     hell_bringer = HellBringer(device, ui_ctx, config["character"]["HellBringer"])
+    trickster = Trickster(device, ui_ctx, config["character"]["Trickster"])
     if sys.argv[2] == "0":
         c = hell_bringer
-    else:
+    elif sys.argv[2] == "1":
         c = evangelist
+    elif sys.argv[2] == "2":
+        c = trickster
     app = BwangaApp(device, detector, c, ui_ctx)
     room.register_room(app, config["scenario"]["dungeon"]["bwanga"], detector)
 

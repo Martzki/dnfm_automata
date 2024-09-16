@@ -8,7 +8,7 @@ character:
         duration: 1
         cool_down: 1
         exec_limit:
-          min_distance: 10
+          min_distance: 100
       &christening_light christening_light:
         type: touch
         duration: 1
@@ -100,10 +100,10 @@ character:
           min_distance: 10
       &mountainous_wheel mountainous_wheel:
         type: touch
-        duration: 0.5
+        duration: 0.1
         cool_down: 1
         exec_limit:
-          min_distance: 10
+          min_distance: 300
       &outrage_break outrage_break:
         type: touch
         duration: 2.1
@@ -123,6 +123,78 @@ character:
         delay: 0.2
         exec_limit:
           min_distance: 10
+  &trickster Trickster:
+    skill:
+      &trickster_attack attack:
+        type: touch
+        duration: 0.8
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 50
+      &acid_rain acid_rain:
+        type: swipe_up
+        duration: 0.5
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 50
+      &cheeky_doll_shururu cheeky_doll_shururu:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 50
+      &enhanced_magic_missile enhanced_magic_missile:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 100
+      &fusion_craft fusion_craft:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 3
+        exec_limit:
+          min_distance: 300
+      &gravitas gravitas:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      &lava_potion_no_9 lava_potion_no_9:
+        type: swipe_down
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      &lollipop lollipop:
+        type: swipe_right
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      &showtime showtime:
+        type: swipe_left
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      &snow_man snow_man:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 100
 scenario:
   base:
     loading:
@@ -229,3 +301,46 @@ ui:
       *thirst :
         key_img:
           - res/ui/skill/hell_bringer/thirst*.png
+    *trickster :
+      *trickster_attack :
+        key_img:
+          - res/ui/skill/trickster/attack*.png
+      *acid_rain :
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/trickster/acid_rain*.png
+      *cheeky_doll_shururu:
+        key_img:
+          - res/ui/skill/trickster/cheeky_doll_shururu*.png
+      *enhanced_magic_missile:
+        key_img:
+          - res/ui/skill/trickster/enhanced_magic_missile*.png
+      *fusion_craft:
+        key_img:
+          - res/ui/skill/trickster/fusion_craft*.png
+      *gravitas:
+        key_img:
+          - res/ui/skill/trickster/gravitas*.png
+      *lava_potion_no_9:
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/trickster/lava_potion_no_9*.png
+      *lollipop:
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/trickster/lollipop*.png
+      *showtime:
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/trickster/showtime*.png
+      *snow_man:
+        key_img:
+          - res/ui/skill/trickster/snow_man*.png
