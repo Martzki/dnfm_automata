@@ -141,7 +141,7 @@ class BattleMetadata(object):
 
     @staticmethod
     def get_move_duration(distance):
-        return distance / 800.0
+        return distance / 1000.0
 
     @staticmethod
     def get_rad(src, dst):

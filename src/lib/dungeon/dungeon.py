@@ -44,12 +44,12 @@ class DungeonRoomHandler(object):
 
         return True
 
-    def refind_character(self, character):
+    def re_search_dungeon(self, character):
         if time.time() - self.last_search_time > 3:
             self.search_times = 0
 
         angle = self.search_angle[self.search_times % 4]
-        character.move(angle, 0.2 + 0.1 * (self.search_times // 4))
+        character.move(angle, 0.4 + 0.4 * (self.search_times // 4))
         self.search_times += 1
         self.last_search_time = time.time()
 
@@ -96,6 +96,8 @@ class DungeonRoomHandler(object):
         LOGGER.info(f"Exec skill {skill}")
         character.exec_skill(skill)
 
+        time.sleep(0.15)
+
         if skill != character.attack:
             self.last_exec_skill_time = now
 
@@ -115,7 +117,7 @@ class DungeonRoomHandler(object):
             LOGGER.info(f"Move toward item from {meta.character.coordinate()} to {item.coordinate()}")
             character.move_toward(meta.character.coordinate(), item.coordinate(), self.room_changed)
         else:
-            self.refind_character(character)
+            self.re_search_dungeon(character)
 
     def maintain_equipments(self):
         pass
@@ -141,8 +143,6 @@ class DungeonRoomHandler(object):
         :param enter_times: the times entering this room
         :return: room changed or not
         """
-        if enter_times > 1:
-            return False
 
         while True:
             frame = self.last_frame()
@@ -169,7 +169,7 @@ class DungeonRoomHandler(object):
             # Search open gate.
             else:
                 LOGGER.info("Search open gate")
-                self.refind_character(character)
+                self.re_search_dungeon(character)
                 # if search_left < 3:
                 #     search_left += 1
                 #     character.move(180, 0.5)
@@ -241,7 +241,7 @@ class DungeonCtx(object):
                   ]
 
         best_match_room = None
-        best_match_confidence = 0
+        best_match_confidence = 0.6
         match_dst = []
         match_shape = []
         for room in self.room_list:
