@@ -3,7 +3,7 @@ import time
 
 
 def get_capture_file(prefix=''):
-    path = "/Users/martzki/Workspace/dnfm_automata/training_data/" + time.strftime("%Y%m%d", time.localtime())
+    path = "/workspace/training_data/" + time.strftime("%Y%m%d", time.localtime())
     if not os.path.isdir(path):
         os.mkdir(path)
 

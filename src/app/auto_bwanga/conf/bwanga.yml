@@ -8,7 +8,7 @@ character:
         duration: 1
         cool_down: 1
         exec_limit:
-          min_distance: 100
+          min_distance: 500
       &christening_light christening_light:
         type: touch
         duration: 1
@@ -66,7 +66,13 @@ character:
         duration: 1
         cool_down: 0
         exec_limit:
-          min_distance: 50
+          min_distance: 330
+      &bloodlust bloodlust:
+        type: touch
+        duration: 0.2
+        cool_down: 8
+        exec_limit:
+          min_distance: 200
       &blood_sword blood_sword:
         type: touch
         duration: 1
@@ -92,6 +98,12 @@ character:
         cool_down: 1
         exec_limit:
           min_distance: 10
+      &gore_cross gore_cross:
+        type: touch
+        duration: 0.2
+        cool_down: 3
+        exec_limit:
+          min_distance: 10
       &extreme_overkill extreme_overkill:
         type: touch
         duration: 1
@@ -103,7 +115,7 @@ character:
         duration: 0.1
         cool_down: 1
         exec_limit:
-          min_distance: 300
+          min_distance: 600
       &outrage_break outrage_break:
         type: touch
         duration: 2.1
@@ -131,28 +143,28 @@ character:
         cool_down: 0
         delay: 0
         exec_limit:
-          min_distance: 50
+          min_distance: 150
       &acid_rain acid_rain:
         type: swipe_up
         duration: 0.5
         cool_down: 1
         delay: 0
         exec_limit:
-          min_distance: 50
+          min_distance: 200
       &cheeky_doll_shururu cheeky_doll_shururu:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
-          min_distance: 50
+          min_distance: 200
       &enhanced_magic_missile enhanced_magic_missile:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
-          min_distance: 100
+          min_distance: 200
       &fusion_craft fusion_craft:
         type: touch
         duration: 0.1
@@ -173,7 +185,7 @@ character:
         cool_down: 1
         delay: 0
         exec_limit:
-          min_distance: 0
+          min_distance: 300
       &lollipop lollipop:
         type: swipe_right
         duration: 0.1
@@ -229,9 +241,15 @@ scenario:
       room_8:
         key_img:
           - res/scenario/dungeon/bwanga/room_8_*.png
-#      room_9:
-#        key_img:
-#        - res/scenario/dungeon/bwanga/room_9_*.png
+      room_9:
+        key_img:
+        - res/scenario/dungeon/bwanga/room_9_*.png
+      room_10:
+        key_img:
+        - res/scenario/dungeon/bwanga/room_10_*.png
+      room_11:
+        key_img:
+        - res/scenario/dungeon/bwanga/room_11_*.png
 ui:
   base:
     move:
@@ -274,6 +292,9 @@ ui:
       *hell_bringer_attack :
         key_img:
           - res/ui/skill/hell_bringer/attack*.png
+      *bloodlust :
+        key_img:
+          - res/ui/skill/hell_bringer/bloodlust.png
       *blood_sword :
         key_img:
           - res/ui/skill/hell_bringer/blood_sword.png
@@ -289,6 +310,9 @@ ui:
       *extreme_overkill :
         key_img:
           - res/ui/skill/hell_bringer/extreme_overkill.png
+      *gore_cross:
+        key_img:
+          - res/ui/skill/hell_bringer/gore_cross.png
       *mountainous_wheel :
         key_img:
           - res/ui/skill/hell_bringer/mountainous_wheel.png

@@ -12,7 +12,7 @@ class Room0Handler(BwangaRoom0Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, trickster: Trickster):
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times > 1:
             return
 
@@ -22,7 +22,7 @@ class Room0Handler(BwangaRoom0Handler):
         trickster.exec_skill(trickster.cheeky_doll_shururu, delay=0.6)
         trickster.exec_skill(trickster.cheeky_doll_shururu)
 
-    def post_handler(self, enter_times, trickster: Trickster):
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.lava_potion_no_9)
 
@@ -33,7 +33,7 @@ class Room1Handler(BwangaRoom1Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, trickster: Trickster):
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times > 1:
             return
 
@@ -41,7 +41,7 @@ class Room1Handler(BwangaRoom1Handler):
         trickster.move(0, 0.07)
         trickster.exec_skill(trickster.lava_potion_no_9)
 
-    def post_handler(self, enter_times, trickster: Trickster):
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.acid_rain)
 
@@ -52,14 +52,14 @@ class Room2Handler(BwangaRoom2Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, trickster: Trickster):
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times > 1:
             return
 
         trickster.move(280, 0.3)
         trickster.exec_skill(trickster.acid_rain)
 
-    def post_handler(self, enter_times, trickster: Trickster):
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.gravitas)
 
@@ -70,14 +70,14 @@ class Room3Handler(BwangaRoom3Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, trickster: Trickster):
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times > 1:
             return
 
         trickster.move(345, 0.6)
         trickster.exec_skill(trickster.gravitas)
 
-    def post_handler(self, enter_times, trickster: Trickster):
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.lava_potion_no_9)
 
@@ -88,7 +88,7 @@ class Room4Handler(BwangaRoom4Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, trickster: Trickster):
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times > 1:
             return
 
@@ -96,27 +96,27 @@ class Room4Handler(BwangaRoom4Handler):
         trickster.move(0, 0.1)
         trickster.exec_skill(trickster.lava_potion_no_9)
 
-    def post_handler(self, enter_times, trickster: Trickster):
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.fusion_craft)
         elif enter_times == 2:
             trickster.wait_skill_cool_down(trickster.cheeky_doll_shururu)
 
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster, enter_times, kwargs.get("room_5_visited", False))
 
 
 class Room5Handler(BwangaRoom5Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, trickster: Trickster):
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times > 1:
             return
 
         trickster.move(250, 0.4)
-        trickster.exec_skill(trickster.fusion_craft, delay=3)
+        trickster.exec_skill(trickster.fusion_craft, delay=11)
 
-    def post_handler(self, enter_times, trickster: Trickster):
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
         self.move_to_next_room(trickster, enter_times)
 
 
@@ -124,7 +124,7 @@ class Room6Handler(BwangaRoom6Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, trickster: Trickster):
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times > 1:
             return
 
@@ -133,7 +133,7 @@ class Room6Handler(BwangaRoom6Handler):
         trickster.exec_skill(trickster.cheeky_doll_shururu, delay=0.6)
         trickster.exec_skill(trickster.cheeky_doll_shururu)
 
-    def post_handler(self, enter_times, trickster: Trickster):
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.lava_potion_no_9)
 
@@ -144,14 +144,14 @@ class Room7Handler(BwangaRoom7Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, trickster: Trickster):
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times > 1:
             return
 
         trickster.move(345, 0.3)
         trickster.exec_skill(trickster.lava_potion_no_9)
 
-    def post_handler(self, enter_times, trickster: Trickster):
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.gravitas)
 
@@ -162,7 +162,7 @@ class Room8Handler(BwangaRoom8Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, trickster: Trickster):
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
         if enter_times > 1:
             return
 
@@ -172,17 +172,37 @@ class Room8Handler(BwangaRoom8Handler):
         trickster.exec_skill(trickster.snow_man)
 
 
-# class Room9Handler(DungeonRoomHandler):
-#     def __init__(self):
-#         super().__init__(9, CharacterClass.Trickster, default_battle_strategy)
-#
-#     def pre_handler(self, last_frame, trickster: Trickster):
-#         trickster.move(0, 10)
-#         trickster.exec_skill(trickster.grand_crashing_cross)
-#         trickster.exec_skill(trickster.shining_cross)
-#
-#     def post_handler(self, last_frame, character: Trickster):
-#         self.maintain_equipments()
+class Room9Handler(BwangaRoom9Handler):
+    def __init__(self, detector, last_frame, detect_room):
+        super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
+
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
+        pass
+
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
+        self.move_to_next_room(trickster, enter_times)
+
+
+class Room10Handler(BwangaRoom10Handler):
+    def __init__(self, detector, last_frame, detect_room):
+        super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
+
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
+        pass
+
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
+        self.move_to_next_room(trickster, enter_times)
+
+
+class Room11Handler(BwangaRoom11Handler):
+    def __init__(self, detector, last_frame, detect_room):
+        super().__init__(CharacterClass.Trickster, detector, last_frame, detect_room, default_battle_strategy)
+
+    def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
+        pass
+
+    def post_handler(self, enter_times, trickster: Trickster, **kwargs):
+        self.move_to_next_room(trickster, enter_times)
 
 
 def init_handlers(detector, last_frame, detect_room):
@@ -196,5 +216,7 @@ def init_handlers(detector, last_frame, detect_room):
         Room6Handler(detector, last_frame, detect_room),
         Room7Handler(detector, last_frame, detect_room),
         Room8Handler(detector, last_frame, detect_room),
-        # Room9Handler()
+        Room9Handler(detector, last_frame, detect_room),
+        Room10Handler(detector, last_frame, detect_room),
+        Room11Handler(detector, last_frame, detect_room),
     ]

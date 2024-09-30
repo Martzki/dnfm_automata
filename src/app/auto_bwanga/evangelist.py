@@ -12,14 +12,14 @@ class Room0Handler(BwangaRoom0Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist):
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times > 1:
             return
 
         evangelist.move(335, 0.4)
         evangelist.exec_skill(evangelist.grand_crashing_cross)
 
-    def post_handler(self, enter_times, evangelist: Evangelist):
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.saint_wall)
             evangelist.wait_skill_cool_down(evangelist.purifying_lightning)
@@ -31,7 +31,7 @@ class Room1Handler(BwangaRoom1Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist):
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times > 1:
             return
 
@@ -40,7 +40,7 @@ class Room1Handler(BwangaRoom1Handler):
         evangelist.exec_skill(evangelist.saint_wall)
         evangelist.exec_skill(evangelist.christening_light)
 
-    def post_handler(self, enter_times, evangelist: Evangelist):
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.spear_of_victory)
             evangelist.wait_skill_cool_down(evangelist.purifying_lightning)
@@ -52,7 +52,7 @@ class Room2Handler(BwangaRoom2Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist):
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times > 1:
             return
 
@@ -60,7 +60,7 @@ class Room2Handler(BwangaRoom2Handler):
         evangelist.exec_skill(evangelist.spear_of_victory, delay=0.25)
         evangelist.exec_skill(evangelist.purifying_lightning)
 
-    def post_handler(self, enter_times, evangelist: Evangelist):
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.valiant_aria)
 
@@ -71,14 +71,14 @@ class Room3Handler(BwangaRoom3Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist):
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times > 1:
             return
 
         evangelist.move(345, 0.6)
         evangelist.exec_skill(evangelist.valiant_aria)
 
-    def post_handler(self, enter_times, evangelist: Evangelist):
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.shining_cross)
 
@@ -89,7 +89,7 @@ class Room4Handler(BwangaRoom4Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist):
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times > 1:
             return
 
@@ -97,28 +97,28 @@ class Room4Handler(BwangaRoom4Handler):
         evangelist.move(45, 0.4)
         evangelist.exec_skill(evangelist.shining_cross)
 
-    def post_handler(self, enter_times, evangelist: Evangelist):
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.crux_of_victoria)
         elif enter_times == 2:
             evangelist.wait_skill_cool_down(evangelist.saint_wall)
             evangelist.wait_skill_cool_down(evangelist.christening_light)
 
-        self.move_to_next_room(evangelist, enter_times)
+        self.move_to_next_room(evangelist, enter_times, kwargs.get("room_5_visited", False))
 
 
 class Room5Handler(BwangaRoom5Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist):
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times > 1:
             return
 
         evangelist.move(270, 0.5)
-        evangelist.exec_skill(evangelist.crux_of_victoria)
+        evangelist.exec_skill(evangelist.crux_of_victoria, delay=7)
 
-    def post_handler(self, enter_times, evangelist: Evangelist):
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         self.move_to_next_room(evangelist, enter_times)
 
 
@@ -126,7 +126,7 @@ class Room6Handler(BwangaRoom6Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist):
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times > 1:
             return
 
@@ -135,7 +135,7 @@ class Room6Handler(BwangaRoom6Handler):
         evangelist.exec_skill(evangelist.saint_wall)
         evangelist.exec_skill(evangelist.christening_light)
 
-    def post_handler(self, enter_times, evangelist: Evangelist):
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.purifying_lightning)
 
@@ -146,7 +146,7 @@ class Room7Handler(BwangaRoom7Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, character: Evangelist):
+    def pre_handler(self, enter_times, character: Evangelist, **kwargs):
         if enter_times > 1:
             return
 
@@ -154,7 +154,7 @@ class Room7Handler(BwangaRoom7Handler):
         character.move(0, 0.1)
         character.exec_skill(character.purifying_lightning)
 
-    def post_handler(self, enter_times, evangelist: Evangelist):
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.grand_crashing_cross)
             evangelist.wait_skill_cool_down(evangelist.shining_cross)
@@ -166,7 +166,7 @@ class Room8Handler(BwangaRoom8Handler):
     def __init__(self, detector, last_frame, detect_room):
         super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist):
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
         if enter_times > 1:
             return
 
@@ -175,17 +175,37 @@ class Room8Handler(BwangaRoom8Handler):
         evangelist.exec_skill(evangelist.shining_cross)
 
 
-# class Room9Handler(DungeonRoomHandler):
-#     def __init__(self):
-#         super().__init__(9, CharacterClass.Evangelist, default_battle_strategy)
-#
-#     def pre_handler(self, last_frame, evangelist: Evangelist):
-#         evangelist.move(0, 10)
-#         evangelist.exec_skill(evangelist.grand_crashing_cross)
-#         evangelist.exec_skill(evangelist.shining_cross)
-#
-#     def post_handler(self, last_frame, character: Evangelist):
-#         self.maintain_equipments()
+class Room9Handler(BwangaRoom9Handler):
+    def __init__(self, detector, last_frame, detect_room):
+        super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
+
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
+        pass
+
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
+        self.move_to_next_room(evangelist, enter_times)
+
+
+class Room10Handler(BwangaRoom10Handler):
+    def __init__(self, detector, last_frame, detect_room):
+        super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
+
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
+        pass
+
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
+        self.move_to_next_room(evangelist, enter_times)
+
+
+class Room11Handler(BwangaRoom11Handler):
+    def __init__(self, detector, last_frame, detect_room):
+        super().__init__(CharacterClass.Evangelist, detector, last_frame, detect_room, default_battle_strategy)
+
+    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
+        pass
+
+    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
+        self.move_to_next_room(evangelist, enter_times)
 
 
 def init_handlers(detector, last_frame, detect_room):
@@ -199,5 +219,7 @@ def init_handlers(detector, last_frame, detect_room):
         Room6Handler(detector, last_frame, detect_room),
         Room7Handler(detector, last_frame, detect_room),
         Room8Handler(detector, last_frame, detect_room),
-        # Room9Handler()
+        Room9Handler(detector, last_frame, detect_room),
+        Room10Handler(detector, last_frame, detect_room),
+        Room11Handler(detector, last_frame, detect_room),
     ]

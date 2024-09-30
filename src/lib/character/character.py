@@ -53,8 +53,6 @@ class Character(object):
             if time.time() - start > duration:
                 break
 
-            time.sleep(0.1)
-
         self.device.raw_touch(coordinate, press=False)
 
         return stop

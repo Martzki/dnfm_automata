@@ -28,14 +28,10 @@ class DungeonRoomHandler(object):
 
     def room_changed(self, frame=None):
         frame = self.last_frame() if frame is None else frame
-        result = self.detector.img_match(frame, [self.in_dungeon_img])
-        if result.confidence < 0.9:
-            return True
-
         room = self.detect_room(frame)
         if not room:
             LOGGER.warning(f"Room is not detected.")
-            return False
+            return True
 
         if room.room_id == self.room_id:
             return False
@@ -71,13 +67,20 @@ class DungeonRoomHandler(object):
         LOGGER.info(f"Change direction")
         character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()), 0.15)
 
+        move_threshold = 0.3
         if skill.exec_limit.min_distance < distance:
             duration = BattleMetadata.get_move_duration(distance)
-            move_duration = 1 if duration > 1 else duration
+            move_duration = move_threshold if duration > move_threshold else duration
             LOGGER.info(f"Move toward monster with {move_duration}")
             character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()),
                                     move_duration)
-            return duration > 1
+            return duration > move_threshold
+        else:
+            vertical_diff = meta.character.coordinate()[1] - monster.coordinate()[1]
+            if abs(vertical_diff) > 100:
+                character.move(90 if vertical_diff > 0 else 270, 0.2)
+
+
 
         return False
 
@@ -126,7 +129,7 @@ class DungeonRoomHandler(object):
         result = self.detector.img_match(frame, [self.finish_img])
         return result.confidence > 0.9
 
-    def pre_handler(self, enter_times, character: Character):
+    def pre_handler(self, enter_times, character: Character, **kwargs):
         """
         Do something before auto battle.
         e.g. Move to somewhere and execute some skill.
@@ -136,7 +139,7 @@ class DungeonRoomHandler(object):
         """
         pass
 
-    def handler(self, enter_times, character):
+    def handler(self, enter_times, character, **kwargs):
         """
         Kill all monsters and pick all items in this dungeon.
         :param character: character under control
@@ -181,7 +184,7 @@ class DungeonRoomHandler(object):
 
         return False
 
-    def post_handler(self, enter_times, character: Character):
+    def post_handler(self, enter_times, character: Character, **kwargs):
         """
         Do something after battle and all items picked.
         e.g. Goto next room, sell items, etc.
@@ -209,59 +212,30 @@ class DungeonRoom(object):
     def register_handler(self, handler):
         self.handler_map[handler.character_class] = handler
 
-    def exec(self, character):
+    def exec(self, character, **kwargs):
         assert character.character_class in self.handler_map, "Handler of class {} is not registered".format(
             character.character_class)
         self.enter_times += 1
 
         handler = self.handler_map[character.character_class]
-        handler.pre_handler(self.enter_times, character)
-        if handler.handler(self.enter_times, character) and self.room_id != 8:
+        handler.pre_handler(self.enter_times, character, **kwargs)
+        if handler.handler(self.enter_times, character, **kwargs) and self.room_id != 8:
             LOGGER.info("room changed, break")
             return
-        handler.post_handler(self.enter_times, character)
+        handler.post_handler(self.enter_times, character, **kwargs)
 
 
-class DungeonCtx(object):
+class Dungeon(object):
     def __init__(self, detector):
-        self.room_list = []
+        self.room_map = {}
         self.detector = detector
 
     def clear(self):
-        for room in self.room_list:
+        for room in self.room_map.values():
             room.clear()
 
     def register_room(self, room):
-        self.room_list.append(room)
+        self.room_map[room.room_id] = room
 
     def detect_room(self, frame):
-        map_img = frame[
-                  39: 220,
-                  2162: 2400,
-                  ]
-
-        best_match_room = None
-        best_match_confidence = 0.6
-        match_dst = []
-        match_shape = []
-        for room in self.room_list:
-            result = room.scenario.detect(self.detector, map_img)
-            if result and result.confidence > best_match_confidence:
-                best_match_room = room
-                best_match_confidence = result.confidence
-                match_dst.append(result.dst)
-                match_shape.append(result.shape)
-
-        # for i in range(len(match_dst)):
-        #     shape = match_shape[i]
-        #     top_left = match_dst[i]
-        #     t_height, t_width = shape[0], shape[1]
-        #     bottom_right = (top_left[0] + t_width, top_left[1] + t_height)
-        #     debug = cv2.rectangle(map_img, top_left, bottom_right, (0, 255, 0), 2)
-        #     cv2.imwrite("match_result_{}.png".format(i), debug)
-        #     i += 1
-
-        if best_match_room:
-            LOGGER.debug(f"Get room {best_match_room.room_id} with confidence {best_match_confidence}")
-
-        return best_match_room
+        pass
