@@ -58,7 +58,7 @@ class Character(object):
         return stop
 
     def move(self, angle, duration=1, need_stop=None):
-        self.move_with_rad(radians(angle), duration, need_stop)
+        return self.move_with_rad(radians(angle), duration, need_stop)
 
     def move_toward(self, src, dst, need_stop=None):
         distance = BattleMetadata.get_distance(src, dst)

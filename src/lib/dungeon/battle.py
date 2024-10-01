@@ -20,6 +20,27 @@ class BattleObjectCategory(object):
     MonsterPriority1 = 11
     MonsterPriority2 = 12
     MonsterPriority3 = 13
+    DungeonMapRoom0 = 14
+    DungeonMapRoom1 = 15
+    DungeonMapRoom2 = 16
+    DungeonMapRoom3 = 17
+    DungeonMapRoom4 = 18
+    DungeonMapRoom5 = 19
+    DungeonMapRoom6 = 20
+    DungeonMapRoom7 = 21
+    DungeonMapRoom8 = 22
+    DungeonMapRoom9 = 23
+    DungeonMapRoom10 = 24
+    DungeonMapRoom11 = 25
+    DungeonMapRoom12 = 26
+    DungeonMapRoom13 = 27
+    DungeonMapRoom14 = 28
+    DungeonMapRoom15 = 29
+    DungeonMapRoom16 = 30
+    DungeonMapRoom17 = 31
+    DungeonMapRoom18 = 32
+    DungeonMapRoom19 = 33
+    DungeonMapRoom20 = 34
 
 
 class BattleObject(object):
@@ -76,8 +97,11 @@ class Monster(BattleObject):
 
 
 class BattleMetadata(object):
-    def __init__(self, frame, detector):
+    UnknownRoomId = -1
+
+    def __init__(self, frame=None, detector=None):
         self.character = None
+        self.frame = frame
         self.items = []
         self.monsters_priority_0 = []
         self.monsters_priority_1 = []
@@ -87,6 +111,11 @@ class BattleMetadata(object):
         self.right_gate = None
         self.up_gate = None
         self.down_gate = None
+        self.room_id = BattleMetadata.UnknownRoomId
+        self.room_confidence = 0
+
+        if frame is None or detector is None:
+            return
 
         result = detector.inference(frame)
         for obj in result:
@@ -118,8 +147,22 @@ class BattleMetadata(object):
                 self.monsters_priority_2.append(Monster(obj.left_top, obj.right_bottom, 2))
             elif obj.category == BattleObjectCategory.MonsterPriority3:
                 self.monsters_priority_3.append(Monster(obj.left_top, obj.right_bottom, 3))
+            elif (BattleObjectCategory.DungeonMapRoom0 <= obj.category <= BattleObjectCategory.DungeonMapRoom20 and
+                  obj.confidence > self.room_confidence):
+                self.room_id = obj.category - BattleObjectCategory.DungeonMapRoom0
+                self.room_confidence = obj.confidence
             else:
                 LOGGER.error(f"Unknown category: {obj.category}")
+
+    def __repr__(self):
+        has_character = self.character is not None
+        has_item = self.has_item()
+        has_monster = self.has_monster()
+        has_left_gate = self.left_gate and self.left_gate.is_open
+        has_right_gate = self.right_gate and self.right_gate.is_open
+        has_up_gate = self.up_gate and self.up_gate.is_open
+        has_down_gate = self.down_gate and self.down_gate.is_open
+        return f"meta(room_id: {self.room_id}, has_character: {has_character}, has_monster: {has_monster}, has_item: {has_item}, has_left_gate: {has_left_gate}, has_right_gate: {has_right_gate}, has_up_gate: {has_up_gate}, has_down_gate: {has_down_gate})"
 
     def has_monster(self):
         return len(self.monsters_priority_0) or len(self.monsters_priority_1) or len(self.monsters_priority_2) or len(

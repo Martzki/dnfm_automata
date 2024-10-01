@@ -12,41 +12,33 @@ LOGGER = Logger(__name__).logger
 
 
 class BwangaRoom0Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(0, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 0, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
         while True:
             retry_times = 0
-            start = time.time()
             last_coordinate = None
             while True:
-                # if time.time() - start > 5:
-                #     LOGGER.warning("Searching gate timeout")
-                #     return
-
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.down_gate and meta.down_gate.is_open and meta.character:
                     break
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file("character_not_found"), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
                 if meta.up_gate:
-                    # input("move to anchor: ")
                     dst = (meta.up_gate.right_bottom[0] + 240, meta.up_gate.right_bottom[1] + 474)
                     LOGGER.info(f"move from {meta.character.coordinate()} to anchor {dst}")
-                    # cv2.imwrite(get_capture_file("room_0_before_move_to_anchor"), frame)
-                    character.move_toward(meta.character.coordinate(), dst)
-                    # cv2.imwrite(get_capture_file("room_0_anchor"), frame)
+                    if character.move_toward(meta.character.coordinate(), dst, self.room_changed):
+                        return
                     continue
 
                 retry_times += 1
@@ -65,7 +57,6 @@ class BwangaRoom0Handler(DungeonRoomHandler):
                 last_coordinate = meta.character.coordinate()
 
                 retry_times = 0
-                cv2.imwrite(get_capture_file("open_down_gate_not_found"), frame)
 
             LOGGER.info("found gate, move")
             if not character.move_toward(meta.character.coordinate(), meta.down_gate.coordinate(), self.room_changed):
@@ -78,37 +69,32 @@ class BwangaRoom0Handler(DungeonRoomHandler):
 
 
 class BwangaRoom1Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(1, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 1, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
         while True:
-            start = time.time()
             last_coordinate = None
             while True:
-                # if time.time() - start > 5:
-                #     LOGGER.warning("Searching gate timeout")
-                #     return
-
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.right_gate and meta.right_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 if meta.up_gate:
                     dst = (meta.up_gate.coordinate()[0] + 400, meta.up_gate.coordinate()[1] + 100)
                     LOGGER.info(f"move from {meta.character.coordinate()} to anchor {dst}")
-                    character.move_toward(meta.character.coordinate(), dst)
+                    if character.move_toward(meta.character.coordinate(), dst, self.room_changed):
+                        return
                     continue
 
                 # Avoid already on gate scenario.
@@ -133,37 +119,32 @@ class BwangaRoom1Handler(DungeonRoomHandler):
 
 
 class BwangaRoom2Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(2, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 2, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
         while True:
-            start = time.time()
             last_coordinate = None
             while True:
-                # if time.time() - start > 5:
-                #     LOGGER.warning("Searching gate timeout")
-                #     return
-
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.right_gate and meta.right_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 if meta.left_gate:
                     dst = (meta.left_gate.coordinate()[0] + 1500, meta.left_gate.coordinate()[1] - 50)
                     LOGGER.info(f"move from {meta.character.coordinate()} to anchor {dst}")
-                    character.move_toward(meta.character.coordinate(), dst)
+                    if character.move_toward(meta.character.coordinate(), dst, self.room_changed):
+                        return
                     continue
 
                 # Avoid already on gate scenario.
@@ -188,37 +169,32 @@ class BwangaRoom2Handler(DungeonRoomHandler):
 
 
 class BwangaRoom3Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(3, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 3, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
         while True:
-            start = time.time()
             last_coordinate = None
             while True:
-                # if time.time() - start > 5:
-                #     LOGGER.warning("Searching gate timeout")
-                #     return
-
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.up_gate and meta.up_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 if meta.left_gate:
                     dst = (meta.left_gate.coordinate()[0] + 700, meta.left_gate.coordinate()[1])
                     LOGGER.info(f"move from {meta.character.coordinate()} to anchor {dst}")
-                    character.move_toward(meta.character.coordinate(), dst)
+                    if character.move_toward(meta.character.coordinate(), dst, self.room_changed):
+                        return
                     continue
 
                 # Avoid already on gate scenario.
@@ -243,32 +219,26 @@ class BwangaRoom3Handler(DungeonRoomHandler):
 
 
 class BwangaRoom4Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(4, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 4, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int, room_5_visited: bool):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
         while True:
-            start = time.time()
             last_coordinate = None
             while True:
-                # if time.time() - start > 5:
-                #     LOGGER.warning("Searching gate timeout")
-                #     return
-
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 next_gate = meta.right_gate if room_5_visited else meta.left_gate
                 if next_gate and next_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 if meta.up_gate:
@@ -278,9 +248,8 @@ class BwangaRoom4Handler(DungeonRoomHandler):
                         dst = (meta.up_gate.right_bottom[0] + 100, meta.up_gate.right_bottom[1] + 400)
 
                     LOGGER.info(f"move from {meta.character.coordinate()} to anchor {dst}")
-                    # cv2.imwrite(get_capture_file("room_4_before_move_to_anchor"), frame)
-                    character.move_toward(meta.character.coordinate(), dst)
-                    # cv2.imwrite(get_capture_file("room_4_anchor"), frame)
+                    if character.move_toward(meta.character.coordinate(), dst, self.room_changed):
+                        return
                     continue
 
                 # Avoid already on gate scenario.
@@ -305,7 +274,6 @@ class BwangaRoom4Handler(DungeonRoomHandler):
 
             LOGGER.info("found gate, move")
 
-            # room_changed = False
             if not room_5_visited:
                 room_changed = character.move_toward(meta.character.coordinate(), meta.left_gate.coordinate(),
                                                      self.room_changed)
@@ -323,31 +291,25 @@ class BwangaRoom4Handler(DungeonRoomHandler):
 
 
 class BwangaRoom5Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(5, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 5, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
         while True:
-            start = time.time()
             last_coordinate = None
             while True:
-                # if time.time() - start > 5:
-                #     LOGGER.warning("Searching gate timeout")
-                #     return
-
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.right_gate and meta.right_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 # Avoid already on gate scenario.
@@ -372,31 +334,25 @@ class BwangaRoom5Handler(DungeonRoomHandler):
 
 
 class BwangaRoom6Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(6, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 6, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
         while True:
-            start = time.time()
             last_coordinate = None
             while True:
-                # if time.time() - start > 5:
-                #     LOGGER.warning("Searching gate timeout")
-                #     return
-
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.right_gate and meta.right_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 # Avoid already on gate scenario.
@@ -421,37 +377,32 @@ class BwangaRoom6Handler(DungeonRoomHandler):
 
 
 class BwangaRoom7Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(7, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 7, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
         while True:
-            start = time.time()
             last_coordinate = None
             while True:
-                # if time.time() - start > 5:
-                #     LOGGER.warning("Searching gate timeout")
-                #     return
-
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.right_gate and meta.right_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 if meta.left_gate:
                     dst = (meta.left_gate.coordinate()[0] + 1500, meta.left_gate.coordinate()[1])
                     LOGGER.info(f"move from {meta.character.coordinate()} to anchor {dst}")
-                    character.move_toward(meta.character.coordinate(), dst)
+                    if character.move_toward(meta.character.coordinate(), dst, self.room_changed):
+                        return
                     continue
 
                 # Avoid already on gate scenario.
@@ -476,20 +427,19 @@ class BwangaRoom7Handler(DungeonRoomHandler):
 
 
 class BwangaRoom8Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(8, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 8, character_class, strategy)
 
     def post_handler(self, enter_times, character: Character, **kwargs):
         # Wait finish.
         while True:
-            finish = self.detector.img_match(self.last_frame(), [self.finish_img])
+            finish = self.dungeon.detector.img_match(self.dungeon.get_battle_metadata().frame, [self.finish_img])
             if finish.confidence > 0.9:
                 break
 
         # Pick up items.
         while True:
-            frame = self.last_frame()
-            meta = BattleMetadata(frame, self.detector)
+            meta = self.dungeon.get_battle_metadata()
 
             if not meta.has_item():
                 break
@@ -498,8 +448,7 @@ class BwangaRoom8Handler(DungeonRoomHandler):
 
         # Re-enter dungeon.
         while True:
-            frame = self.last_frame()
-            re_enter = self.detector.img_match(frame, [self.re_enter_img])
+            re_enter = self.dungeon.detector.img_match(self.dungeon.get_battle_metadata().frame, [self.re_enter_img])
             if finish.confidence > 0.9:
                 break
 
@@ -510,8 +459,8 @@ class BwangaRoom8Handler(DungeonRoomHandler):
 
 
 class BwangaRoom9Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(9, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 9, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
@@ -519,23 +468,23 @@ class BwangaRoom9Handler(DungeonRoomHandler):
         while True:
             last_coordinate = None
             while True:
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.down_gate and meta.down_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 if meta.left_gate:
                     dst = (meta.left_gate.coordinate()[0] + 1500, meta.left_gate.coordinate()[1] + 300)
                     LOGGER.info(f"move from {meta.character.coordinate()} to anchor {dst}")
-                    character.move_toward(meta.character.coordinate(), dst)
+                    if character.move_toward(meta.character.coordinate(), dst, self.room_changed):
+                        return
                     continue
 
                 # Avoid already on gate scenario.
@@ -560,8 +509,8 @@ class BwangaRoom9Handler(DungeonRoomHandler):
 
 
 class BwangaRoom10Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(10, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 10, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
@@ -569,23 +518,23 @@ class BwangaRoom10Handler(DungeonRoomHandler):
         while True:
             last_coordinate = None
             while True:
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.right_gate and meta.right_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 if meta.left_gate:
                     dst = (meta.left_gate.coordinate()[0] + 1500, meta.left_gate.coordinate()[1])
                     LOGGER.info(f"move from {meta.character.coordinate()} to anchor {dst}")
-                    character.move_toward(meta.character.coordinate(), dst)
+                    if character.move_toward(meta.character.coordinate(), dst, self.room_changed):
+                        return
                     continue
 
                 # Avoid already on gate scenario.
@@ -610,8 +559,8 @@ class BwangaRoom10Handler(DungeonRoomHandler):
 
 
 class BwangaRoom11Handler(DungeonRoomHandler):
-    def __init__(self, character_class, detector, last_frame, detect_room, strategy):
-        super().__init__(11, character_class, detector, last_frame, detect_room, strategy)
+    def __init__(self, dungeon, character_class, strategy):
+        super().__init__(dungeon, 11, character_class, strategy)
 
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
@@ -619,23 +568,23 @@ class BwangaRoom11Handler(DungeonRoomHandler):
         while True:
             last_coordinate = None
             while True:
-                frame = self.last_frame()
-                meta = BattleMetadata(frame, self.detector)
+                meta = self.dungeon.get_battle_metadata()
                 if meta.right_gate and meta.right_gate.is_open and meta.character:
                     break
 
                 if not meta.character:
-                    cv2.imwrite(get_capture_file(), frame)
-                    self.re_search_dungeon(character)
+                    if self.re_search_dungeon(character):
+                        return
                     continue
 
-                if self.room_changed(frame):
+                if self.room_changed():
                     return
 
                 if meta.down_gate:
                     dst = (meta.down_gate.coordinate()[0], 0)
                     LOGGER.info(f"move from {meta.character.coordinate()} to anchor {dst}")
-                    character.move_toward(meta.character.coordinate(), dst)
+                    if character.move_toward(meta.character.coordinate(), dst, self.room_changed):
+                        return
                     character.move(0, 0.5)
                     continue
 

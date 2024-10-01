@@ -126,5 +126,5 @@ class Detector(object):
         # return self.bf_match(frame, key_img_list)
         return self.template_match(frame, key_img_list)
 
-    def inference(self, frame, conf_thres=0.8, save_img=False):
+    def inference(self, frame, conf_thres=0.8, save_img=False) -> [YoloResult]:
         return self.model.inference(frame, conf_thres=conf_thres, save_img=save_img)

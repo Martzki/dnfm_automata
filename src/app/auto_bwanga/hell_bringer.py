@@ -9,8 +9,8 @@ default_battle_strategy.register_skill(HellBringer.GoreCross, 10, 0)
 
 
 class Room0Handler(BwangaRoom0Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         if enter_times > 1:
@@ -31,8 +31,8 @@ class Room0Handler(BwangaRoom0Handler):
 
 
 class Room1Handler(BwangaRoom1Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         if enter_times > 1:
@@ -51,8 +51,8 @@ class Room1Handler(BwangaRoom1Handler):
 
 
 class Room2Handler(BwangaRoom2Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         if enter_times > 1:
@@ -71,8 +71,8 @@ class Room2Handler(BwangaRoom2Handler):
 
 
 class Room3Handler(BwangaRoom3Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         if enter_times > 1:
@@ -89,8 +89,8 @@ class Room3Handler(BwangaRoom3Handler):
 
 
 class Room4Handler(BwangaRoom4Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         if enter_times > 1:
@@ -111,8 +111,8 @@ class Room4Handler(BwangaRoom4Handler):
 
 
 class Room5Handler(BwangaRoom5Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         if enter_times > 1:
@@ -126,8 +126,8 @@ class Room5Handler(BwangaRoom5Handler):
 
 
 class Room6Handler(BwangaRoom6Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         if enter_times > 1:
@@ -147,8 +147,8 @@ class Room6Handler(BwangaRoom6Handler):
 
 
 class Room7Handler(BwangaRoom7Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         if enter_times > 1:
@@ -166,8 +166,8 @@ class Room7Handler(BwangaRoom7Handler):
 
 
 class Room8Handler(BwangaRoom8Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         if enter_times > 1:
@@ -180,8 +180,8 @@ class Room8Handler(BwangaRoom8Handler):
 
 
 class Room9Handler(BwangaRoom9Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         pass
@@ -191,8 +191,8 @@ class Room9Handler(BwangaRoom9Handler):
 
 
 class Room10Handler(BwangaRoom10Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         pass
@@ -202,8 +202,8 @@ class Room10Handler(BwangaRoom10Handler):
 
 
 class Room11Handler(BwangaRoom11Handler):
-    def __init__(self, detector, last_frame, detect_room):
-        super().__init__(CharacterClass.HellBringer, detector, last_frame, detect_room, default_battle_strategy)
+    def __init__(self, dungeon):
+        super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         pass
@@ -212,18 +212,18 @@ class Room11Handler(BwangaRoom11Handler):
         self.move_to_next_room(hell_bringer, enter_times)
 
 
-def init_handlers(detector, last_frame, detect_room):
+def init_handlers(dungeon):
     return [
-        Room0Handler(detector, last_frame, detect_room),
-        Room1Handler(detector, last_frame, detect_room),
-        Room2Handler(detector, last_frame, detect_room),
-        Room3Handler(detector, last_frame, detect_room),
-        Room4Handler(detector, last_frame, detect_room),
-        Room5Handler(detector, last_frame, detect_room),
-        Room6Handler(detector, last_frame, detect_room),
-        Room7Handler(detector, last_frame, detect_room),
-        Room8Handler(detector, last_frame, detect_room),
-        Room9Handler(detector, last_frame, detect_room),
-        Room10Handler(detector, last_frame, detect_room),
-        Room11Handler(detector, last_frame, detect_room),
+        Room0Handler(dungeon),
+        Room1Handler(dungeon),
+        Room2Handler(dungeon),
+        Room3Handler(dungeon),
+        Room4Handler(dungeon),
+        Room5Handler(dungeon),
+        Room6Handler(dungeon),
+        Room7Handler(dungeon),
+        Room8Handler(dungeon),
+        Room9Handler(dungeon),
+        Room10Handler(dungeon),
+        Room11Handler(dungeon),
     ]

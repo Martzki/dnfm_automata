@@ -71,18 +71,18 @@ def get_room_name(room_id):
     return DUNGEON_NAME + "_room_{}".format(room_id)
 
 
-def register_room(app, room_scenario, detector):
-    dungeon_ctx = app.dungeon
-    evangelist_handlers = evangelist_init_handlers(detector, app.device.last_frame, dungeon_ctx.detect_room)
-    hell_bringer_handlers = hell_bringer_init_handlers(detector, app.device.last_frame, dungeon_ctx.detect_room)
-    trickster_handlers = trickster_init_handlers(detector, app.device.last_frame, dungeon_ctx.detect_room)
+def register_room(app, room_scenario):
+    dungeon = app.dungeon
+    evangelist_handlers = evangelist_init_handlers(dungeon)
+    hell_bringer_handlers = hell_bringer_init_handlers(dungeon)
+    trickster_handlers = trickster_init_handlers(dungeon)
 
     i = 0
     for room in room_scenario:
         room = DungeonRoom(DUNGEON_NAME + room, i,
-                           Scenario(DUNGEON_NAME + room, key_img_list=room_scenario[room]["key_img"]), detector)
+                           Scenario(DUNGEON_NAME + room, key_img_list=room_scenario[room]["key_img"]))
         room.register_handler(evangelist_handlers[i])
         room.register_handler(hell_bringer_handlers[i])
         room.register_handler(trickster_handlers[i])
-        dungeon_ctx.register_room(room)
+        dungeon.register_room(room)
         i += 1
