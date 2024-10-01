@@ -4,6 +4,8 @@ import cv2
 
 from src.common.log import Logger
 from src.lib.character.character import Character
+from src.lib.detector.detector import Detector
+from src.lib.device.device import Device
 from src.lib.dungeon.battle import BattleMetadata
 from src.lib.dungeon.strategy import BattleStrategy
 
@@ -11,14 +13,11 @@ LOGGER = Logger(__name__).logger
 
 
 class DungeonRoomHandler(object):
-    def __init__(self, room_id, character_class, detector, last_frame, detect_room, strategy=None):
+    def __init__(self, dungeon, room_id, character_class, strategy=None):
+        self.dungeon = dungeon
         self.room_id = room_id
         self.character_class = character_class
-        self.detector = detector
-        self.detect_room = detect_room
-        self.last_frame = last_frame
         self.finish_img = cv2.imread('res/scenario/base/dungeon_finish.png')
-        self.in_dungeon_img = cv2.imread('res/scenario/base/in_dungeon_2.png')
         self.re_enter_img = cv2.imread('res/scenario/base/re_enter.png')
         self.search_angle = (20, 270, 160, 270)
         self.search_times = 0
@@ -26,29 +25,25 @@ class DungeonRoomHandler(object):
         self.last_exec_skill_time = time.time()
         self.battle_strategy = strategy if strategy else BattleStrategy()
 
-    def room_changed(self, frame=None):
-        frame = self.last_frame() if frame is None else frame
-        room = self.detect_room(frame)
-        if not room:
-            LOGGER.warning(f"Room is not detected.")
-            return True
-
-        if room.room_id == self.room_id:
-            return False
-
-        LOGGER.info(f"Room changed from {self.room_id} to {room.room_id}")
-
-        return True
+    def room_changed(self):
+        room_id = self.dungeon.get_battle_metadata().room_id
+        if room_id != self.room_id:
+            LOGGER.info(f"Room changed from {self.room_id} to {room_id}")
+        return room_id != self.room_id
 
     def re_search_dungeon(self, character):
+        LOGGER.info("re-search dungeon")
         if time.time() - self.last_search_time > 3:
             self.search_times = 0
 
         angle = self.search_angle[self.search_times % 4]
-        character.move(angle, 0.4 + 0.4 * (self.search_times // 4))
+        if character.move(angle, 0.4 + 0.4 * (self.search_times // 4), self.room_changed):
+            return True
+
         self.search_times += 1
         self.last_search_time = time.time()
 
+        return False
 
     def move_toward_monster(self, character, skill, meta):
         """
@@ -119,14 +114,17 @@ class DungeonRoomHandler(object):
         if meta.character:
             LOGGER.info(f"Move toward item from {meta.character.coordinate()} to {item.coordinate()}")
             character.move_toward(meta.character.coordinate(), item.coordinate(), self.room_changed)
-        else:
-            self.re_search_dungeon(character)
+            return
+
+        if self.re_search_dungeon(character):
+            return
 
     def maintain_equipments(self):
         pass
 
-    def dungeon_is_finished(self, frame):
-        result = self.detector.img_match(frame, [self.finish_img])
+    def dungeon_is_finished(self):
+        frame = self.dungeon.get_battle_metadata().frame
+        result = self.dungeon.detector.img_match(frame, [self.finish_img])
         return result.confidence > 0.9
 
     def pre_handler(self, enter_times, character: Character, **kwargs):
@@ -148,11 +146,10 @@ class DungeonRoomHandler(object):
         """
 
         while True:
-            frame = self.last_frame()
-            if self.room_changed(frame):
+            if self.room_changed():
                 return True
 
-            meta = BattleMetadata(frame, self.detector)
+            meta = self.dungeon.get_battle_metadata()
 
             # Find monster and battle.
             if meta.has_monster():
@@ -162,7 +159,7 @@ class DungeonRoomHandler(object):
             elif meta.has_item():
                 LOGGER.info("Found item")
                 self.pick_items(character, meta)
-            elif self.dungeon_is_finished(frame):
+            elif self.dungeon_is_finished():
                 LOGGER.info("Dungeon finished")
                 break
             # Open gate found, break.
@@ -172,15 +169,8 @@ class DungeonRoomHandler(object):
             # Search open gate.
             else:
                 LOGGER.info("Search open gate")
-                self.re_search_dungeon(character)
-                # if search_left < 3:
-                #     search_left += 1
-                #     character.move(180, 0.5)
-                # elif search_right == 0:
-                #     character.move(0, 1.5)
-                # elif search_right < 3:
-                #     search_right += 1
-                #     character.move(0, 0.5)
+                if self.re_search_dungeon(character):
+                    return True
 
         return False
 
@@ -196,11 +186,10 @@ class DungeonRoomHandler(object):
 
 
 class DungeonRoom(object):
-    def __init__(self, dungeon, room_id, scenario, detector):
+    def __init__(self, dungeon, room_id, scenario):
         self.dungeon = dungeon
         self.room_id = room_id
         self.scenario = scenario
-        self.detector = detector
         self.handler_map = {}
         self.enter_times = 0
 
@@ -226,9 +215,17 @@ class DungeonRoom(object):
 
 
 class Dungeon(object):
-    def __init__(self, detector):
+    def __init__(self, device: Device, detector: Detector):
         self.room_map = {}
+        self.device = device
         self.detector = detector
+        self.battle_metadata = BattleMetadata()
+        self.stats = {
+            'last_dump_ts': time.time(),
+            'inference_cnt': 0,
+            'inference_time': 0
+        }
+        self.room_id = BattleMetadata.UnknownRoomId
 
     def clear(self):
         for room in self.room_map.values():
@@ -237,5 +234,24 @@ class Dungeon(object):
     def register_room(self, room):
         self.room_map[room.room_id] = room
 
-    def detect_room(self, frame):
-        pass
+    def get_battle_metadata(self):
+        start = time.time()
+        frame = self.device.last_frame()
+        meta = BattleMetadata(frame, self.detector)
+        now = time.time()
+        self.stats['inference_cnt'] += 1
+        self.stats['inference_time'] += now - start
+
+        if now - self.stats['last_dump_ts'] > 60:
+            LOGGER.info(
+                f"last 1 minute {self.stats['inference_cnt']} frame inferenced, fps: {self.stats['inference_cnt'] / self.stats['inference_time']}")
+            self.stats['last_dump_ts'] = now
+            self.stats['inference_cnt'] = 0
+            self.stats['inference_time'] = 0
+
+        return meta
+
+    def get_room(self):
+        frame = self.device.last_frame()
+        meta = BattleMetadata(frame, self.detector)
+        return self.room_map.get(meta.room_id, None)
