@@ -9,6 +9,7 @@ from character.character import Character
 from character.evangelist import Evangelist
 from character.hell_bringer import HellBringer
 from character.noblesse import Noblesse
+from character.silent_eye import SilentEye
 from character.trickster import Trickster
 from character.wrecking_ball import WreckingBall
 from common.log import Logger
@@ -116,6 +117,7 @@ if __name__ == '__main__':
     evangelist = Evangelist(device, ui_ctx, config["character"]["Evangelist"])
     hell_bringer = HellBringer(device, ui_ctx, config["character"]["HellBringer"])
     noblesse = Noblesse(device, ui_ctx, config["character"]["Noblesse"])
+    silent_eye = SilentEye(device, ui_ctx, config["character"]["SilentEye"])
     trickster = Trickster(device, ui_ctx, config["character"]["Trickster"])
     wrecking_ball = WreckingBall(device, ui_ctx, config["character"]["WreckingBall"])
     character_class = sys.argv[2]
@@ -125,6 +127,8 @@ if __name__ == '__main__':
         c = evangelist
     elif character_class == "2":
         c = trickster
+    elif character_class == "3":
+        c = silent_eye
     elif character_class == "4":
         c = wrecking_ball
     elif character_class == "5":
