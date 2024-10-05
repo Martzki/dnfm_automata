@@ -226,12 +226,13 @@ ui:
     exit_dungeon:
       key_img:
         - res/ui/dungeon/exit_dungeon.png
+    card:
+      key_img:
+        - res/ui/dungeon/card.png
     card_0:
       coordinate:
         - 650
         - 350
-      key_img:
-        - res/ui/dungeon/card.png
     card_1:
       coordinate:
         - 1030
