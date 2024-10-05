@@ -262,8 +262,8 @@ class Dungeon(object):
         self.device.touch(confirm, 0.1)
 
     def pick_cards(self, card_list=None):
-        if self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "card_0", timeout=10) is None:
-            LOGGER.error("failed to get card_0 coordinate")
+        if self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "card", timeout=10) is None:
+            LOGGER.error("failed to get card coordinate")
             return
 
         # Choose a free card arbitrarily.
