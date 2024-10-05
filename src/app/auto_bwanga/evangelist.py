@@ -16,7 +16,7 @@ class Room0Handler(BwangaRoom0Handler):
         if enter_times > 1:
             return
 
-        evangelist.move(335, 0.4)
+        evangelist.move(335, 0.45)
         evangelist.exec_skill(evangelist.grand_crashing_cross)
 
     def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
@@ -56,7 +56,7 @@ class Room2Handler(BwangaRoom2Handler):
         if enter_times > 1:
             return
 
-        evangelist.move(280, 0.3)
+        evangelist.move(280, 0.35)
         evangelist.exec_skill(evangelist.spear_of_victory, delay=0.25)
         evangelist.exec_skill(evangelist.purifying_lightning)
 
