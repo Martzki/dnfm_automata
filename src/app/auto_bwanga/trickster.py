@@ -18,8 +18,8 @@ class Room0Handler(BwangaRoom0Handler):
 
         trickster.exec_skill(trickster.lollipop, delay=0.3)
         trickster.exec_skill(trickster.showtime)
-        trickster.move(335, 0.4)
-        trickster.exec_skill(trickster.cheeky_doll_shururu, delay=0.6)
+        trickster.move(335, 0.45)
+        trickster.exec_skill(trickster.cheeky_doll_shururu, delay=0.75)
         trickster.exec_skill(trickster.cheeky_doll_shururu)
 
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
@@ -114,7 +114,8 @@ class Room5Handler(BwangaRoom5Handler):
             return
 
         trickster.move(250, 0.4)
-        trickster.exec_skill(trickster.fusion_craft, delay=11)
+        trickster.exec_skill(trickster.fusion_craft, delay=8)
+        trickster.move(180, 0.4)
 
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
         self.move_to_next_room(trickster, enter_times)
@@ -130,7 +131,7 @@ class Room6Handler(BwangaRoom6Handler):
 
         trickster.move(0, 0.5)
         trickster.move(270, 0.2)
-        trickster.exec_skill(trickster.cheeky_doll_shururu, delay=0.6)
+        trickster.exec_skill(trickster.cheeky_doll_shururu, delay=0.75)
         trickster.exec_skill(trickster.cheeky_doll_shururu)
 
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
