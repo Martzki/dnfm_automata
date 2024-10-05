@@ -1,6 +1,5 @@
+import random
 import time
-
-import cv2
 
 from src.common.log import Logger
 from src.lib.character.character import Character
@@ -8,6 +7,7 @@ from src.lib.detector.detector import Detector
 from src.lib.device.device import Device
 from src.lib.dungeon.battle import BattleMetadata
 from src.lib.dungeon.strategy import BattleStrategy
+from src.lib.ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 
@@ -17,8 +17,6 @@ class DungeonRoomHandler(object):
         self.dungeon = dungeon
         self.room_id = room_id
         self.character_class = character_class
-        self.finish_img = cv2.imread('res/scenario/base/dungeon_finish.png')
-        self.re_enter_img = cv2.imread('res/scenario/base/re_enter.png')
         self.search_angle = (20, 270, 160, 270)
         self.search_times = 0
         self.last_search_time = time.time()
@@ -122,11 +120,6 @@ class DungeonRoomHandler(object):
     def maintain_equipments(self):
         pass
 
-    def dungeon_is_finished(self):
-        frame = self.dungeon.get_battle_metadata().frame
-        result = self.dungeon.detector.img_match(frame, [self.finish_img])
-        return result.confidence > 0.9
-
     def pre_handler(self, enter_times, character: Character, **kwargs):
         """
         Do something before auto battle.
@@ -159,9 +152,6 @@ class DungeonRoomHandler(object):
             elif meta.has_item():
                 LOGGER.info("Found item")
                 self.pick_items(character, meta)
-            elif self.dungeon_is_finished():
-                LOGGER.info("Dungeon finished")
-                break
             # Open gate found, break.
             elif meta.has_open_gate():
                 LOGGER.info("Found open gate, break")
@@ -186,10 +176,9 @@ class DungeonRoomHandler(object):
 
 
 class DungeonRoom(object):
-    def __init__(self, dungeon, room_id, scenario):
+    def __init__(self, dungeon, room_id):
         self.dungeon = dungeon
         self.room_id = room_id
-        self.scenario = scenario
         self.handler_map = {}
         self.enter_times = 0
 
@@ -215,10 +204,11 @@ class DungeonRoom(object):
 
 
 class Dungeon(object):
-    def __init__(self, device: Device, detector: Detector):
+    def __init__(self, device: Device, detector: Detector, ui_ctx: UIElementCtx):
         self.room_map = {}
         self.device = device
         self.detector = detector
+        self.ui_ctx = ui_ctx
         self.battle_metadata = BattleMetadata()
         self.stats = {
             'last_dump_ts': time.time(),
@@ -255,3 +245,54 @@ class Dungeon(object):
         frame = self.device.last_frame()
         meta = BattleMetadata(frame, self.detector)
         return self.room_map.get(meta.room_id, None)
+
+    def double_confirm(self):
+        check_box = self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "check_box", timeout=2)
+        if check_box is None:
+            return
+
+        self.device.touch(check_box, 0.1)
+
+        time.sleep(0.2)
+
+        confirm = self.ui_ctx.get_ui_coordinate(UIElementCtx.CategoryBase, "confirm")
+        if not confirm:
+            return
+
+        self.device.touch(confirm, 0.1)
+
+    def pick_cards(self, card_list=None):
+        if self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "card_0", timeout=10) is None:
+            LOGGER.error("failed to get card_0 coordinate")
+            return
+
+        # Choose a free card arbitrarily.
+        if card_list is None:
+            card_list = [random.randint(0, 3)]
+
+        for card in card_list:
+            card_key = f"card_{card}"
+            coordinate = self.ui_ctx.get_ui_coordinate(UIElementCtx.CategoryDungeon, card_key)
+            if coordinate is None:
+                continue
+
+            LOGGER.info(f"pick card {card}")
+            self.device.touch(coordinate, 0.1)
+
+            time.sleep(0.2)
+
+        time.sleep(0.5)
+
+        # Touch empty area to skip picking.
+        self.device.touch((100, 100), 0.1)
+
+    def re_enter(self):
+        re_enter = self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "re_enter_dungeon", timeout=15)
+        if re_enter is None:
+            LOGGER.error("failed to get re_enter coordinate")
+            return
+
+        LOGGER.info("re-enter dungeon")
+        self.device.touch(re_enter, 0.1)
+
+        self.double_confirm()

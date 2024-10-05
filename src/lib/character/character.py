@@ -4,6 +4,7 @@ from math import sin, cos, radians
 from src.common.log import Logger
 from src.lib.character.skill import Skill, SkillType
 from src.lib.dungeon.battle import BattleMetadata
+from src.lib.ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 
@@ -31,7 +32,7 @@ class Character(object):
         self.attack = Skill("attack", conf["skill"]["attack"])
 
     def move_with_rad(self, rad, duration=1, need_stop=None):
-        center = self.ui_ctx.get_ui_coordinate("move")
+        center = self.ui_ctx.get_ui_coordinate(UIElementCtx.CategoryBase, "move")
         if not center:
             LOGGER.critical("Failed to get move coordinate.")
             return False

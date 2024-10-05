@@ -207,55 +207,59 @@ character:
         delay: 0
         exec_limit:
           min_distance: 100
-scenario:
-  base:
-    loading:
-      key_img:
-        - res/scenario/base/loading_0.png
-  dungeon:
-    bwanga:
-      room_0:
-        key_img:
-          - res/scenario/dungeon/bwanga/room_0_*.png
-      room_1:
-        key_img:
-          - res/scenario/dungeon/bwanga/room_1_*.png
-      room_2:
-        key_img:
-          - res/scenario/dungeon/bwanga/room_2_*.png
-      room_3:
-        key_img:
-          - res/scenario/dungeon/bwanga/room_3_*.png
-      room_4:
-        key_img:
-          - res/scenario/dungeon/bwanga/room_4_*.png
-      room_5:
-        key_img:
-          - res/scenario/dungeon/bwanga/room_5_*.png
-      room_6:
-        key_img:
-          - res/scenario/dungeon/bwanga/room_6_*.png
-      room_7:
-        key_img:
-          - res/scenario/dungeon/bwanga/room_7_*.png
-      room_8:
-        key_img:
-          - res/scenario/dungeon/bwanga/room_8_*.png
-      room_9:
-        key_img:
-        - res/scenario/dungeon/bwanga/room_9_*.png
-      room_10:
-        key_img:
-        - res/scenario/dungeon/bwanga/room_10_*.png
-      room_11:
-        key_img:
-        - res/scenario/dungeon/bwanga/room_11_*.png
 ui:
   base:
     move:
       coordinate:
         - 311
         - 791
+    check_box:
+      key_img:
+        - res/ui/base/check_box.png
+    confirm:
+      key_img:
+        - res/ui/base/confirm.png
+  dungeon:
+    re_enter_dungeon:
+      key_img:
+        - res/ui/dungeon/re_enter_dungeon.png
+    exit_dungeon:
+      key_img:
+        - res/ui/dungeon/exit_dungeon.png
+    card_0:
+      coordinate:
+        - 650
+        - 350
+      key_img:
+        - res/ui/dungeon/card.png
+    card_1:
+      coordinate:
+        - 1030
+        - 350
+    card_2:
+      coordinate:
+        - 1400
+        - 350
+    card_3:
+      coordinate:
+        - 1800
+        - 350
+    card_4:
+      coordinate:
+        - 650
+        - 880
+    card_5:
+      coordinate:
+        - 1030
+        - 880
+    card_6:
+      coordinate:
+        - 1400
+        - 880
+    card_7:
+      coordinate:
+        - 1800
+        - 880
   skill:
     *evangelist :
       *evangelist_attack :

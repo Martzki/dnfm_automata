@@ -1,12 +1,7 @@
-import time
-
-import cv2
-
 from src.common.log import Logger
-from src.common.util import get_capture_file
 from src.lib.character.character import Character
-from src.lib.dungeon.battle import BattleMetadata
 from src.lib.dungeon.dungeon import DungeonRoomHandler
+from src.lib.ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 
@@ -431,13 +426,11 @@ class BwangaRoom8Handler(DungeonRoomHandler):
         super().__init__(dungeon, 8, character_class, strategy)
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        # Wait finish.
-        while True:
-            finish = self.dungeon.detector.img_match(self.dungeon.get_battle_metadata().frame, [self.finish_img])
-            if finish.confidence > 0.9:
-                break
+        self.dungeon.pick_cards()
 
-        # Pick up items.
+        self.dungeon.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "re_enter_dungeon", timeout=15)
+
+        # Pick up left items.
         while True:
             meta = self.dungeon.get_battle_metadata()
 
@@ -446,16 +439,7 @@ class BwangaRoom8Handler(DungeonRoomHandler):
 
             self.pick_items(character, meta)
 
-        # Re-enter dungeon.
-        while True:
-            re_enter = self.dungeon.detector.img_match(self.dungeon.get_battle_metadata().frame, [self.re_enter_img])
-            if finish.confidence > 0.9:
-                break
-
-        LOGGER.info("re-enter dungeon")
-        for i in range(3):
-            character.device.touch(re_enter.center)
-            time.sleep(0.1)
+        self.dungeon.re_enter()
 
 
 class BwangaRoom9Handler(DungeonRoomHandler):

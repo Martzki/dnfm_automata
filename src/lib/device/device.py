@@ -4,3 +4,6 @@ class Device(object):
 
     def last_frame(self):
         pass
+
+    def touch(self, coordinate, duration):
+        pass
