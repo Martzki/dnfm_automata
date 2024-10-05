@@ -17,12 +17,14 @@ class CharacterClass(object):
     Evangelist = "Evangelist"
     HellBringer = "HellBringer"
     Noblesse = "Noblesse"
+    SilentEye = "SilentEye"
     Trickster = "Trickster"
     WreckingBall = "WreckingBall"
     class_map = {
         "Evangelist": Evangelist,
         "HellBringer": HellBringer,
         "Noblesse": Noblesse,
+        "SilentEye": SilentEye,
         "Trickster": Trickster,
         "WreckingBall": WreckingBall
     }

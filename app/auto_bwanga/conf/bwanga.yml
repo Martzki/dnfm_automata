@@ -215,6 +215,92 @@ character:
         delay: 5
         exec_limit:
           min_distance: 0
+  &silent_eye SilentEye:
+    skill:
+      &silent_eye_attack attack:
+        type: touch
+        duration: 2
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      &agni_pentacle agni_pentacle:
+        type: swipe_up
+        duration: 0.5
+        cool_down: 40
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      &deadly_enticer deadly_enticer:
+        type: swipe_down
+        duration: 0.5
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 400
+      &fire_wave_sword fire_wave_sword:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 1
+        exec_limit:
+          min_distance: 400
+      &force_wave_neutral force_wave_neutral:
+        type: touch
+        duration: 0.1
+        cool_down: 5
+        delay: 0
+        exec_limit:
+          min_distance: 250
+      &ghost_orb ghost_orb:
+        type: touch
+        duration: 0.8
+        cool_down: 5
+        delay: 1
+        exec_limit:
+          min_distance: 300
+      &ground_quaker ground_quaker:
+        type: swipe_down
+        duration: 0.5
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 400
+      &ice_wave_sword ice_wave_sword:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0.3
+        exec_limit:
+          min_distance: 300
+      &murderous_wave murderous_wave:
+        type: swipe_right
+        duration: 0.1
+        cool_down: 1
+        delay: 0.8
+        exec_limit:
+          min_distance: 0
+      &spirit_crescent spirit_crescent:
+        type: touch
+        duration: 0.8
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 200
+      &wave_eye wave_eye:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      &wave_radiation wave_radiation:
+        type: touch
+        duration: 0.2
+        cool_down: 7
+        delay: 0
+        exec_limit:
+          min_distance: 250
   &trickster Trickster:
     skill:
       &trickster_attack attack:
@@ -291,11 +377,11 @@ character:
     skill:
       &wrecking_ball_attack attack:
         type: touch
-        duration: 1.5
+        duration: 2.5
         cool_down: 0
         delay: 0
         exec_limit:
-          min_distance: 200
+          min_distance: 300
       &destroyer_90_bunker_bomb destroyer_90_bunker_bomb:
         type: touch
         duration: 0.5
@@ -592,6 +678,52 @@ ui:
       *ultimate_slayer_technique_spacetime_cutter :
         key_img:
           - res/ui/skill/noblesse/ultimate_slayer_technique_spacetime_cutter*.png
+    *silent_eye :
+      *silent_eye_attack :
+        key_img:
+          - res/ui/skill/silent_eye/attack*.png
+      *agni_pentacle :
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/silent_eye/agni_pentacle*.png
+      *deadly_enticer:
+        key_img:
+          - res/ui/skill/silent_eye/deadly_enticer*.png
+      *fire_wave_sword:
+        key_img:
+          - res/ui/skill/silent_eye/fire_wave_sword*.png
+      *force_wave_neutral:
+        key_img:
+          - res/ui/skill/silent_eye/force_wave_neutral*.png
+      *ghost_orb:
+        key_img:
+          - res/ui/skill/silent_eye/ghost_orb*.png
+      *ground_quaker:
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/silent_eye/ground_quaker*.png
+      *ice_wave_sword:
+        key_img:
+          - res/ui/skill/silent_eye/ice_wave_sword*.png
+      *murderous_wave:
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/silent_eye/murderous_wave*.png
+      *spirit_crescent:
+        key_img:
+          - res/ui/skill/silent_eye/spirit_crescent*.png
+      *wave_eye:
+        key_img:
+          - res/ui/skill/silent_eye/wave_eye*.png
+      *wave_radiation:
+        key_img:
+          - res/ui/skill/silent_eye/wave_radiation*.png
     *trickster :
       *trickster_attack :
         key_img:
