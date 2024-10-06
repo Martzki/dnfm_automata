@@ -16,10 +16,8 @@ class Room0Handler(BwangaRoom0Handler):
         if enter_times > 1:
             return
 
-        hell_bringer.exec_skill(hell_bringer.derange, delay=0.5)
-        # time.sleep(0.3)
-        hell_bringer.exec_skill(hell_bringer.thirst, delay=0.4)
-        # time.sleep(0.3)
+        hell_bringer.exec_skill(hell_bringer.derange, delay=0.3)
+        hell_bringer.exec_skill(hell_bringer.thirst, delay=1)
         hell_bringer.move(345, 0.6)
         hell_bringer.exec_skill(hell_bringer.enrage)
 
@@ -39,7 +37,7 @@ class Room1Handler(BwangaRoom1Handler):
             return
 
         hell_bringer.move(225, 0.5)
-        hell_bringer.move(0, 0.15)
+        hell_bringer.move(0, 0.2)
         hell_bringer.exec_skill(hell_bringer.blood_sword)
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
@@ -59,8 +57,8 @@ class Room2Handler(BwangaRoom2Handler):
             return
 
         hell_bringer.move(340, 0.6)
-        hell_bringer.move(0, 0.2)
-        hell_bringer.exec_skill(hell_bringer.raging_fury)
+        hell_bringer.move(0, 0.1)
+        hell_bringer.exec_skill(hell_bringer.raging_fury, delay=0.5)
         hell_bringer.exec_skill(hell_bringer.extreme_overkill)
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
@@ -78,7 +76,7 @@ class Room3Handler(BwangaRoom3Handler):
         if enter_times > 1:
             return
 
-        hell_bringer.move(345, 0.4)
+        hell_bringer.move(345, 0.25)
         hell_bringer.exec_skill(hell_bringer.bloody_twister)
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
@@ -96,7 +94,7 @@ class Room4Handler(BwangaRoom4Handler):
         if enter_times > 1:
             return
 
-        hell_bringer.move(140, 0.7)
+        hell_bringer.move(140, 0.55)
         hell_bringer.move(0, 0.2)
         hell_bringer.exec_skill(hell_bringer.enrage)
 
@@ -119,7 +117,8 @@ class Room5Handler(BwangaRoom5Handler):
             return
 
         hell_bringer.move(270, 0.3)
-        hell_bringer.exec_skill(hell_bringer.extreme_overkill)
+        hell_bringer.exec_skill(hell_bringer.extreme_overkill, delay=1.5)
+        hell_bringer.move(225, 1)
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
         self.move_to_next_room(hell_bringer, enter_times)
@@ -155,7 +154,7 @@ class Room7Handler(BwangaRoom7Handler):
             return
 
         hell_bringer.move(345, 0.3)
-        hell_bringer.move(0, 0.1)
+        hell_bringer.move(0, 0.15)
         hell_bringer.exec_skill(hell_bringer.enrage)
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
