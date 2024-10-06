@@ -8,7 +8,7 @@ from src.lib.ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 
-DEFAULT_SWIPE_DISTANCE = 200
+DEFAULT_SWIPE_DISTANCE = 350
 DEFAULT_MOVE_LENGTH = 150
 
 
@@ -17,7 +17,13 @@ class CharacterClass(object):
     Evangelist = "Evangelist"
     HellBringer = "HellBringer"
     Trickster = "Trickster"
-    class_map = {"Evangelist": Evangelist, "HellBringer": HellBringer, "Trickster": Trickster}
+    WreckingBall = "WreckingBall"
+    class_map = {
+        "Evangelist": Evangelist,
+        "HellBringer": HellBringer,
+        "Trickster": Trickster,
+        "WreckingBall": WreckingBall
+    }
 
     @classmethod
     def from_str(cls, class_str):
@@ -72,7 +78,7 @@ class Character(object):
         assert skill is not None, "skill {} is not found".format(skill_name)
         return skill
 
-    def exec_skill(self, skill, duration=None, delay=None):
+    def exec_skill(self, skill, duration=None, delay=None, swipe_angle=None):
         coordinate = self.ui_ctx.get_skill_coordinate(self.character_class, skill.name)
         if not coordinate:
             LOGGER.error("Failed to get coordinate for {}.{}".format(self.character_class, skill.name))
@@ -88,6 +94,17 @@ class Character(object):
 
         if skill.type == SkillType.Touch:
             self.device.touch(coordinate, duration)
+        elif skill.type == SkillType.Swipe:
+            if swipe_angle:
+                rad = radians(swipe_angle)
+                dst = (
+                    coordinate[0] + DEFAULT_SWIPE_DISTANCE * cos(rad),
+                    coordinate[1] - DEFAULT_SWIPE_DISTANCE * sin(rad)
+                )
+                self.device.swipe(coordinate, dst)
+            else:
+                LOGGER.warning(f"Swipe skill: {skill} has no angle, use touch instead")
+                self.device.touch(coordinate, duration)
         elif skill.type == SkillType.SwipeLeft:
             self.device.swipe(coordinate, (coordinate[0] - DEFAULT_SWIPE_DISTANCE, coordinate[1]))
         elif skill.type == SkillType.SwipeRight:

@@ -33,7 +33,7 @@ class ScrcpyDevice(Device):
         else:
             self.client.control.touch(coordinate[0], coordinate[1], scrcpy.ACTION_UP)
 
-    def swipe(self, start, end, move_step_length=50, move_steps_delay=0.051):
+    def swipe(self, start, end, move_step_length=50, move_steps_delay=0.05):
         LOGGER.debug(
             "swipe from {} to {} with move_step_length: {}, move_steps_delay: {}".format(start, end, move_step_length,
                                                                                          move_steps_delay))

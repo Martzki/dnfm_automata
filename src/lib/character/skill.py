@@ -3,12 +3,14 @@ import time
 
 class SkillType(object):
     Touch = 0
-    SwipeLeft = 1
-    SwipeRight = 2
-    SwipeUp = 3
-    SwipeDown = 4
+    Swipe = 1
+    SwipeLeft = 2
+    SwipeRight = 3
+    SwipeUp = 4
+    SwipeDown = 5
     type_map = {
         "touch": Touch,
+        "swipe": Swipe,
         "swipe_left": SwipeLeft,
         "swipe_right": SwipeRight,
         "swipe_up": SwipeUp,

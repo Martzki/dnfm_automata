@@ -183,8 +183,8 @@ class BattleMetadata(object):
             return math.sqrt((src[0] - dst[0]) ** 2 + (src[1] - dst[1]) ** 2)
 
     @staticmethod
-    def get_move_duration(distance):
-        return distance / 1000.0
+    def get_move_duration(distance, vertical_only=False):
+        return distance / (600.0 if vertical_only else 1000.0)
 
     @staticmethod
     def get_rad(src, dst):
