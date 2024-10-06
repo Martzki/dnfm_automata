@@ -3,6 +3,7 @@ from hell_bringer import init_handlers as hell_bringer_init_handlers
 from src.common.log import Logger
 from src.lib.dungeon.dungeon import DungeonRoom
 from trickster import init_handlers as trickster_init_handlers
+from wrecking_ball import init_handlers as wrecking_ball_init_handlers
 
 LOGGER = Logger(__name__).logger
 DUNGEON_NAME = "bwanga"
@@ -20,10 +21,12 @@ def register_room(app):
     evangelist_handlers = evangelist_init_handlers(dungeon)
     hell_bringer_handlers = hell_bringer_init_handlers(dungeon)
     trickster_handlers = trickster_init_handlers(dungeon)
+    wrecking_ball_handlers = wrecking_ball_init_handlers(dungeon)
 
     for i in range(len(evangelist_handlers)):
         room = DungeonRoom(DUNGEON_NAME, i)
         room.register_handler(evangelist_handlers[i])
         room.register_handler(hell_bringer_handlers[i])
         room.register_handler(trickster_handlers[i])
+        room.register_handler(wrecking_ball_handlers[i])
         dungeon.register_room(room)

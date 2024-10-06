@@ -207,6 +207,94 @@ character:
         delay: 0
         exec_limit:
           min_distance: 100
+  &wrecking_ball WreckingBall:
+    skill:
+      &wrecking_ball_attack attack:
+        type: touch
+        duration: 1.5
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 200
+      &destroyer_90_bunker_bomb destroyer_90_bunker_bomb:
+        type: touch
+        duration: 0.5
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 600
+      &eagle_eye eagle_eye:
+        type: swipe_left
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      &fire_concentrate fire_concentrate:
+        type: swipe_right
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      &fm_31_grenade_launcher fm_31_grenade_launcher:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 1
+        exec_limit:
+          min_distance: 600
+      &fm_92_stinger fm_92_stinger:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0.5
+        exec_limit:
+          min_distance: 500
+      &laser_rifle laser_rifle:
+        type: touch
+        duration: 0.6
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 80
+          vertical_only: true
+      &quantum_bomb quantum_bomb:
+        type: swipe
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      &satellite_beam satellite_beam:
+        type: swipe
+        duration: 0.1
+        cool_down: 5
+        delay: 0
+        exec_limit:
+          min_distance: 250
+      &shotgun shotgun:
+        type: touch
+        duration: 0.1
+        cool_down: 5
+        delay: 0
+        exec_limit:
+          min_distance: 250
+      &steyr_amr steyr_amr:
+        type: touch
+        duration: 0.1
+        cool_down: 5
+        delay: 0
+        exec_limit:
+          min_distance: 100
+          vertical_only: 80
+      &x_1_extruder x_1_extruder:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 600
 ui:
   base:
     move:
@@ -379,3 +467,46 @@ ui:
       *snow_man:
         key_img:
           - res/ui/skill/trickster/snow_man*.png
+    *wrecking_ball :
+      *wrecking_ball_attack :
+        key_img:
+          - res/ui/skill/wrecking_ball/attack*.png
+      *destroyer_90_bunker_bomb :
+        key_img:
+          - res/ui/skill/wrecking_ball/destroyer_90_bunker_bomb*.png
+      *eagle_eye:
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/wrecking_ball/eagle_eye*.png
+      *fire_concentrate:
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/wrecking_ball/fire_concentrate*.png
+      *fm_31_grenade_launcher:
+        key_img:
+          - res/ui/skill/wrecking_ball/fm_31_grenade_launcher*.png
+      *fm_92_stinger:
+        key_img:
+          - res/ui/skill/wrecking_ball/fm_92_stinger*.png
+      *laser_rifle:
+        key_img:
+          - res/ui/skill/wrecking_ball/laser_rifle*.png
+      *quantum_bomb:
+        key_img:
+          - res/ui/skill/wrecking_ball/quantum_bomb*.png
+      *satellite_beam:
+        key_img:
+          - res/ui/skill/wrecking_ball/satellite_beam*.png
+      *shotgun:
+        key_img:
+          - res/ui/skill/wrecking_ball/shotgun*.png
+      *steyr_amr:
+        key_img:
+          - res/ui/skill/wrecking_ball/steyr_amr*.png
+      *x_1_extruder:
+        key_img:
+          - res/ui/skill/wrecking_ball/x_1_extruder*.png

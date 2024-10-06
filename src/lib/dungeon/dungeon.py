@@ -55,7 +55,8 @@ class DungeonRoomHandler(object):
             LOGGER.info(f"Character not found")
             return False
 
-        monster, distance = meta.get_closest_monster(skill.exec_limit.vertical_only)
+        vertical_only = skill.exec_limit.vertical_only
+        monster, distance = meta.get_closest_monster(vertical_only)
 
         LOGGER.info(f"Change direction")
         character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()), 0.15)
@@ -72,8 +73,6 @@ class DungeonRoomHandler(object):
             vertical_diff = meta.character.coordinate()[1] - monster.coordinate()[1]
             if abs(vertical_diff) > 100:
                 character.move(90 if vertical_diff > 0 else 270, 0.2)
-
-
 
         return False
 
