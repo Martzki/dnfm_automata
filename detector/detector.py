@@ -1,6 +1,7 @@
 # from paddleocr import PaddleOCR
-import cv2
 import time
+
+import cv2
 
 from common.log import Logger
 from detector.onnx import Onnx

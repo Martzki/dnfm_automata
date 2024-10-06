@@ -383,10 +383,52 @@ ui:
         - 791
     check_box:
       key_img:
-        - res/ui/base/check_box.png
+        - res/ui/base/check_box*.png
     confirm:
       key_img:
-        - res/ui/base/confirm.png
+        - res/ui/base/confirm*.png
+    commission:
+      key_img:
+        - res/ui/base/commission*.png
+    speciality:
+      key_img:
+        - res/ui/base/speciality*.png
+    speciality_ridge:
+      key_img:
+        - res/ui/base/speciality_ridge*.png
+    move_to_specific_area:
+      key_img:
+        - res/ui/base/move_to_specific_area*.png
+    package:
+      key_img:
+        - res/ui/base/package*.png
+    repair:
+      key_img:
+        - res/ui/base/repair*.png
+    repair_window_label:
+      key_img:
+        - res/ui/base/repair_window_label*.png
+    repair_window_confirm:
+      key_img:
+        - res/ui/base/repair_window_confirm*.png
+    repair_worn:
+      key_img:
+        - res/ui/base/repair_worn*.png
+    setting_select_character:
+      key_img:
+        - res/ui/base/setting_select_character*.png
+    dungeon_label_ridge:
+      key_img:
+        - res/ui/base/dungeon_label_ridge*.png
+    dungeon_label_bwanga:
+      key_img:
+        - res/ui/base/dungeon_label_bwanga*.png
+    dungeon_select_previous:
+      key_img:
+        - res/ui/base/dungeon_select_previous*.png
+    dungeon_select_start_battle:
+      key_img:
+        - res/ui/base/dungeon_select_start_battle*.png
   dungeon:
     re_enter_dungeon:
       key_img:
