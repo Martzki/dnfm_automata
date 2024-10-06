@@ -23,15 +23,43 @@ LOGGER = Logger(__name__).logger
 
 class BwangaApp(BaseApp):
     def __init__(self, device: Device, detector: Detector, character: Character, ui_ctx: UIElementCtx):
-        super(BwangaApp, self).__init__(device)
+        super(BwangaApp, self).__init__(device, ui_ctx)
         self.dungeon = Dungeon(device, detector, ui_ctx)
         self.character = character
 
     def init(self):
         super(BwangaApp, self).init()
 
+    def goto_dungeon(self):
+        LOGGER.info("Start to go to dungeon")
+
+        self.repair_equipments()
+
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "commission")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "speciality")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "speciality_ridge")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "move_to_specific_area")
+
+        LOGGER.info("Start to move to dungeon")
+
+        self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "dungeon_label_ridge", timeout=120)
+
+        while True:
+            try:
+                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "dungeon_label_bwanga", timeout=3)
+                break
+            except TimeoutError:
+                self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "dungeon_select_previous", timeout=3)
+                continue
+
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "dungeon_select_start_battle")
+
+        LOGGER.info("Succeed to go to dungeon")
+
     def start(self):
         LOGGER.info("App started")
+
+        self.goto_dungeon()
 
         dungeon_finished = False
         dungeon_finished_time = None

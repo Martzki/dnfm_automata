@@ -245,21 +245,6 @@ class Dungeon(object):
         meta = BattleMetadata(frame, self.detector)
         return self.room_map.get(meta.room_id, None)
 
-    def double_confirm(self):
-        check_box = self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "check_box", timeout=2)
-        if check_box is None:
-            return
-
-        self.device.touch(check_box, 0.1)
-
-        time.sleep(0.2)
-
-        confirm = self.ui_ctx.get_ui_coordinate(UIElementCtx.CategoryBase, "confirm")
-        if not confirm:
-            return
-
-        self.device.touch(confirm, 0.1)
-
     def pick_cards(self, card_list=None):
         if self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "card", timeout=10) is None:
             LOGGER.error("failed to get card coordinate")
@@ -286,12 +271,5 @@ class Dungeon(object):
         self.device.touch((100, 100), 0.1)
 
     def re_enter(self):
-        re_enter = self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "re_enter_dungeon", timeout=15)
-        if re_enter is None:
-            LOGGER.error("failed to get re_enter coordinate")
-            return
-
-        LOGGER.info("re-enter dungeon")
-        self.device.touch(re_enter, 0.1)
-
-        self.double_confirm()
+        LOGGER.info("Start to re-enter dungeon")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "re_enter_dungeon", double_check=True, timeout=15)
