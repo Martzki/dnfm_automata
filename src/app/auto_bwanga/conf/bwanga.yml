@@ -307,6 +307,9 @@ ui:
         key_img:
           - res/ui/skill/hell_bringer/bloody_twister.png
       *derange :
+        coordinate:
+          - 1856
+          - 932
         key_img:
           - res/ui/skill/hell_bringer/derange*.png
       *enrage :
@@ -328,6 +331,9 @@ ui:
         key_img:
           - res/ui/skill/hell_bringer/raging_fury.png
       *thirst :
+        coordinate:
+          - 1856
+          - 932
         key_img:
           - res/ui/skill/hell_bringer/thirst*.png
     *trickster :
