@@ -332,37 +332,21 @@ class BwangaRoom6Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 6, character_class, strategy)
 
-    def move_to_next_room(self, character: Character, enter_times: int):
+    def move_to_next_room(self, character: Character, enter_times: int, room_5_visited: bool):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
         while True:
-            last_coordinate = None
             while True:
                 meta = self.dungeon.get_battle_metadata()
-                if meta.right_gate and meta.right_gate.is_open and meta.character:
+                next_gate = meta.right_gate if room_5_visited else meta.left_gate
+                if next_gate and next_gate.is_open and meta.character:
                     break
 
-                if not meta.character:
-                    if self.re_search_dungeon(character):
-                        return
-                    continue
-
-                if self.room_changed():
+                if self.re_search_dungeon(character):
                     return
 
-                # Avoid already on gate scenario.
-                if not last_coordinate:
-                    character.move(180, 0.2)
-
-                if not last_coordinate or abs(last_coordinate[1] - meta.character.coordinate()[1]) > 10:
-                    character.move(90, 0.1)
-                else:
-                    character.move(0, 0.1)
-
-                last_coordinate = meta.character.coordinate()
-
             LOGGER.info("found gate, move")
-            if not character.move_toward(meta.character.coordinate(), meta.right_gate.coordinate(), self.room_changed):
+            if not character.move_toward(meta.character.coordinate(), next_gate.coordinate(), self.room_changed):
                 LOGGER.info("room not changed after moving, retry")
                 continue
 

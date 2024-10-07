@@ -139,7 +139,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.purifying_lightning)
 
-        self.move_to_next_room(evangelist, enter_times)
+        self.move_to_next_room(evangelist, enter_times, kwargs.get("room_5_visited", False))
 
 
 class Room7Handler(BwangaRoom7Handler):
