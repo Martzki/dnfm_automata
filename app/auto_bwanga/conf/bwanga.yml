@@ -135,6 +135,86 @@ character:
         delay: 0.2
         exec_limit:
           min_distance: 10
+  &noblesse Noblesse:
+    skill:
+      &noblesse_attack attack:
+        type: touch
+        duration: 1.5
+        cool_down: 0
+        exec_limit:
+          min_distance: 330
+      &arcane_sword_blast arcane_sword_blast:
+        type: swipe_down
+        duration: 0.2
+        cool_down: 8
+        delay: 2
+        exec_limit:
+          min_distance: 600
+      &ascent ascent:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        delay: 0.5
+        exec_limit:
+          min_distance: 300
+      &crescent crescent:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        exec_limit:
+          min_distance: 500
+      &elemental_shift elemental_shift:
+        type: swipe
+        duration: 0.2
+        cool_down: 1
+        delay: 0.5
+        exec_limit:
+          min_distance: 0
+      &flash flash:
+        type: swipe_right
+        duration: 0.2
+        cool_down: 1
+        delay: 0.5
+        exec_limit:
+          min_distance: 800
+      &illusion_sword illusion_sword:
+        type: touch
+        duration: 0.2
+        cool_down: 5
+        delay: 0.5
+        exec_limit:
+          min_distance: 300
+      &sentiment_du_fer_critical sentiment_du_fer_critical:
+        type: swipe_up
+        duration: 0.2
+        cool_down: 1
+        exec_limit:
+          min_distance: 0
+      &swift_demon_slash swift_demon_slash:
+        type: touch
+        duration: 0.5
+        cool_down: 1
+        exec_limit:
+          min_distance: 400
+      &swift_sword swift_sword:
+        type: touch
+        duration: 0.2
+        cool_down: 4
+        exec_limit:
+          min_distance: 300
+      &tossing_slash tossing_slash:
+        type: touch
+        duration: 0.2
+        cool_down: 14
+        exec_limit:
+          min_distance: 100
+      &ultimate_slayer_technique_spacetime_cutter ultimate_slayer_technique_spacetime_cutter:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        delay: 5
+        exec_limit:
+          min_distance: 0
   &trickster Trickster:
     skill:
       &trickster_attack attack:
@@ -424,6 +504,52 @@ ui:
           - 932
         key_img:
           - res/ui/skill/hell_bringer/thirst*.png
+    *noblesse :
+      *noblesse_attack :
+        key_img:
+          - res/ui/skill/noblesse/attack*.png
+      *arcane_sword_blast :
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/noblesse/arcane_sword_blast*.png
+      *ascent :
+        key_img:
+          - res/ui/skill/noblesse/ascent*.png
+      *crescent :
+        key_img:
+          - res/ui/skill/noblesse/crescent*.png
+      *elemental_shift :
+        key_img:
+          - res/ui/skill/noblesse/elemental_shift*.png
+      *flash :
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/noblesse/flash*.png
+      *illusion_sword :
+        key_img:
+          - res/ui/skill/noblesse/illusion_sword*.png
+      *sentiment_du_fer_critical :
+        coordinate:
+          - 1856
+          - 932
+        key_img:
+          - res/ui/skill/noblesse/sentiment_du_fer_critical*.png
+      *swift_demon_slash :
+        key_img:
+          - res/ui/skill/noblesse/swift_demon_slash*.png
+      *swift_sword :
+        key_img:
+          - res/ui/skill/noblesse/swift_sword*.png
+      *tossing_slash :
+        key_img:
+          - res/ui/skill/noblesse/tossing_slash*.png
+      *ultimate_slayer_technique_spacetime_cutter :
+        key_img:
+          - res/ui/skill/noblesse/ultimate_slayer_technique_spacetime_cutter*.png
     *trickster :
       *trickster_attack :
         key_img:

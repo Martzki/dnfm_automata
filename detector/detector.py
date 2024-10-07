@@ -1,5 +1,6 @@
 # from paddleocr import PaddleOCR
 import cv2
+import time
 
 from common.log import Logger
 from detector.onnx import Onnx
@@ -107,8 +108,6 @@ class Detector(object):
         return ImageMatchResult(max_val, (center_x, center_y), max_loc, [key_img_height, key_img_width])
 
     def template_match(self, frame, key_img_list):
-        # cv2.imwrite("debug_frame.png", frame)
-
         start = time.time()
 
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
