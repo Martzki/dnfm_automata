@@ -80,7 +80,7 @@ class UIElementCtx(object):
         coordinate = None
         if element.key_img_list:
             result = self.detector.img_match(self.device.last_frame(), element.key_img_list)
-            if result.confidence > 0.85:
+            if result.confidence > 0.65:
                 coordinate = result.center
         elif element.key_text_list:
             coordinate = self.detector.ocr_match(self.device.last_frame(), element.key_text_list)
