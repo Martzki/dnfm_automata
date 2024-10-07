@@ -4,6 +4,8 @@ from character.evangelist import Evangelist
 from dungeon.strategy import BattleStrategy
 
 default_battle_strategy = BattleStrategy()
+
+
 # default_battle_strategy.register_skill(Evangelist., 10, 0)
 
 

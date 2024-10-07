@@ -5,12 +5,12 @@ import yaml
 
 from app.auto_bwanga import room
 from app.base_app import BaseApp
-from common.log import Logger
 from character.character import Character
 from character.evangelist import Evangelist
 from character.hell_bringer import HellBringer
 from character.trickster import Trickster
 from character.wrecking_ball import WreckingBall
+from common.log import Logger
 from detector.detector import Detector
 from device.device import Device
 from device.scrcpy_device import ScrcpyDevice

@@ -2,7 +2,6 @@ import onnxruntime
 import torch.nn as nn
 from ultralytics.utils.plotting import Annotator, colors
 
-from common.log import Logger
 from detector.yolo import *
 
 LOGGER = Logger(__name__).logger
