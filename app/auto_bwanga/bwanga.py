@@ -8,6 +8,7 @@ from app.base_app import BaseApp
 from character.character import Character
 from character.evangelist import Evangelist
 from character.hell_bringer import HellBringer
+from character.noblesse import Noblesse
 from character.trickster import Trickster
 from character.wrecking_ball import WreckingBall
 from common.log import Logger
@@ -86,16 +87,21 @@ if __name__ == '__main__':
     ui_ctx.load(config["ui"])
     evangelist = Evangelist(device, ui_ctx, config["character"]["Evangelist"])
     hell_bringer = HellBringer(device, ui_ctx, config["character"]["HellBringer"])
+    noblesse = Noblesse(device, ui_ctx, config["character"]["Noblesse"])
     trickster = Trickster(device, ui_ctx, config["character"]["Trickster"])
     wrecking_ball = WreckingBall(device, ui_ctx, config["character"]["WreckingBall"])
-    if sys.argv[2] == "0":
+    character_class = sys.argv[2]
+    if character_class == "0":
         c = hell_bringer
-    elif sys.argv[2] == "1":
+    elif character_class == "1":
         c = evangelist
-    elif sys.argv[2] == "2":
+    elif character_class == "2":
         c = trickster
-    elif sys.argv[2] == "4":
+    elif character_class == "4":
         c = wrecking_ball
+    elif character_class == "5":
+        c = noblesse
+
     app = BwangaApp(device, detector, c, ui_ctx)
     room.register_room(app)
 
