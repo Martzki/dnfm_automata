@@ -1,7 +1,7 @@
-from src.common.log import Logger
-from src.lib.character.character import Character
-from src.lib.dungeon.dungeon import DungeonRoomHandler
-from src.lib.ui.ui import UIElementCtx
+from common.log import Logger
+from character.character import Character
+from dungeon.dungeon import DungeonRoomHandler
+from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 

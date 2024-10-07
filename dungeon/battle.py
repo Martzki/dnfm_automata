@@ -1,6 +1,6 @@
 import math
 
-from src.common.log import Logger
+from common.log import Logger
 
 LOGGER = Logger(__name__).logger
 

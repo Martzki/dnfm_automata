@@ -1,5 +1,5 @@
-from src.lib.character.character import Character, CharacterClass
-from src.lib.character.skill import Skill
+from character.character import Character, CharacterClass
+from character.skill import Skill
 
 
 class Trickster(Character):

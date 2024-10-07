@@ -1,7 +1,7 @@
-from src.app.auto_bwanga.room_handler import *
-from src.lib.character.character import CharacterClass
-from src.lib.character.hell_bringer import HellBringer
-from src.lib.dungeon.strategy import BattleStrategy
+from app.auto_bwanga.room_handler import *
+from character.character import CharacterClass
+from character.hell_bringer import HellBringer
+from dungeon.strategy import BattleStrategy
 
 default_battle_strategy = BattleStrategy()
 default_battle_strategy.register_skill(HellBringer.Bloodlust, 10, 0)
