@@ -55,10 +55,11 @@ class BwangaApp(BaseApp):
             if room.room_id == 0:
                 dungeon_finished = False
 
-            if room.room_id == 4:
-                room.exec(self.character, room_5_visited=room_5_visited)
-            else:
-                room.exec(self.character)
+            room_args = {
+                'room_5_visited': room_5_visited
+            }
+
+            room.exec(self.character, **room_args)
 
             LOGGER.info(f"room {room.room_id} finished")
 

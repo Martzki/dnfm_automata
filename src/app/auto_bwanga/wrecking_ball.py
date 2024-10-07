@@ -149,7 +149,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             wrecking_ball.wait_skill_cool_down(wrecking_ball.fm_31_grenade_launcher)
 
-        self.move_to_next_room(wrecking_ball, enter_times)
+        self.move_to_next_room(wrecking_ball, enter_times, kwargs.get("room_5_visited", False))
 
 
 class Room7Handler(BwangaRoom7Handler):

@@ -138,7 +138,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.lava_potion_no_9)
 
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster, enter_times, kwargs.get("room_5_visited", False))
 
 
 class Room7Handler(BwangaRoom7Handler):
