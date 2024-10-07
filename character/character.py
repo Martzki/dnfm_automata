@@ -1,10 +1,10 @@
 import time
 from math import sin, cos, radians
 
-from src.common.log import Logger
-from src.lib.character.skill import Skill, SkillType
-from src.lib.dungeon.battle import BattleMetadata
-from src.lib.ui.ui import UIElementCtx
+from common.log import Logger
+from character.skill import Skill, SkillType
+from dungeon.battle import BattleMetadata
+from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 

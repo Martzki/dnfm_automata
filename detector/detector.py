@@ -1,6 +1,9 @@
 # from paddleocr import PaddleOCR
+import cv2
 
-from src.lib.detector.onnx import *
+from common.log import Logger
+from detector.onnx import Onnx
+from detector.yolo import YoloResult
 
 LOGGER = Logger(__name__).logger
 

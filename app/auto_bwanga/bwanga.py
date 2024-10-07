@@ -3,19 +3,19 @@ import time
 
 import yaml
 
-from src.app.auto_bwanga import room
-from src.app.base_app import BaseApp
-from src.common.log import Logger
-from src.lib.character.character import Character
-from src.lib.character.evangelist import Evangelist
-from src.lib.character.hell_bringer import HellBringer
-from src.lib.character.trickster import Trickster
-from src.lib.character.wrecking_ball import WreckingBall
-from src.lib.detector.detector import Detector
-from src.lib.device.device import Device
-from src.lib.device.scrcpy_device import ScrcpyDevice
-from src.lib.dungeon.dungeon import Dungeon
-from src.lib.ui.ui import UIElementCtx
+from app.auto_bwanga import room
+from app.base_app import BaseApp
+from common.log import Logger
+from character.character import Character
+from character.evangelist import Evangelist
+from character.hell_bringer import HellBringer
+from character.trickster import Trickster
+from character.wrecking_ball import WreckingBall
+from detector.detector import Detector
+from device.device import Device
+from device.scrcpy_device import ScrcpyDevice
+from dungeon.dungeon import Dungeon
+from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 

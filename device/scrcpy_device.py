@@ -3,8 +3,8 @@ import time
 
 import scrcpy
 
-from src.common.log import Logger
-from src.lib.device.device import Device
+from common.log import Logger
+from device.device import Device
 
 LOGGER = Logger(__name__).logger
 LOGGER.setLevel(logging.INFO)

@@ -1,13 +1,13 @@
 import random
 import time
 
-from src.common.log import Logger
-from src.lib.character.character import Character
-from src.lib.detector.detector import Detector
-from src.lib.device.device import Device
-from src.lib.dungeon.battle import BattleMetadata
-from src.lib.dungeon.strategy import BattleStrategy
-from src.lib.ui.ui import UIElementCtx
+from common.log import Logger
+from character.character import Character
+from detector.detector import Detector
+from device.device import Device
+from dungeon.battle import BattleMetadata
+from dungeon.strategy import BattleStrategy
+from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 

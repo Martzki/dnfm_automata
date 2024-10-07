@@ -11,7 +11,7 @@ import torch
 import torchvision
 import yaml
 
-from src.common.log import Logger
+from common.log import Logger
 
 LOGGER = Logger(__name__).logger
 
