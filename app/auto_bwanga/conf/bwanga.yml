@@ -406,7 +406,7 @@ ui:
       *extreme_overkill :
         key_img:
           - res/ui/skill/hell_bringer/extreme_overkill.png
-      *gore_cross:
+      *gore_cross :
         key_img:
           - res/ui/skill/hell_bringer/gore_cross.png
       *mountainous_wheel :
@@ -434,37 +434,37 @@ ui:
           - 932
         key_img:
           - res/ui/skill/trickster/acid_rain*.png
-      *cheeky_doll_shururu:
+      *cheeky_doll_shururu :
         key_img:
           - res/ui/skill/trickster/cheeky_doll_shururu*.png
-      *enhanced_magic_missile:
+      *enhanced_magic_missile :
         key_img:
           - res/ui/skill/trickster/enhanced_magic_missile*.png
-      *fusion_craft:
+      *fusion_craft :
         key_img:
           - res/ui/skill/trickster/fusion_craft*.png
-      *gravitas:
+      *gravitas :
         key_img:
           - res/ui/skill/trickster/gravitas*.png
-      *lava_potion_no_9:
+      *lava_potion_no_9 :
         coordinate:
           - 1856
           - 932
         key_img:
           - res/ui/skill/trickster/lava_potion_no_9*.png
-      *lollipop:
+      *lollipop :
         coordinate:
           - 1856
           - 932
         key_img:
           - res/ui/skill/trickster/lollipop*.png
-      *showtime:
+      *showtime :
         coordinate:
           - 1856
           - 932
         key_img:
           - res/ui/skill/trickster/showtime*.png
-      *snow_man:
+      *snow_man :
         key_img:
           - res/ui/skill/trickster/snow_man*.png
     *wrecking_ball :
@@ -474,39 +474,39 @@ ui:
       *destroyer_90_bunker_bomb :
         key_img:
           - res/ui/skill/wrecking_ball/destroyer_90_bunker_bomb*.png
-      *eagle_eye:
+      *eagle_eye :
         coordinate:
           - 1856
           - 932
         key_img:
           - res/ui/skill/wrecking_ball/eagle_eye*.png
-      *fire_concentrate:
+      *fire_concentrate :
         coordinate:
           - 1856
           - 932
         key_img:
           - res/ui/skill/wrecking_ball/fire_concentrate*.png
-      *fm_31_grenade_launcher:
+      *fm_31_grenade_launcher :
         key_img:
           - res/ui/skill/wrecking_ball/fm_31_grenade_launcher*.png
-      *fm_92_stinger:
+      *fm_92_stinger :
         key_img:
           - res/ui/skill/wrecking_ball/fm_92_stinger*.png
-      *laser_rifle:
+      *laser_rifle :
         key_img:
           - res/ui/skill/wrecking_ball/laser_rifle*.png
-      *quantum_bomb:
+      *quantum_bomb :
         key_img:
           - res/ui/skill/wrecking_ball/quantum_bomb*.png
-      *satellite_beam:
+      *satellite_beam :
         key_img:
           - res/ui/skill/wrecking_ball/satellite_beam*.png
-      *shotgun:
+      *shotgun :
         key_img:
           - res/ui/skill/wrecking_ball/shotgun*.png
-      *steyr_amr:
+      *steyr_amr :
         key_img:
           - res/ui/skill/wrecking_ball/steyr_amr*.png
-      *x_1_extruder:
+      *x_1_extruder :
         key_img:
           - res/ui/skill/wrecking_ball/x_1_extruder*.png

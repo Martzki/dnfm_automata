@@ -1,8 +1,8 @@
 import random
 import time
 
-from common.log import Logger
 from character.character import Character
+from common.log import Logger
 from detector.detector import Detector
 from device.device import Device
 from dungeon.battle import BattleMetadata

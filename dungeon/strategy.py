@@ -1,6 +1,3 @@
-import time
-
-
 class SkillStrategy(object):
     def __init__(self, skill, pre_attack_duration, priority):
         self.skill = skill

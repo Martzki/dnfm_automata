@@ -1,5 +1,5 @@
-from common.log import Logger
 from character.character import Character
+from common.log import Logger
 from dungeon.dungeon import DungeonRoomHandler
 from ui.ui import UIElementCtx
 

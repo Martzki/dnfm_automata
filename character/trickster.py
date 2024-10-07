@@ -25,4 +25,3 @@ class Trickster(Character):
         self.lollipop = Skill(Trickster.Lollipop, conf["skill"][Trickster.Lollipop])
         self.showtime = Skill(Trickster.Showtime, conf["skill"][Trickster.Showtime])
         self.snow_man = Skill(Trickster.Showtime, conf["skill"][Trickster.SnowMan])
-

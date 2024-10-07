@@ -1,7 +1,7 @@
-from evangelist import init_handlers as evangelist_init_handlers
-from hell_bringer import init_handlers as hell_bringer_init_handlers
 from common.log import Logger
 from dungeon.dungeon import DungeonRoom
+from evangelist import init_handlers as evangelist_init_handlers
+from hell_bringer import init_handlers as hell_bringer_init_handlers
 from trickster import init_handlers as trickster_init_handlers
 from wrecking_ball import init_handlers as wrecking_ball_init_handlers
 

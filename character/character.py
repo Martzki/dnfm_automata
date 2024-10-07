@@ -1,8 +1,8 @@
 import time
 from math import sin, cos, radians
 
-from common.log import Logger
 from character.skill import Skill, SkillType
+from common.log import Logger
 from dungeon.battle import BattleMetadata
 from ui.ui import UIElementCtx
 
