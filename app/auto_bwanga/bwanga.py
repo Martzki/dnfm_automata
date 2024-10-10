@@ -52,7 +52,7 @@ class BwangaApp(BaseApp):
                 self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "dungeon_select_previous", timeout=3)
                 continue
 
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "dungeon_select_start_battle")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "dungeon_select_start_battle", double_check=True)
 
         LOGGER.info("Succeed to go to dungeon")
 
