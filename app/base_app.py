@@ -25,6 +25,26 @@ class BaseApp(object):
     def exit_game(self):
         pass
 
+    def swipe_up(self, coordinate=None, distance=200):
+        src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+        dst = (src[0], max(src[1] - distance, 0))
+        self.device.swipe(src, dst)
+
+    def swipe_down(self, coordinate=None, distance=200):
+        src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+        dst = (src[0], min(src[1] + distance, self.device.client.resolution[1]))
+        self.device.swipe(src, dst)
+
+    def swipe_left(self, coordinate=None, distance=200):
+        src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+        dst = (max(src[0] - distance, 0), src[1])
+        self.device.swipe(src, dst)
+
+    def swipe_right(self, coordinate=None, distance=200):
+        src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+        dst = (min(src[0] + distance,  self.device.client.resolution[0]), src[1])
+        self.device.swipe(src, dst)
+
     def back(self):
         self.device.client.device.keyevent("BACK")
 
@@ -69,3 +89,34 @@ class BaseApp(object):
         self.return_to_base_scenario()
 
         LOGGER.info("Succeed to repair worn equipments")
+
+    def change_character(self, character):
+        LOGGER.info(f"Change character to {character}")
+
+        self.return_to_base_scenario()
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "select_character")
+
+        # Scroll to top and search character.
+        for i in range(3):
+            self.swipe_down()
+            time.sleep(0.2)
+        time.sleep(5)
+
+        while True:
+            try:
+                self.ui_ctx.click_ui_element(UIElementCtx.CategoryCharacter, character, timeout=3)
+                break
+            except LookupError:
+                # Character not found, scroll down and re-search.
+                self.swipe_up()
+                time.sleep(5)
+                continue
+
+        try:
+            self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "change_character")
+            self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "package")
+        except LookupError:
+            # Current character is target character.
+            LOGGER.info(f"Current character is already {character}")
+
+        self.return_to_base_scenario()
