@@ -59,8 +59,12 @@ class DungeonRoomHandler(object):
         vertical_only = skill.exec_limit.vertical_only
         monster, distance = meta.get_closest_monster(vertical_only)
 
-        LOGGER.info(f"Change direction")
-        character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()), 0.15)
+        if meta.character.coordinate()[0] < monster.coordinate()[0]:
+            LOGGER.info(f"Change direction to right")
+            character.move(0, 0.1)
+        else:
+            LOGGER.info(f"Change direction to left")
+            character.move(180, 0.1)
 
         move_threshold = 0.3
         if skill.exec_limit.min_distance < distance:
