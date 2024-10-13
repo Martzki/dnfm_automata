@@ -515,6 +515,12 @@ ui:
     dungeon_select_start_battle:
       key_img:
         - res/ui/base/dungeon_select_start_battle*.png
+    change_character:
+      key_img:
+        - res/ui/base/change_character*.png
+    select_character:
+      key_img:
+        - res/ui/base/select_character*.png
   dungeon:
     re_enter_dungeon:
       key_img:

@@ -39,6 +39,7 @@ class UIElement(object):
 
 class UIElementCtx(object):
     CategoryBase = "base"
+    CategoryCharacter = "character"
     CategoryDungeon = "dungeon"
     CategorySkill = "skill"
 
@@ -51,7 +52,7 @@ class UIElementCtx(object):
         self.ui_element_map[key] = ui_element
 
     def load(self, conf):
-        for category in [UIElementCtx.CategoryBase, UIElementCtx.CategoryDungeon]:
+        for category in [UIElementCtx.CategoryBase, UIElementCtx.CategoryCharacter, UIElementCtx.CategoryDungeon]:
             if category not in conf:
                 continue
 

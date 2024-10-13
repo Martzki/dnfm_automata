@@ -1,0 +1,31 @@
+character:
+  silent_eye_0:
+    character_class: SilentEye
+    priority: 0
+    key_img:
+      - res/ui/character/silent_eye_0.png
+  wrecking_ball_0:
+    character_class: WreckingBall
+    priority: 0
+    key_img:
+      - res/ui/character/wrecking_ball_0.png
+  evangelist_0:
+    character_class: Evangelist
+    priority: 0
+    key_img:
+      - res/ui/character/evangelist_0.png
+  trickster_0:
+    character_class: Trickster
+    priority: 1
+    key_img:
+      - res/ui/character/trickster_0.png
+  hell_bringer_0:
+    character_class: HellBringer
+    priority: 2
+    key_img:
+      - res/ui/character/hell_bringer_0.png
+  noblesse_0:
+    character_class: Noblesse
+    priority: 2
+    key_img:
+      - res/ui/character/noblesse_0.png

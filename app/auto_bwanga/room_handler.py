@@ -1,5 +1,6 @@
 from character.character import Character
 from common.log import Logger
+from common.util import timeout
 from dungeon.dungeon import DungeonRoomHandler
 from ui.ui import UIElementCtx
 
@@ -67,6 +68,7 @@ class BwangaRoom1Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 1, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 

@@ -3,6 +3,7 @@ import time
 
 from character.character import Character
 from common.log import Logger
+from common.util import timeout
 from detector.detector import Detector
 from device.device import Device
 from dungeon.battle import BattleMetadata
@@ -189,6 +190,7 @@ class DungeonRoom(object):
     def register_handler(self, handler):
         self.handler_map[handler.character_class] = handler
 
+    @timeout(300)
     def exec(self, character, **kwargs):
         assert character.character_class in self.handler_map, "Handler of class {} is not registered".format(
             character.character_class)
