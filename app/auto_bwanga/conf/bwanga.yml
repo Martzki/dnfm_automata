@@ -1,4 +1,75 @@
 character:
+  &champion Champion:
+    skill:
+      &champion_attack attack:
+        type: touch
+        duration: 1
+        cool_down: 0
+        exec_limit:
+          min_distance: 300
+      &beat_drive beat_drive:
+        type: swipe_down
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 250
+      &bone_crusher bone_crusher:
+        type: touch
+        duration: 0.1
+        cool_down: 7
+        delay: 0.1
+        exec_limit:
+          min_distance: 250
+      &continuous_strike continuous_strike:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 250
+      &rising_fist rising_fist:
+        type: swipe_up
+        duration: 0.1
+        cool_down: 1
+        delay: 0.35
+        exec_limit:
+          min_distance: 250
+      &lightning_dance lightning_dance:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 1
+        exec_limit:
+          min_distance: 10
+      &kihop_low_kick kihop_low_kick:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 300
+      &mountain_pusher mountain_pusher:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 300
+      &power_fist power_fist:
+        type: swipe_right
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 0
+      &seismic_crash seismic_crash:
+        type: touch
+        duration: 0.1
+        cool_down: 6
+        exec_limit:
+          min_distance: 300
+      &super_armor super_armor:
+        type: swipe_left
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 0
   &evangelist Evangelist:
     id:
       - OALeave
@@ -564,6 +635,52 @@ ui:
         - 1800
         - 880
   skill:
+    *champion :
+      *champion_attack :
+        key_img:
+          - res/ui/skill/champion/attack*.png
+      *beat_drive :
+        coordinate:
+          - 1860
+          - 926
+        key_img:
+          - res/ui/skill/champion/beat_drive.png
+      *bone_crusher :
+        key_img:
+          - res/ui/skill/champion/bone_crusher.png
+      *continuous_strike :
+        key_img:
+          - res/ui/skill/champion/continuous_strike*.png
+      *rising_fist :
+        coordinate:
+          - 1860
+          - 926
+        key_img:
+          - res/ui/skill/champion/rising_fist*.png
+      *lightning_dance :
+        key_img:
+          - res/ui/skill/champion/lightning_dance*.png
+      *kihop_low_kick :
+        key_img:
+          - res/ui/skill/champion/kihop_low_kick*.png
+      *mountain_pusher :
+        key_img:
+          - res/ui/skill/champion/mountain_pusher*.png
+      *power_fist :
+        coordinate:
+          - 1860
+          - 926
+        key_img:
+          - res/ui/skill/champion/power_fist*.png
+      *seismic_crash :
+        key_img:
+          - res/ui/skill/champion/seismic_crash*.png
+      *super_armor :
+        coordinate:
+          - 1860
+          - 926
+        key_img:
+          - res/ui/skill/champion/super_armor*.png
     *evangelist :
       *evangelist_attack :
         key_img:

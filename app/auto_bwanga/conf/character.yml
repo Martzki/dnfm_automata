@@ -29,3 +29,8 @@ character:
     priority: 2
     key_img:
       - res/ui/character/noblesse_0.png
+  champion_0:
+    character_class: Champion
+    priority: 2
+    key_img:
+      - res/ui/character/champion_0.png
