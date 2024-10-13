@@ -14,6 +14,7 @@ DEFAULT_MOVE_LENGTH = 150
 
 class CharacterClass(object):
     Unknown = "Unknown"
+    Champion = "Champion"
     Evangelist = "Evangelist"
     HellBringer = "HellBringer"
     Noblesse = "Noblesse"
@@ -21,6 +22,7 @@ class CharacterClass(object):
     Trickster = "Trickster"
     WreckingBall = "WreckingBall"
     class_map = {
+        "Champion": Champion,
         "Evangelist": Evangelist,
         "HellBringer": HellBringer,
         "Noblesse": Noblesse,

@@ -9,6 +9,7 @@ from app.auto_bwanga import room
 from app.auto_bwanga.room import validate_next_room
 from app.base_app import BaseApp
 from character.character import Character
+from character.champion import Champion
 from character.evangelist import Evangelist
 from character.hell_bringer import HellBringer
 from character.noblesse import Noblesse
@@ -150,6 +151,7 @@ class BwangaApp(BaseApp):
 
 def get_character_list(character_config):
     init_func = {
+        "Champion": Champion,
         "Evangelist": Evangelist,
         "HellBringer": HellBringer,
         "Noblesse": Noblesse,

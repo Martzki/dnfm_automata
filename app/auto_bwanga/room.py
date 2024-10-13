@@ -1,5 +1,6 @@
 from common.log import Logger
 from dungeon.dungeon import DungeonRoom
+from champion import init_handlers as champion_init_handlers
 from evangelist import init_handlers as evangelist_init_handlers
 from hell_bringer import init_handlers as hell_bringer_init_handlers
 from noblesse import init_handlers as noblesse_init_handlers
@@ -40,6 +41,7 @@ def validate_next_room(old_room_id, new_room_id):
 
 def register_room(app):
     dungeon = app.dungeon
+    champion_handlers = champion_init_handlers(dungeon)
     evangelist_handlers = evangelist_init_handlers(dungeon)
     hell_bringer_handlers = hell_bringer_init_handlers(dungeon)
     noblesse_handlers = noblesse_init_handlers(dungeon)
@@ -49,6 +51,7 @@ def register_room(app):
 
     for i in range(len(evangelist_handlers)):
         room = DungeonRoom(DUNGEON_NAME, i)
+        room.register_handler(champion_handlers[i])
         room.register_handler(evangelist_handlers[i])
         room.register_handler(hell_bringer_handlers[i])
         room.register_handler(noblesse_handlers[i])
