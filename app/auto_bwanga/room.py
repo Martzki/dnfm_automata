@@ -35,7 +35,7 @@ valid_next_room = {
 
 
 def validate_next_room(old_room_id, new_room_id):
-    return new_room_id in valid_next_room.get(old_room_id, [])
+    return old_room_id == new_room_id or new_room_id in valid_next_room.get(old_room_id, [])
 
 
 def register_room(app):
