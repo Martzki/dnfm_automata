@@ -22,8 +22,13 @@ class BaseApp(object):
     def frame_handler(self, frame):
         pass
 
+    def start_game(self):
+        LOGGER.info("Start game")
+        self.device.client.device.app_start("com.tencent.tmgp.dnf")
+
     def exit_game(self):
-        pass
+        LOGGER.info("Exit game")
+        self.device.client.device.app_stop("com.tencent.tmgp.dnf")
 
     def swipe_up(self, coordinate=None, distance=200):
         src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)

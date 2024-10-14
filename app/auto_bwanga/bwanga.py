@@ -2,6 +2,7 @@ import argparse
 import random
 import time
 
+import cv2
 import yaml
 
 from app.auto_bwanga import room
@@ -128,6 +129,10 @@ class BwangaApp(BaseApp):
                 self.battle_in_dungeon(character["character"])
         except TimeoutError as e:
             LOGGER.fatal(f"Timeout: {e}")
+            for i in range(5):
+                cv2.imwrite(f"timeout_{i}.png", self.device.last_frame())
+                time.sleep(1)
+        finally:
             self.exit_game()
 
     def frame_handler(self, frame):
