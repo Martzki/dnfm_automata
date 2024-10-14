@@ -17,6 +17,26 @@ Bwanga Room
 [  1  ][  2  ][  3  ]
 """
 
+valid_next_room = {
+    -1: [0],
+    0: [1, 11],
+    1: [0, 2],
+    2: [1, 3],
+    3: [2, 4],
+    4: [3, 5, 6, 9],
+    5: [4],
+    6: [4, 7],
+    7: [6, 8],
+    8: [0],
+    9: [4, 10],
+    10: [9, 11],
+    11: [0, 10]
+}
+
+
+def validate_next_room(old_room_id, new_room_id):
+    return new_room_id in valid_next_room.get(old_room_id, [])
+
 
 def register_room(app):
     dungeon = app.dungeon

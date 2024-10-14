@@ -219,6 +219,11 @@ class BwangaRoom4Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 4, character_class, strategy)
 
+    def pre_handler(self, enter_times, character: Character, **kwargs):
+        last_room_id = kwargs.get("last_room_id", -1)
+        if last_room_id == 5:
+            character.move(160, 2)
+
     def move_to_next_room(self, character: Character, enter_times: int, room_5_visited: bool):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
