@@ -96,6 +96,8 @@ class Room4Handler(BwangaRoom4Handler):
         super().__init__(dungeon, CharacterClass.WreckingBall, DefaultBattleStrategy())
 
     def pre_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
+        super().pre_handler(enter_times, wrecking_ball, **kwargs)
+
         if enter_times > 1:
             return
 

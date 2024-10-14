@@ -6,6 +6,7 @@ import cv2
 import yaml
 
 from app.auto_bwanga import room
+from app.auto_bwanga.room import validate_next_room
 from app.base_app import BaseApp
 from character.character import Character
 from character.evangelist import Evangelist
@@ -70,6 +71,7 @@ class BwangaApp(BaseApp):
         dungeon_finished = False
         dungeon_finished_time = None
         room_5_visited = False
+        last_room_id = -1
         while True:
             room = self.dungeon.get_room()
             if not room:
@@ -85,12 +87,16 @@ class BwangaApp(BaseApp):
                 self.device.touch(coordinate)
                 return
 
+            if not validate_next_room(last_room_id, room.room_id):
+                continue
+
             LOGGER.info("detect room {}".format(room.room_id))
 
             if room.room_id == 0:
                 dungeon_finished = False
 
             room_args = {
+                'last_room_id': last_room_id,
                 'room_5_visited': room_5_visited
             }
 

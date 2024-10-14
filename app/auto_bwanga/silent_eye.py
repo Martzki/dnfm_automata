@@ -94,6 +94,8 @@ class Room4Handler(BwangaRoom4Handler):
         super().__init__(dungeon, CharacterClass.SilentEye, DefaultBattleStrategy())
 
     def pre_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
+        super().pre_handler(enter_times, silent_eye, **kwargs)
+
         if enter_times > 1:
             return
 

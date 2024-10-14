@@ -88,6 +88,8 @@ class Room4Handler(BwangaRoom4Handler):
         super().__init__(dungeon, CharacterClass.Trickster, default_battle_strategy)
 
     def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
+        super().pre_handler(enter_times, trickster, **kwargs)
+
         if enter_times > 1:
             return
 
