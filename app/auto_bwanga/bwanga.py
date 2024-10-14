@@ -106,6 +106,7 @@ class BwangaApp(BaseApp):
                 LOGGER.info(f"room {room.room_id} timeout: {e}")
             finally:
                 LOGGER.info(f"room {room.room_id} finished")
+                last_room_id = room.room_id
 
             if room.room_id == 5:
                 room_5_visited = True
