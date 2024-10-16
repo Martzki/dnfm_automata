@@ -120,8 +120,9 @@ class BwangaApp(BaseApp):
 
     def start(self):
         LOGGER.info("App started")
-
         LOGGER.info(f"Character list: {[c['id'] for c in self.character_list]}")
+
+        self.mute_game(True)
 
         try:
             for character in self.character_list:
@@ -140,6 +141,7 @@ class BwangaApp(BaseApp):
                 cv2.imwrite(f"timeout_{i}.png", self.device.last_frame())
                 time.sleep(1)
         finally:
+            self.mute_game(False)
             self.exit_game()
 
     def frame_handler(self, frame):

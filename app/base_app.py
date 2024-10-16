@@ -30,6 +30,10 @@ class BaseApp(object):
         LOGGER.info("Exit game")
         self.device.client.device.app_stop("com.tencent.tmgp.dnf")
 
+    def mute_game(self, mute=True):
+        LOGGER.info(f"{'Mute' if mute else 'Un-mute'} game")
+        self.device.client.device.shell(f"cmd media_session volume --set {0 if mute else 15}")
+
     def swipe_up(self, coordinate=None, distance=200):
         src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
         dst = (src[0], max(src[1] - distance, 0))
