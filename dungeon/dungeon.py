@@ -11,6 +11,7 @@ from dungeon.strategy import BattleStrategy
 from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
+DEFAULT_AREA_HEIGHT = 60
 
 
 class DungeonRoomHandler(object):
@@ -35,9 +36,13 @@ class DungeonRoomHandler(object):
         if time.time() - self.last_search_time > 3:
             self.search_times = 0
 
-        angle = self.search_angle[self.search_times % 4]
-        if character.move(angle, 0.4 + 0.4 * (self.search_times // 4), self.room_changed):
-            return True
+        # Retry 1 time before re-search.
+        if self.search_times % 2 != 0:
+            angle_list_len = len(self.search_angle)
+            scale_search_times = self.search_times // 2
+            angle = self.search_angle[scale_search_times % angle_list_len]
+            if character.move(angle, 0.4 + 0.4 * (scale_search_times // angle_list_len), self.room_changed):
+                return True
 
         self.search_times += 1
         self.last_search_time = time.time()
@@ -50,36 +55,92 @@ class DungeonRoomHandler(object):
         :param character: character under control
         :param skill: skill to execute
         :param meta: DungeonMetadata
-        :return: True if monster is too far away from character else False
+        :return: None
         """
         if meta.character is None:
             LOGGER.info(f"Character not found")
-            return False
+            return
 
         vertical_only = skill.exec_limit.vertical_only
         monster, distance = meta.get_closest_monster(vertical_only)
 
-        if meta.character.coordinate()[0] < monster.coordinate()[0]:
-            LOGGER.info(f"Change direction to right")
-            character.move(0, 0.1)
-        else:
+        src = meta.character.coordinate()
+        dst = monster.coordinate()
+        toward_left = src[0] > dst[0]
+
+        if toward_left:
             LOGGER.info(f"Change direction to left")
             character.move(180, 0.1)
-
-        move_threshold = 0.3
-        if skill.exec_limit.min_distance < distance:
-            duration = BattleMetadata.get_move_duration(distance)
-            move_duration = move_threshold if duration > move_threshold else duration
-            LOGGER.info(f"Move toward monster with {move_duration}")
-            character.move_with_rad(BattleMetadata.get_rad(meta.character.coordinate(), monster.coordinate()),
-                                    move_duration)
-            return duration > move_threshold
+            attack_area = {
+                "left_top": {
+                    "x": float('-inf') if vertical_only else src[0] - skill.exec_limit.min_distance,
+                    "y": src[1] - DEFAULT_AREA_HEIGHT / 2
+                },
+                "right_bottom": {
+                    "x": src[0],
+                    "y": src[1] + DEFAULT_AREA_HEIGHT / 2
+                }
+            }
         else:
-            vertical_diff = meta.character.coordinate()[1] - monster.coordinate()[1]
-            if abs(vertical_diff) > 100:
-                character.move(90 if vertical_diff > 0 else 270, 0.2)
+            LOGGER.info(f"Change direction to right")
+            character.move(0, 0.1)
+            attack_area = {
+                "left_top": {
+                    "x": src[0],
+                    "y": src[1] - DEFAULT_AREA_HEIGHT / 2
+                },
+                "right_bottom": {
+                    "x": float('inf') if vertical_only else src[0] + skill.exec_limit.min_distance,
+                    "y": src[1] + DEFAULT_AREA_HEIGHT / 2
+                }
+            }
 
-        return False
+        monster_area = {
+            "left_top": {
+                "x": monster.left_top[0],
+                "y": monster.right_bottom[1] - DEFAULT_AREA_HEIGHT / 2
+            },
+            "right_bottom": {
+                "x": monster.right_bottom[0],
+                "y": monster.right_bottom[1] + DEFAULT_AREA_HEIGHT / 2
+            }
+        }
+
+        move_vector = {"x": 0, "y": 0}
+        if attack_area["left_top"]["x"] > monster_area["right_bottom"]["x"]:
+            move_vector["x"] = monster_area["right_bottom"]["x"] - attack_area["left_top"]["x"]
+            if attack_area["left_top"]["y"] > monster_area["right_bottom"]["y"]:
+                move_vector["y"] = monster_area["right_bottom"]["y"] - attack_area["left_top"]["y"]
+            elif attack_area["right_bottom"]["y"] < monster_area["left_top"]["y"]:
+                move_vector["y"] = monster_area["left_top"]["y"] - attack_area["right_bottom"]["y"]
+        elif attack_area["right_bottom"]["x"] < monster_area["left_top"]["x"]:
+            move_vector["x"] = monster_area["left_top"]["x"] - attack_area["right_bottom"]["x"]
+            if attack_area["left_top"]["y"] > monster_area["right_bottom"]["y"]:
+                move_vector["y"] = monster_area["right_bottom"]["y"] - attack_area["left_top"]["y"]
+            elif attack_area["right_bottom"]["y"] < monster_area["left_top"]["y"]:
+                move_vector["y"] = monster_area["left_top"]["y"] - attack_area["right_bottom"]["y"]
+        elif attack_area["left_top"]["y"] > monster_area["right_bottom"]["y"]:
+            move_vector["y"] = monster_area["right_bottom"]["y"] - attack_area["left_top"]["y"]
+            if attack_area["left_top"]["x"] > monster_area["right_bottom"]["x"]:
+                move_vector["x"] = monster_area["right_bottom"]["x"] - attack_area["left_top"]["x"]
+            elif attack_area["right_bottom"]["x"] < monster_area["left_top"]["x"]:
+                move_vector["x"] = monster_area["left_top"]["x"] - attack_area["right_bottom"]["x"]
+        elif attack_area["right_bottom"]["y"] < monster_area["left_top"]["y"]:
+            move_vector["y"] = monster_area["left_top"]["y"] - attack_area["right_bottom"]["y"]
+            if attack_area["left_top"]["x"] > monster_area["right_bottom"]["x"]:
+                move_vector["x"] = monster_area["right_bottom"]["x"] - attack_area["left_top"]["x"]
+            elif attack_area["right_bottom"]["x"] < monster_area["left_top"]["x"]:
+                move_vector["x"] = monster_area["left_top"]["x"] - attack_area["right_bottom"]["x"]
+        else:
+            LOGGER.info("No need to move")
+            return
+
+        dst = (
+            src[0] + move_vector["x"],
+            src[1] + move_vector["y"]
+        )
+
+        character.move_toward(src, dst)
 
     def battle(self, character, meta):
         now = time.time()
@@ -89,9 +150,8 @@ class DungeonRoomHandler(object):
         else:
             skill = character.attack
 
-        # Need move closer.
-        if self.move_toward_monster(character, skill, meta):
-            return
+        # Try to move closer.
+        self.move_toward_monster(character, skill, meta)
 
         LOGGER.info(f"Exec skill {skill}")
         character.exec_skill(skill)
@@ -100,6 +160,9 @@ class DungeonRoomHandler(object):
 
         if skill != character.attack:
             self.last_exec_skill_time = now
+
+        if meta.character is None:
+            self.re_search_dungeon(character)
 
     def pick_items(self, character, meta):
         """
