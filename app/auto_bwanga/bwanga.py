@@ -2,14 +2,13 @@ import argparse
 import random
 import time
 
-import cv2
 import yaml
 
 from app.auto_bwanga import room
 from app.auto_bwanga.room import validate_next_room
 from app.base_app import BaseApp
-from character.character import Character
 from character.champion import Champion
+from character.character import Character
 from character.evangelist import Evangelist
 from character.hell_bringer import HellBringer
 from character.noblesse import Noblesse
@@ -17,7 +16,7 @@ from character.silent_eye import SilentEye
 from character.trickster import Trickster
 from character.wrecking_ball import WreckingBall
 from common.log import Logger
-from common.util import timeout
+from common.util import timeout, timeout_handler
 from detector.detector import Detector
 from device.device import Device
 from device.scrcpy_device import ScrcpyDevice
@@ -62,12 +61,16 @@ class BwangaApp(BaseApp):
 
         time.sleep(1)
 
-        if self.ui_ctx.get_ui_coordinate(UIElementCtx.CategoryBase, "dungeon_select_start_battle", use_cache=False) is not None:
+        if self.ui_ctx.get_ui_coordinate(
+                UIElementCtx.CategoryBase,
+                "dungeon_select_start_battle",
+                use_cache=False
+        ) is not None:
             raise TimeoutError("Start battle timeout")
 
         LOGGER.info("Succeed to go to dungeon")
 
-    @timeout(1800)
+    @timeout(600)
     def battle_in_dungeon(self, character: Character):
         dungeon_finished = False
         dungeon_finished_time = None
@@ -104,7 +107,7 @@ class BwangaApp(BaseApp):
             try:
                 room.exec(character, **room_args)
             except TimeoutError as e:
-                LOGGER.info(f"room {room.room_id} timeout: {e}")
+                timeout_handler(f"Timeout in room {room.room_id}: {e}", LOGGER.warning, self.device.last_frame)
             finally:
                 LOGGER.info(f"room {room.room_id} finished")
                 last_room_id = room.room_id
@@ -137,10 +140,7 @@ class BwangaApp(BaseApp):
 
                 self.battle_in_dungeon(character["character"])
         except TimeoutError as e:
-            LOGGER.fatal(f"Timeout: {e}")
-            for i in range(5):
-                cv2.imwrite(f"timeout_{i}.png", self.device.last_frame())
-                time.sleep(1)
+            timeout_handler(f"App timeout: {e}", LOGGER.critical, self.device.last_frame)
         finally:
             self.mute_game(False)
             self.exit_game()

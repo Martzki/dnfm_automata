@@ -164,12 +164,13 @@ class DungeonRoomHandler(object):
         if meta.character is None:
             self.re_search_dungeon(character)
 
-    def pick_items(self, character, meta):
+    def pick_items(self, character, meta, ignore_room_change=False):
         """
         Pick found items.
         :param character: character
         :param meta: battle metadata
-        :return: Need re
+        :param ignore_room_change: whether ignore room change when moving or not
+        :return: None
         """
         item, distance = meta.get_closest_item()
         if item is None:
@@ -178,7 +179,11 @@ class DungeonRoomHandler(object):
 
         if meta.character:
             LOGGER.info(f"Move toward item from {meta.character.coordinate()} to {item.coordinate()}")
-            character.move_toward(meta.character.coordinate(), item.coordinate(), self.room_changed)
+            character.move_toward(
+                meta.character.coordinate(),
+                item.coordinate(),
+                None if ignore_room_change else self.room_changed
+            )
             return
 
         if self.re_search_dungeon(character):
@@ -257,7 +262,7 @@ class DungeonRoom(object):
     def register_handler(self, handler):
         self.handler_map[handler.character_class] = handler
 
-    @timeout(300)
+    @timeout(120)
     def exec(self, character, **kwargs):
         assert character.character_class in self.handler_map, "Handler of class {} is not registered".format(
             character.character_class)
