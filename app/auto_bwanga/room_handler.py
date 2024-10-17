@@ -11,6 +11,7 @@ class BwangaRoom0Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 0, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
@@ -119,6 +120,7 @@ class BwangaRoom2Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 2, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
@@ -169,6 +171,7 @@ class BwangaRoom3Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 3, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
@@ -224,6 +227,7 @@ class BwangaRoom4Handler(DungeonRoomHandler):
         if last_room_id == 5:
             character.move(340, 1)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int, room_5_visited: bool):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
@@ -296,6 +300,7 @@ class BwangaRoom5Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 5, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
@@ -339,6 +344,7 @@ class BwangaRoom6Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 6, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int, room_5_visited: bool):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
@@ -366,6 +372,7 @@ class BwangaRoom7Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 7, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
@@ -416,6 +423,7 @@ class BwangaRoom8Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 8, character_class, strategy)
 
+    @timeout(30)
     def post_handler(self, enter_times, character: Character, **kwargs):
         self.dungeon.pick_cards()
 
@@ -428,7 +436,7 @@ class BwangaRoom8Handler(DungeonRoomHandler):
             if not meta.has_item():
                 break
 
-            self.pick_items(character, meta)
+            self.pick_items(character, meta, ignore_room_change=True)
 
         self.dungeon.re_enter()
 
@@ -437,6 +445,7 @@ class BwangaRoom9Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 9, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
@@ -487,6 +496,7 @@ class BwangaRoom10Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 10, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 
@@ -537,6 +547,7 @@ class BwangaRoom11Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 11, character_class, strategy)
 
+    @timeout(30)
     def move_to_next_room(self, character: Character, enter_times: int):
         LOGGER.info(f"Searching next room gate for room {self.room_id}")
 

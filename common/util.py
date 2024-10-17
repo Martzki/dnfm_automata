@@ -1,7 +1,10 @@
 import functools
+import inspect
 import os
 import signal
 import time
+
+import cv2
 
 from common.log import Logger
 
@@ -16,15 +19,26 @@ def get_capture_file(prefix=''):
     return path + "/{}_{}.png".format(prefix, time.strftime("%Y%m%d%H%M%S", time.localtime()))
 
 
-def timeout_handler(signum, frame):
+def alarm_handler(signum, frame):
     raise TimeoutError()
+
+
+def timeout_handler(exception, log, last_frame):
+    log(exception)
+    try:
+        frame = inspect.stack()[1]
+        for i in range(5):
+            cv2.imwrite(f"{frame.filename}:{frame.lineno}_timeout_{i}.png", last_frame())
+            time.sleep(1)
+    except Exception:
+        pass
 
 
 def timeout(seconds):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.signal(signal.SIGALRM, alarm_handler)
             signal.alarm(seconds)
             try:
                 result = func(*args, **kwargs)
