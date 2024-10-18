@@ -1,6 +1,6 @@
 from character.character import Character
 from common.log import Logger
-from common.util import timeout
+from common.util import timeout, timeout_handler
 from dungeon.dungeon import DungeonRoomHandler
 from ui.ui import UIElementCtx
 
@@ -423,12 +423,8 @@ class BwangaRoom8Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 8, character_class, strategy)
 
-    @timeout(30)
-    def post_handler(self, enter_times, character: Character, **kwargs):
-        self.dungeon.pick_cards()
-
-        self.dungeon.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "re_enter_dungeon", timeout=15)
-
+    @timeout(15)
+    def re_pick_items(self, character: Character):
         # Pick up left items.
         while True:
             meta = self.dungeon.get_battle_metadata()
@@ -438,7 +434,17 @@ class BwangaRoom8Handler(DungeonRoomHandler):
 
             self.pick_items(character, meta, ignore_room_change=True)
 
-        self.dungeon.re_enter()
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        self.dungeon.pick_cards()
+
+        self.dungeon.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "re_enter_dungeon", timeout=15)
+
+        try:
+            self.re_pick_items(character)
+        except TimeoutError as e:
+            timeout_handler(e, LOGGER.warning, self.dungeon.device.last_frame)
+        finally:
+            self.dungeon.re_enter()
 
 
 class BwangaRoom9Handler(DungeonRoomHandler):

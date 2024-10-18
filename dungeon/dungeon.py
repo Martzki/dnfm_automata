@@ -184,6 +184,7 @@ class DungeonRoomHandler(object):
                 item.coordinate(),
                 None if ignore_room_change else self.room_changed
             )
+            time.sleep(0.1)
             return
 
         if self.re_search_dungeon(character):
