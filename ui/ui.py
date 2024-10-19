@@ -2,6 +2,7 @@ import glob
 import time
 
 import cv2
+from func_timeout import FunctionTimedOut
 
 from common.log import Logger
 
@@ -100,7 +101,7 @@ class UIElementCtx(object):
         start = time.time()
         while True:
             if time.time() - start > timeout:
-                raise TimeoutError(f"Waiting UI element: ui.{category}.{name} timeout")
+                raise FunctionTimedOut(f"Waiting UI element: ui.{category}.{name} timeout")
 
             coordinate = self.get_ui_coordinate(category, name, use_cache=False)
             if coordinate is not None:
@@ -111,14 +112,14 @@ class UIElementCtx(object):
             check_box = self.wait_ui_element(UIElementCtx.CategoryBase, "check_box", timeout=2)
             self.device.touch(check_box, 0.1)
             time.sleep(0.5)
-        except TimeoutError:
+        except FunctionTimedOut:
             return
 
         try:
             confirm = self.wait_ui_element(UIElementCtx.CategoryBase, "confirm")
             self.device.touch(confirm, 0.1)
             time.sleep(0.5)
-        except TimeoutError:
+        except FunctionTimedOut:
             return
 
     def click_ui_element(self, category, name, double_check=False, timeout=10, delay=0.5):
@@ -126,7 +127,7 @@ class UIElementCtx(object):
             element = self.wait_ui_element(category, name, timeout)
             self.device.touch(element, 0.1)
             time.sleep(delay)
-        except TimeoutError as e:
+        except FunctionTimedOut as e:
             raise LookupError(f"Failed to get coordinate of {category} {name}: {e}")
 
         if double_check:

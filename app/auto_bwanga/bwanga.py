@@ -3,6 +3,7 @@ import random
 import time
 
 import yaml
+from func_timeout import func_set_timeout, FunctionTimedOut
 
 from app.auto_bwanga import room
 from app.auto_bwanga.room import validate_next_room
@@ -16,7 +17,7 @@ from character.silent_eye import SilentEye
 from character.trickster import Trickster
 from character.wrecking_ball import WreckingBall
 from common.log import Logger
-from common.util import timeout, timeout_handler
+from common.util import timeout_handler
 from detector.detector import Detector
 from device.device import Device
 from device.scrcpy_device import ScrcpyDevice
@@ -53,7 +54,7 @@ class BwangaApp(BaseApp):
             try:
                 self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "dungeon_label_bwanga", timeout=3)
                 break
-            except TimeoutError:
+            except FunctionTimedOut:
                 self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "dungeon_select_previous", timeout=3)
                 continue
 
@@ -66,11 +67,11 @@ class BwangaApp(BaseApp):
                 "dungeon_select_start_battle",
                 use_cache=False
         ) is not None:
-            raise TimeoutError("Start battle timeout")
+            raise FunctionTimedOut("Start battle timeout")
 
         LOGGER.info("Succeed to go to dungeon")
 
-    @timeout(600)
+    @func_set_timeout(1800)
     def battle_in_dungeon(self, character: Character):
         dungeon_finished = False
         dungeon_finished_time = None
@@ -106,7 +107,7 @@ class BwangaApp(BaseApp):
 
             try:
                 room.exec(character, **room_args)
-            except TimeoutError as e:
+            except FunctionTimedOut as e:
                 timeout_handler(f"Timeout in room {room.room_id}: {e}", LOGGER.warning, self.device.last_frame)
             finally:
                 LOGGER.info(f"room {room.room_id} finished")
@@ -134,12 +135,12 @@ class BwangaApp(BaseApp):
 
                 try:
                     self.goto_dungeon()
-                except TimeoutError:
+                except FunctionTimedOut:
                     LOGGER.warning(f"Go to dungeon timeout, skip {character['id']}")
                     continue
 
                 self.battle_in_dungeon(character["character"])
-        except TimeoutError as e:
+        except FunctionTimedOut as e:
             timeout_handler(f"App timeout: {e}", LOGGER.critical, self.device.last_frame)
         finally:
             self.mute_game(False)
