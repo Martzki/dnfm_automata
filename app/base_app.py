@@ -1,5 +1,7 @@
 import time
 
+from func_timeout import FunctionTimedOut
+
 from common.log import Logger
 from ui.ui import UIElementCtx
 
@@ -35,23 +37,27 @@ class BaseApp(object):
         self.device.client.device.shell(f"cmd media_session volume --set {0 if mute else 15}")
 
     def swipe_up(self, coordinate=None, distance=200):
-        src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+        src = coordinate if coordinate else (
+        self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
         dst = (src[0], max(src[1] - distance, 0))
         self.device.swipe(src, dst)
 
     def swipe_down(self, coordinate=None, distance=200):
-        src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+        src = coordinate if coordinate else (
+        self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
         dst = (src[0], min(src[1] + distance, self.device.client.resolution[1]))
         self.device.swipe(src, dst)
 
     def swipe_left(self, coordinate=None, distance=200):
-        src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+        src = coordinate if coordinate else (
+        self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
         dst = (max(src[0] - distance, 0), src[1])
         self.device.swipe(src, dst)
 
     def swipe_right(self, coordinate=None, distance=200):
-        src = coordinate if coordinate else (self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
-        dst = (min(src[0] + distance,  self.device.client.resolution[0]), src[1])
+        src = coordinate if coordinate else (
+        self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+        dst = (min(src[0] + distance, self.device.client.resolution[0]), src[1])
         self.device.swipe(src, dst)
 
     def back(self):
@@ -63,7 +69,7 @@ class BaseApp(object):
         while True:
             try:
                 self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "setting_select_character", timeout=3)
-            except TimeoutError:
+            except FunctionTimedOut:
                 self.back()
                 continue
 

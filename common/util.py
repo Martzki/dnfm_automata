@@ -1,7 +1,5 @@
-import functools
 import inspect
 import os
-import signal
 import time
 
 import cv2
@@ -19,10 +17,6 @@ def get_capture_file(prefix=''):
     return path + "/{}_{}.png".format(prefix, time.strftime("%Y%m%d%H%M%S", time.localtime()))
 
 
-def alarm_handler(signum, frame):
-    raise TimeoutError()
-
-
 def timeout_handler(exception, log, last_frame):
     log(exception)
     try:
@@ -32,20 +26,3 @@ def timeout_handler(exception, log, last_frame):
             time.sleep(1)
     except Exception:
         pass
-
-
-def timeout(seconds):
-    def decorator(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            signal.signal(signal.SIGALRM, alarm_handler)
-            signal.alarm(seconds)
-            try:
-                result = func(*args, **kwargs)
-            except TimeoutError as e:
-                raise TimeoutError(f"Timeout for {seconds}s when exec {func.__name__}") from e
-            finally:
-                signal.alarm(0)  # Cancel the alarm
-            return result
-        return wrapper
-    return decorator
