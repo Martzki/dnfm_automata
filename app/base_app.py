@@ -1,5 +1,7 @@
 import time
 
+from func_timeout import FunctionTimedOut
+
 from common.log import Logger
 from ui.ui import UIElementCtx
 
@@ -67,7 +69,7 @@ class BaseApp(object):
         while True:
             try:
                 self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "setting_select_character", timeout=3)
-            except TimeoutError:
+            except FunctionTimedOut:
                 self.back()
                 continue
 

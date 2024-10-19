@@ -54,7 +54,7 @@ class BwangaApp(BaseApp):
             try:
                 self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "dungeon_label_bwanga", timeout=3)
                 break
-            except TimeoutError:
+            except FunctionTimedOut:
                 self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "dungeon_select_previous", timeout=3)
                 continue
 
@@ -67,7 +67,7 @@ class BwangaApp(BaseApp):
                 "dungeon_select_start_battle",
                 use_cache=False
         ) is not None:
-            raise TimeoutError("Start battle timeout")
+            raise FunctionTimedOut("Start battle timeout")
 
         LOGGER.info("Succeed to go to dungeon")
 
@@ -135,7 +135,7 @@ class BwangaApp(BaseApp):
 
                 try:
                     self.goto_dungeon()
-                except TimeoutError:
+                except FunctionTimedOut:
                     LOGGER.warning(f"Go to dungeon timeout, skip {character['id']}")
                     continue
 
