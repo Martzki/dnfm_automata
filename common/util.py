@@ -24,5 +24,5 @@ def timeout_handler(exception, log, last_frame):
         for i in range(5):
             cv2.imwrite(f"{frame.filename}:{frame.lineno}_timeout_{i}.png", last_frame())
             time.sleep(1)
-    except Exception:
-        pass
+    except Exception as e:
+        LOGGER.error(e)

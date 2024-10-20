@@ -21,41 +21,38 @@ from common.util import timeout_handler
 from detector.detector import Detector
 from device.device import Device
 from device.scrcpy_device import ScrcpyDevice
-from dungeon.dungeon import Dungeon
+from dungeon.dungeon import Dungeon, DungeonReEntered
 from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 
 
-class BwangaApp(BaseApp):
-    def __init__(self, device: Device, detector: Detector, character_list: list, ui_ctx: UIElementCtx):
-        super(BwangaApp, self).__init__(device, ui_ctx)
-        self.dungeon = Dungeon(device, detector, ui_ctx)
-        self.character_list = character_list
-
-    def init(self):
-        super(BwangaApp, self).init()
-
+class Bwanga(Dungeon):
     def goto_dungeon(self):
         LOGGER.info("Start to go to dungeon")
-
-        self.repair_equipments()
-
         self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward", delay=1)
         self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward_adventure_level")
         self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward_mount_thunderime")
         self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward_move_to_area")
-
-        LOGGER.info("Start to move to dungeon")
-
         self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_adventure_level", timeout=120)
         self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_bwanga")
         self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "dungeon_label_bwanga", timeout=3)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_start_battle", double_check=True)
-        self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "mount_thunderime_loading", timeout=5)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_start_battle")
+        try:
+            self.wait_in_dungeon()
+        except FunctionTimedOut:
+            self.ui_ctx.double_check()
+            self.wait_in_dungeon()
 
         LOGGER.info("Succeed to go to dungeon")
+
+
+class BwangaApp(BaseApp):
+    def __init__(self, device: Device, detector: Detector, character_list: list, ui_ctx: UIElementCtx):
+        super(BwangaApp, self).__init__(device, ui_ctx)
+        self.dungeon = Bwanga(device, detector, ui_ctx)
+        self.character_list = character_list
 
     @func_set_timeout(1800)
     def battle_in_dungeon(self, character: Character):
@@ -69,14 +66,13 @@ class BwangaApp(BaseApp):
                 if not dungeon_finished or time.time() - dungeon_finished_time < 10:
                     continue
 
-                coordinate = self.dungeon.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "exit_dungeon",
-                                                                 timeout=5)
-                if coordinate is None:
+                try:
+                    self.dungeon.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "exit_dungeon",
+                                                         timeout=5, delay=10)
+                    LOGGER.info("exit dungeon")
+                    return
+                except LookupError:
                     continue
-
-                LOGGER.info("exit dungeon")
-                self.device.touch(coordinate)
-                return
 
             if not validate_next_room(last_room_id, room.room_id):
                 continue
@@ -91,19 +87,24 @@ class BwangaApp(BaseApp):
                 'room_5_visited': room_5_visited
             }
 
+            dungeon_re_entered = False
             try:
                 room.exec(character, **room_args)
             except FunctionTimedOut as e:
                 timeout_handler(f"Timeout in room {room.room_id}: {e}", LOGGER.warning, self.device.last_frame)
+                try:
+                    self.dungeon.revive(room)
+                except DungeonReEntered:
+                    dungeon_re_entered = True
             finally:
                 LOGGER.info(f"room {room.room_id} finished")
-                last_room_id = room.room_id
+                last_room_id = -1 if dungeon_re_entered else room.room_id
 
             if room.room_id == 5:
                 room_5_visited = True
 
-            if room.room_id == 8:
-                LOGGER.info("Dungeon finished")
+            if room.room_id == 8 or dungeon_re_entered:
+                LOGGER.info("Dungeon re-entered" if dungeon_re_entered else "Dungeon finished")
                 self.dungeon.clear()
                 room_5_visited = False
                 dungeon_finished = True
@@ -120,7 +121,8 @@ class BwangaApp(BaseApp):
                 self.change_character(character["id"])
 
                 try:
-                    self.goto_dungeon()
+                    self.repair_equipments()
+                    self.dungeon.goto_dungeon()
                 except FunctionTimedOut:
                     LOGGER.warning(f"Go to dungeon timeout, skip {character['id']}")
                     continue
