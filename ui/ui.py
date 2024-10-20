@@ -1,5 +1,5 @@
-import glob
 import time
+from pathlib import Path
 
 import cv2
 from func_timeout import FunctionTimedOut
@@ -26,50 +26,70 @@ class UIElement(object):
             f"Invalid arguments: {coordinate}, {key_img_list}, {key_text_list}"
 
         self.coordinate = tuple(coordinate) if isinstance(coordinate, list) and len(coordinate) == 2 else None
+        self.raw_key_img_list = key_img_list
         self.key_img_list = []
         if key_img_list:
             for key_img in key_img_list:
-                for each in glob.glob(key_img):
-                    LOGGER.debug("add key img {}".format(each))
-                    self.key_img_list.append(cv2.imread(each))
+                LOGGER.debug(f"add key img {key_img}")
+                self.key_img_list.append(cv2.imread(str(key_img)))
         self.key_text_list = key_text_list if key_text_list else []
 
     def __repr__(self):
-        return f"coordinate({self.coordinate}, {len(self.key_img_list)}, {self.key_text_list})"
+        return f"coordinate({self.coordinate}, {self.raw_key_img_list}, {self.key_text_list})"
 
 
 class UIElementCtx(object):
-    CategoryBase = "base"
     CategoryCharacter = "character"
+    CategoryCommon = "common"
     CategoryDungeon = "dungeon"
     CategorySkill = "skill"
 
-    def __init__(self, device, detector):
+    def __init__(self, device, detector, base_dir='.'):
         self.ui_element_map = {}
+        self.base_dir = Path(base_dir)
         self.device = device
         self.detector = detector
 
     def register_ui_element(self, key, ui_element):
+        LOGGER.debug(f"register {key} {ui_element}")
         self.ui_element_map[key] = ui_element
 
+    def register_dynamic_ui_elements(self, path, prefix):
+        element_map = {}
+        for each in path.glob("*.png"):
+            element_name = each.name.split('.')[0]
+            if element_name not in element_map:
+                element_map[element_name] = {"key_img_list": []}
+            element_map[element_name]["key_img_list"].append(each)
+
+        for each in element_map.keys():
+            self.register_ui_element(
+                f"ui.{prefix}.{each}",
+                UIElement(key_img_list=element_map[each]["key_img_list"])
+            )
+
     def load(self, conf):
-        for category in [UIElementCtx.CategoryBase, UIElementCtx.CategoryCharacter, UIElementCtx.CategoryDungeon]:
+        for category in [UIElementCtx.CategoryCommon, UIElementCtx.CategoryDungeon]:
             if category not in conf:
                 continue
 
+            # Register static elements.
             for each in conf[category]:
-                element = conf[category][each]
-                self.register_ui_element(f"ui.{category}.{each}",
-                                         UIElement(element.get("coordinate"), element.get("key_img"),
-                                                   element.get("key_text")))
+                coordinate = conf[category][each]
+                self.register_ui_element(f"ui.{category}.{each}", UIElement(coordinate=coordinate))
 
-        if UIElementCtx.CategorySkill in conf:
-            for character_class in conf[UIElementCtx.CategorySkill]:
-                for each in conf[UIElementCtx.CategorySkill][character_class]:
-                    skill = conf[UIElementCtx.CategorySkill][character_class][each]
-                    self.register_ui_element(f"ui.{UIElementCtx.CategorySkill}.{character_class}.{each}",
-                                             UIElement(skill.get("coordinate"), skill.get("key_img"),
-                                                       skill.get("key_text")))
+            # Register dynamic elements.
+            self.register_dynamic_ui_elements(self.base_dir / category, category)
+
+    def load_character(self, conf):
+        if UIElementCtx.CategoryCharacter not in conf:
+            LOGGER.error(f"{UIElementCtx.CategoryCharacter} nof found in conf: {conf}")
+            return
+
+        self.register_dynamic_ui_elements(
+            self.base_dir / UIElementCtx.CategoryCharacter,
+            UIElementCtx.CategoryCharacter
+        )
 
     def get_coordinate(self, key, use_cache=True, conf_thres=0.65):
         if key not in self.ui_element_map:
@@ -109,14 +129,14 @@ class UIElementCtx(object):
 
     def double_check(self):
         try:
-            check_box = self.wait_ui_element(UIElementCtx.CategoryBase, "check_box", timeout=2)
+            check_box = self.wait_ui_element(UIElementCtx.CategoryCommon, "check_box", timeout=2)
             self.device.touch(check_box, 0.1)
             time.sleep(0.5)
         except FunctionTimedOut:
             return
 
         try:
-            confirm = self.wait_ui_element(UIElementCtx.CategoryBase, "confirm")
+            confirm = self.wait_ui_element(UIElementCtx.CategoryCommon, "confirm")
             self.device.touch(confirm, 0.1)
             time.sleep(0.5)
         except FunctionTimedOut:

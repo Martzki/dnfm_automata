@@ -41,29 +41,29 @@ class BwangaApp(BaseApp):
 
         self.repair_equipments()
 
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "commission")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "speciality")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "speciality_ridge")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "move_to_specific_area")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "commission")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "speciality")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "speciality_ridge")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "move_to_specific_area")
 
         LOGGER.info("Start to move to dungeon")
 
-        self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "dungeon_label_ridge", timeout=120)
+        self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "dungeon_label_ridge", timeout=120)
 
         while True:
             try:
-                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "dungeon_label_bwanga", timeout=3)
+                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "dungeon_label_bwanga", timeout=3)
                 break
             except FunctionTimedOut:
-                self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "dungeon_select_previous", timeout=3)
+                self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "dungeon_select_previous", timeout=3)
                 continue
 
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "dungeon_select_start_battle", double_check=True)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "dungeon_select_start_battle", double_check=True)
 
         time.sleep(1)
 
         if self.ui_ctx.get_ui_coordinate(
-                UIElementCtx.CategoryBase,
+                UIElementCtx.CategoryCommon,
                 "dungeon_select_start_battle",
                 use_cache=False
         ) is not None:
@@ -150,15 +150,15 @@ class BwangaApp(BaseApp):
         pass
 
 
-def get_character_list(character_config):
+def get_character_list(device, character_config):
     init_func = {
-        "Champion": Champion,
-        "Evangelist": Evangelist,
-        "HellBringer": HellBringer,
-        "Noblesse": Noblesse,
-        "SilentEye": SilentEye,
-        "Trickster": Trickster,
-        "WreckingBall": WreckingBall
+        "champion": Champion,
+        "evangelist": Evangelist,
+        "hell_bringer": HellBringer,
+        "noblesse": Noblesse,
+        "silent_eye": SilentEye,
+        "trickster": Trickster,
+        "wrecking_ball": WreckingBall
     }
 
     character_list = []
@@ -167,15 +167,17 @@ def get_character_list(character_config):
         sub_list = []
         for character in character_config["character"]:
             each = character_config["character"][character]
-            if each["priority"] == priority:
-                character_class = each["character_class"]
-                each["id"] = character
-                each["character"] = character_map.get(
-                    character_class,
-                    init_func[character_class](device, ui_ctx, config["character"][character_class])
-                )
-                character_map[character_class] = each["character"]
-                sub_list.append(each)
+            if each["priority"] != priority:
+                continue
+
+            character_class = each["character_class"]
+            each["id"] = character
+            each["character"] = character_map.get(
+                character_class,
+                init_func[character_class](device, ui_ctx, config["character"][character_class])
+            )
+            character_map[character_class] = each["character"]
+            sub_list.append(each)
 
         random.shuffle(sub_list)
         character_list.extend(sub_list)
@@ -200,11 +202,11 @@ if __name__ == '__main__':
 
     device = ScrcpyDevice(args.device)
     detector = Detector(args.weights)
-    ui_ctx = UIElementCtx(device, detector)
+    ui_ctx = UIElementCtx(device, detector, config["ui"]["base_dir"])
     ui_ctx.load(config["ui"])
-    ui_ctx.load(character_config)
+    ui_ctx.load_character(character_config)
 
-    app = BwangaApp(device, detector, get_character_list(character_config), ui_ctx)
+    app = BwangaApp(device, detector, get_character_list(device, character_config), ui_ctx)
     room.register_room(app)
 
     app.init()

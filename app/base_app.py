@@ -68,7 +68,7 @@ class BaseApp(object):
 
         while True:
             try:
-                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "setting_select_character", timeout=3)
+                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "setting_select_character", timeout=3)
             except FunctionTimedOut:
                 self.back()
                 continue
@@ -82,21 +82,21 @@ class BaseApp(object):
         LOGGER.info("Succeed to return to base scenario")
 
     def repair_equipments(self):
-        LOGGER.info("Start to epair worn equipments")
+        LOGGER.info("Start to repair worn equipments")
 
         self.return_to_base_scenario()
 
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "package", timeout=3)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "repair", timeout=3)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "repair_window_label", timeout=3)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "package", timeout=3)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair", timeout=3)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_label", timeout=3)
 
         try:
-            self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "repair_window_confirm", timeout=3)
+            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_confirm", timeout=3)
         except LookupError:
-            self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "repair_worn", timeout=3)
+            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_worn", timeout=3)
 
             try:
-                self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "repair_window_confirm", timeout=3)
+                self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_confirm", timeout=3)
             except LookupError:
                 # Maybe worn is fully repaired.
                 pass
@@ -109,7 +109,7 @@ class BaseApp(object):
         LOGGER.info(f"Change character to {character}")
 
         self.return_to_base_scenario()
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "select_character")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "select_character")
 
         # Scroll to top and search character.
         for i in range(3):
@@ -128,8 +128,8 @@ class BaseApp(object):
                 continue
 
         try:
-            self.ui_ctx.click_ui_element(UIElementCtx.CategoryBase, "change_character")
-            self.ui_ctx.wait_ui_element(UIElementCtx.CategoryBase, "package")
+            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "change_character")
+            self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "package")
         except LookupError:
             # Current character is target character.
             LOGGER.info(f"Current character is already {character}")
