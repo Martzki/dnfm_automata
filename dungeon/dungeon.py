@@ -1,7 +1,7 @@
 import random
 import time
 
-from func_timeout import func_set_timeout
+from func_timeout import func_set_timeout, FunctionTimedOut
 
 from character.character import Character
 from common.log import Logger
@@ -13,6 +13,11 @@ from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 DEFAULT_AREA_HEIGHT = 60
+MAX_REVIVE_TIMES = 1
+
+
+class DungeonReEntered(Exception):
+    pass
 
 
 class DungeonRoomHandler(object):
@@ -255,9 +260,11 @@ class DungeonRoom(object):
         self.room_id = room_id
         self.handler_map = {}
         self.enter_times = 0
+        self.revive_times = 0
 
     def clear(self):
         self.enter_times = 0
+        self.revive_times = 0
         for handler in self.handler_map.values():
             handler.last_exec_skill_time = time.time() - 3600
 
@@ -291,6 +298,9 @@ class Dungeon(object):
             'inference_time': 0
         }
         self.room_id = BattleMetadata.UnknownRoomId
+
+    def goto_dungeon(self):
+        pass
 
     def clear(self):
         for room in self.room_map.values():
@@ -349,3 +359,41 @@ class Dungeon(object):
     def re_enter(self):
         LOGGER.info("Start to re-enter dungeon")
         self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "re_enter_dungeon", double_check=True, timeout=15)
+
+    @func_set_timeout(10)
+    def wait_in_dungeon(self):
+        while self.get_room() is None:
+            continue
+
+    def revive(self, room):
+        try:
+            self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "dead_revive")
+        except FunctionTimedOut:
+            LOGGER.warning("Character not dead")
+            return
+
+        # Revive.
+        if room.revive_times < MAX_REVIVE_TIMES:
+            room.revive_times += 1
+            try:
+                LOGGER.info("Character dead, try to revive")
+                self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dead_revive")
+            except LookupError as e:
+                LOGGER.error(f"Failed to revive: {e}")
+        # Back to town and re-enter dungeon.
+        else:
+            try:
+                LOGGER.info(f"Revive times are larger than {MAX_REVIVE_TIMES}, back to town and re-enter dungeon")
+                self.ui_ctx.click_ui_element(
+                    UIElementCtx.CategoryDungeon,
+                    "dead_back_to_town",
+                    double_check=True,
+                    delay=15
+                )
+                LOGGER.info("Back to town and re-enter dungeon")
+                self.goto_dungeon()
+                raise DungeonReEntered(
+                    f"Revive times are larger than {MAX_REVIVE_TIMES}, back to town and re-enter dungeon"
+                )
+            except LookupError as e:
+                LOGGER.error(f"Failed to re-enter dungeon: {e}")

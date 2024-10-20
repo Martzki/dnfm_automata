@@ -9,17 +9,6 @@ from common.log import Logger
 LOGGER = Logger(__name__).logger
 
 
-class CoordinateType(object):
-    Fixed = 0
-    Match = 1
-    Ocr = 2
-
-
-class CoordinateCategory(object):
-    Skill = "skill"
-    UI = "ui"
-
-
 class UIElement(object):
     def __init__(self, coordinate=None, key_img_list=None, key_text_list=None):
         assert coordinate or key_img_list or key_text_list, \
@@ -133,10 +122,11 @@ class UIElementCtx(object):
             self.device.touch(check_box, 0.1)
             time.sleep(0.5)
         except FunctionTimedOut:
-            return
+            # Some double check doesn't have checkbox.
+            pass
 
         try:
-            confirm = self.wait_ui_element(UIElementCtx.CategoryCommon, "confirm")
+            confirm = self.wait_ui_element(UIElementCtx.CategoryCommon, "confirm", timeout=2)
             self.device.touch(confirm, 0.1)
             time.sleep(0.5)
         except FunctionTimedOut:
@@ -146,9 +136,10 @@ class UIElementCtx(object):
         try:
             element = self.wait_ui_element(category, name, timeout)
             self.device.touch(element, 0.1)
-            time.sleep(delay)
         except FunctionTimedOut as e:
             raise LookupError(f"Failed to get coordinate of {category} {name}: {e}")
 
         if double_check:
             self.double_check()
+
+        time.sleep(delay)
