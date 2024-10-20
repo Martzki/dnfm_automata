@@ -41,33 +41,19 @@ class BwangaApp(BaseApp):
 
         self.repair_equipments()
 
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "commission")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "speciality")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "speciality_ridge")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "move_to_specific_area")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward_adventure_level")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward_mount_thunderime")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward_move_to_area")
 
         LOGGER.info("Start to move to dungeon")
 
-        self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "dungeon_label_ridge", timeout=120)
-
-        while True:
-            try:
-                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "dungeon_label_bwanga", timeout=3)
-                break
-            except FunctionTimedOut:
-                self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "dungeon_select_previous", timeout=3)
-                continue
-
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "dungeon_select_start_battle", double_check=True)
-
-        time.sleep(1)
-
-        if self.ui_ctx.get_ui_coordinate(
-                UIElementCtx.CategoryCommon,
-                "dungeon_select_start_battle",
-                use_cache=False
-        ) is not None:
-            raise FunctionTimedOut("Start battle timeout")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_adventure_level", timeout=120)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_bwanga")
+        self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "dungeon_label_bwanga", timeout=3)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_start_battle", double_check=True)
+        self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "mount_thunderime_loading", timeout=5)
 
         LOGGER.info("Succeed to go to dungeon")
 
