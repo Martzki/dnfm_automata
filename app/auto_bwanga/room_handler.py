@@ -4,8 +4,8 @@ from character.character import Character
 from common.log import Logger
 from common.util import timeout_handler
 from dungeon.battle import Gate
-from dungeon.dungeon import DungeonRoomHandler, DungeonFinished, DungeonReEntered
-from ui.ui import UIElementCtx
+from dungeon.dungeon import DungeonRoomHandler, DungeonFinished
+from runtime.ui import ui_elements
 
 LOGGER = Logger(__name__).logger
 
@@ -260,7 +260,7 @@ class BwangaRoom8Handler(DungeonRoomHandler):
     def post_handler(self, enter_times, character: Character, **kwargs):
         self.dungeon.pick_cards()
 
-        self.dungeon.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "re_enter_dungeon", timeout=15)
+        self.dungeon.ui_ctx.wait_ui_element(ui_elements.Dungeon.ContinueBattle, timeout=15)
 
         try:
             self.re_pick_items(character)
@@ -272,11 +272,11 @@ class BwangaRoom8Handler(DungeonRoomHandler):
 
         if fatigue_points > character.reserve_fatigue_points or fatigue_points < 0:
             if kwargs.get('repair_equipments', False):
-                self.dungeon.repair_equipments(UIElementCtx.CategoryDungeon)
+                self.dungeon.repair_equipments(in_dungeon=True)
                 self.dungeon.return_to_dungeon_scenario()
             self.dungeon.continue_battle()
         else:
-            self.dungeon.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "exit_dungeon",
+            self.dungeon.ui_ctx.click_ui_element(ui_elements.Dungeon.ExitDungeon,
                                                  timeout=5, delay=10)
             raise DungeonFinished()
 

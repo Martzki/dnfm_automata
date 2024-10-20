@@ -3,7 +3,9 @@ import time
 from func_timeout import FunctionTimedOut, func_set_timeout
 
 from common.log import Logger
-from ui.ui import UIElementCtx
+from common.util import to_camel_case
+from runtime.ui import ui_elements
+from ui.ui import UIElementCtx, UIElement
 
 LOGGER = Logger(__name__).logger
 
@@ -71,7 +73,7 @@ class BaseApp(object):
 
         while True:
             try:
-                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "setting_select_character", timeout=3)
+                self.ui_ctx.wait_ui_element(ui_elements.Common.SettingSelectCharacter, timeout=3)
             except FunctionTimedOut:
                 self.device.back()
                 continue
@@ -88,7 +90,7 @@ class BaseApp(object):
         LOGGER.info(f"Change character to {character}")
 
         self.return_to_base_scenario()
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "select_character")
+        self.ui_ctx.click_ui_element(ui_elements.Common.SelectCharacter)
 
         # Scroll to top and search character.
         for i in range(3):
@@ -98,7 +100,7 @@ class BaseApp(object):
 
         while True:
             try:
-                self.ui_ctx.click_ui_element(UIElementCtx.CategoryCharacter, character, timeout=3)
+                self.ui_ctx.click_ui_element(getattr(ui_elements.Character, to_camel_case(character)), timeout=3)
                 break
             except LookupError:
                 # Character not found, scroll down and re-search.
@@ -107,8 +109,8 @@ class BaseApp(object):
                 continue
 
         try:
-            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "change_character")
-            self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "package")
+            self.ui_ctx.click_ui_element(ui_elements.Common.ChangeCharacter)
+            self.ui_ctx.wait_ui_element(ui_elements.Common.Package)
         except LookupError:
             # Current character is target character.
             LOGGER.info(f"Current character is already {character}")
@@ -116,13 +118,13 @@ class BaseApp(object):
     def get_current_suit_id(self):
         self.return_to_base_scenario()
 
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "package", delay=1)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "attire", delay=1)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "deformation", delay=1)
+        self.ui_ctx.click_ui_element(ui_elements.Common.Package, delay=1)
+        self.ui_ctx.click_ui_element(ui_elements.Common.Attire, delay=1)
+        self.ui_ctx.click_ui_element(ui_elements.Common.Deformation, delay=1)
 
         for suit_id in range(1, 4):
             try:
-                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, f"suit_{suit_id}", timeout=3)
+                self.ui_ctx.wait_ui_element(getattr(ui_elements.Common, f"Suit{suit_id}"), timeout=3)
                 return suit_id
             except FunctionTimedOut:
                 pass
@@ -133,7 +135,7 @@ class BaseApp(object):
         LOGGER.info(f"Change suit to {suit_id}")
         self.return_to_base_scenario()
 
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "package", delay=1)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "attire", delay=1)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "deformation", delay=1)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, f"unselected_suit_{suit_id}", delay=1)
+        self.ui_ctx.click_ui_element(ui_elements.Common.Package, delay=1)
+        self.ui_ctx.click_ui_element(ui_elements.Common.Attire, delay=1)
+        self.ui_ctx.click_ui_element(ui_elements.Common.Deformation, delay=1)
+        self.ui_ctx.click_ui_element(getattr(ui_elements.Common, f"UnselectedSuit{suit_id}"), delay=1)

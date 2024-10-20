@@ -2,13 +2,13 @@
 
 DEVICE="R3CN509VDWH"
 CHARACTER=${1}
-
-#conda activate dnf
+DIR="app/auto_bwanga"
+LOG="$(pwd)/$(basename $0).log"
 
 export PYTHONPATH=/workspace/bwanga
 
 trap "pkill -9 -f bwanga" 2
 
-cd src/app/auto_bwanga/
-python3 bwanga.py ${DEVICE} ${CHARACTER}
-
+pkill -9 -f bwanga
+python3 app/auto_bwanga/bwanga.py --device R3CN509VDWH --weights app/auto_bwanga/weights/exp21.onnx --conf conf/config.yml --app-conf app/auto_bwanga/conf/bwanga.yml >> ${LOG} 2>&1
+${1}

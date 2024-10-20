@@ -1,8 +1,8 @@
 import time
 
 from app.auto_bwanga.room_handler import *
-from character.character import CharacterClass
-from character.noblesse import Noblesse
+from runtime.character.character_class import CharacterClass
+from runtime.character.noblesse import Noblesse
 from dungeon.strategy import BattleStrategy
 
 

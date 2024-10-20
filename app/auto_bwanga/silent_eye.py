@@ -1,8 +1,8 @@
 import time
 
 from app.auto_bwanga.room_handler import *
-from character.character import CharacterClass
-from character.silent_eye import SilentEye
+from runtime.character.character_class import CharacterClass
+from runtime.character.silent_eye import SilentEye
 from dungeon.strategy import BattleStrategy
 
 

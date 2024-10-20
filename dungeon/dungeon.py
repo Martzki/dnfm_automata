@@ -9,7 +9,8 @@ from detector.detector import Detector
 from device.device import Device
 from dungeon.battle import BattleMetadata, Gate
 from dungeon.strategy import BattleStrategy
-from ui.ui import UIElementCtx
+from runtime.ui import ui_elements
+from ui.ui import UIElementCtx, UIElement
 
 LOGGER = Logger(__name__).logger
 DEFAULT_AREA_HEIGHT = 60
@@ -400,7 +401,7 @@ class Dungeon(object):
         return self.room_map.get(meta.room_id, None)
 
     def pick_cards(self, card_list=None):
-        if self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "card", timeout=10) is None:
+        if self.ui_ctx.wait_ui_element(ui_elements.Dungeon.Card, timeout=10) is None:
             LOGGER.error("failed to get card coordinate")
             return
 
@@ -409,8 +410,7 @@ class Dungeon(object):
             card_list = [random.randint(0, 3)]
 
         for card in card_list:
-            card_key = f"card_{card}"
-            coordinate = self.ui_ctx.get_ui_coordinate(UIElementCtx.CategoryDungeon, card_key)
+            coordinate = self.ui_ctx.get_ui_coordinate(getattr(ui_elements.Dungeon, f"Card{card}"))
             if coordinate is None:
                 continue
 
@@ -426,7 +426,7 @@ class Dungeon(object):
 
     def continue_battle(self):
         LOGGER.info("Continue battle")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "continue_battle", double_check=True, timeout=15)
+        self.ui_ctx.click_ui_element(ui_elements.Dungeon.ContinueBattle, double_check=True, timeout=15)
 
     @func_set_timeout(10)
     def wait_in_dungeon(self):
@@ -435,7 +435,7 @@ class Dungeon(object):
 
     def check_character_dead(self):
         try:
-            self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "dead_revive")
+            self.ui_ctx.wait_ui_element(ui_elements.Dungeon.DeadRevive)
             LOGGER.info("Character is dead")
             return True
         except FunctionTimedOut:
@@ -448,7 +448,7 @@ class Dungeon(object):
             room.revive_times += 1
             try:
                 LOGGER.info("Character dead, try to revive")
-                self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dead_revive")
+                self.ui_ctx.click_ui_element(ui_elements.Dungeon.DeadRevive)
             except LookupError as e:
                 LOGGER.error(f"Failed to revive: {e}")
         # Back to town and re-enter dungeon.
@@ -456,8 +456,7 @@ class Dungeon(object):
             try:
                 LOGGER.info(f"Revive times are larger than {MAX_REVIVE_TIMES}, back to town and re-enter dungeon")
                 self.ui_ctx.click_ui_element(
-                    UIElementCtx.CategoryDungeon,
-                    "dead_back_to_town",
+                    ui_elements.Dungeon.DeadBackToTown,
                     double_check=True,
                     delay=15
                 )
@@ -511,8 +510,7 @@ class Dungeon(object):
             self.device.back()
             time.sleep(2)
             self.ui_ctx.click_ui_element(
-                UIElementCtx.CategoryCommon,
-                "confirm",
+                ui_elements.Common.Confirm,
                 delay=15
             )
             raise DungeonFinished("Dungeon finished")
@@ -532,7 +530,7 @@ class Dungeon(object):
 
         while True:
             try:
-                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "confirm", timeout=3)
+                self.ui_ctx.wait_ui_element(ui_elements.Common.Confirm, timeout=3)
             except FunctionTimedOut:
                 self.device.back()
                 continue
@@ -545,20 +543,21 @@ class Dungeon(object):
 
         LOGGER.info("Succeed to return to dungeon scenario")
 
-    def repair_equipments(self, category):
+    def repair_equipments(self, in_dungeon):
         LOGGER.info("Start to repair worn equipments")
 
-        self.ui_ctx.click_ui_element(category, "package", timeout=5)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair", timeout=3)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_label", timeout=3)
+        category = ui_elements.Dungeon if in_dungeon else ui_elements.Common
+        self.ui_ctx.click_ui_element(category.Package, timeout=5)
+        self.ui_ctx.click_ui_element(ui_elements.Common.Repair, timeout=3)
+        self.ui_ctx.click_ui_element(ui_elements.Common.RepairWindowLabel, timeout=3)
 
         try:
-            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_confirm", timeout=3)
+            self.ui_ctx.click_ui_element(ui_elements.Common.RepairWindowConfirm, timeout=3)
         except LookupError:
-            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_worn", timeout=3)
+            self.ui_ctx.click_ui_element(ui_elements.Common.RepairWorn, timeout=3)
 
             try:
-                self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_confirm", timeout=3)
+                self.ui_ctx.click_ui_element(ui_elements.Common.RepairWindowConfirm, timeout=3)
             except LookupError:
                 # Maybe worn is fully repaired.
                 pass
