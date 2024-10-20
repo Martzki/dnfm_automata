@@ -1,5 +1,4 @@
 from character.character import Character, CharacterClass
-from character.skill import Skill
 
 
 class SilentEye(Character):
@@ -17,14 +16,17 @@ class SilentEye(Character):
 
     def __init__(self, device, ui_ctx, conf):
         super().__init__(device, ui_ctx, CharacterClass.SilentEye, conf)
-        self.agni_pentacle = Skill(SilentEye.AgniPentacle, conf["skill"][SilentEye.AgniPentacle])
-        self.deadly_enticer = Skill(SilentEye.DeadlyEnticer, conf["skill"][SilentEye.DeadlyEnticer])
-        self.fire_wave_sword = Skill(SilentEye.FireWaveSword, conf["skill"][SilentEye.FireWaveSword])
-        self.force_wave_neutral = Skill(SilentEye.ForceWaveNeutral, conf["skill"][SilentEye.ForceWaveNeutral])
-        self.ghost_orb = Skill(SilentEye.GhostOrb, conf["skill"][SilentEye.GhostOrb])
-        self.ground_quaker = Skill(SilentEye.GroundQuaker, conf["skill"][SilentEye.GroundQuaker])
-        self.ice_wave_sword = Skill(SilentEye.IceWaveSword, conf["skill"][SilentEye.IceWaveSword])
-        self.murderous_wave = Skill(SilentEye.MurderousWave, conf["skill"][SilentEye.MurderousWave])
-        self.spirit_crescent = Skill(SilentEye.SpiritCrescent, conf["skill"][SilentEye.SpiritCrescent])
-        self.wave_eye = Skill(SilentEye.WaveEye, conf["skill"][SilentEye.WaveEye])
-        self.wave_radiation = Skill(SilentEye.WaveRadiation, conf["skill"][SilentEye.WaveRadiation])
+        self.agni_pentacle = self.register_skill(SilentEye.AgniPentacle, conf["skill"][SilentEye.AgniPentacle])
+        self.deadly_enticer = self.register_skill(SilentEye.DeadlyEnticer, conf["skill"][SilentEye.DeadlyEnticer])
+        self.fire_wave_sword = self.register_skill(SilentEye.FireWaveSword, conf["skill"][SilentEye.FireWaveSword])
+        self.force_wave_neutral = self.register_skill(
+            SilentEye.ForceWaveNeutral,
+            conf["skill"][SilentEye.ForceWaveNeutral]
+        )
+        self.ghost_orb = self.register_skill(SilentEye.GhostOrb, conf["skill"][SilentEye.GhostOrb])
+        self.ground_quaker = self.register_skill(SilentEye.GroundQuaker, conf["skill"][SilentEye.GroundQuaker])
+        self.ice_wave_sword = self.register_skill(SilentEye.IceWaveSword, conf["skill"][SilentEye.IceWaveSword])
+        self.murderous_wave = self.register_skill(SilentEye.MurderousWave, conf["skill"][SilentEye.MurderousWave])
+        self.spirit_crescent = self.register_skill(SilentEye.SpiritCrescent, conf["skill"][SilentEye.SpiritCrescent])
+        self.wave_eye = self.register_skill(SilentEye.WaveEye, conf["skill"][SilentEye.WaveEye])
+        self.wave_radiation = self.register_skill(SilentEye.WaveRadiation, conf["skill"][SilentEye.WaveRadiation])

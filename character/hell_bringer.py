@@ -1,5 +1,4 @@
 from character.character import Character, CharacterClass
-from character.skill import Skill
 
 
 class HellBringer(Character):
@@ -17,14 +16,20 @@ class HellBringer(Character):
 
     def __init__(self, device, ui_ctx, conf):
         super().__init__(device, ui_ctx, CharacterClass.HellBringer, conf)
-        self.bloodlust = Skill(HellBringer.Bloodlust, conf["skill"][HellBringer.Bloodlust])
-        self.blood_sword = Skill(HellBringer.BloodSword, conf["skill"][HellBringer.BloodSword])
-        self.bloody_twister = Skill(HellBringer.BloodyTwister, conf["skill"][HellBringer.BloodyTwister])
-        self.derange = Skill(HellBringer.Derange, conf["skill"][HellBringer.Derange])
-        self.enrage = Skill(HellBringer.Enrage, conf["skill"][HellBringer.Enrage])
-        self.extreme_overkill = Skill(HellBringer.ExtremeOverkill, conf["skill"][HellBringer.ExtremeOverkill])
-        self.gore_cross = Skill(HellBringer.GoreCross, conf["skill"][HellBringer.GoreCross])
-        self.mountainous_wheel = Skill(HellBringer.MountainousWheel, conf["skill"][HellBringer.MountainousWheel])
-        self.outrage_break = Skill(HellBringer.OutrageBreak, conf["skill"][HellBringer.OutrageBreak])
-        self.raging_fury = Skill(HellBringer.RagingFury, conf["skill"][HellBringer.RagingFury])
-        self.thirst = Skill(HellBringer.Thirst, conf["skill"][HellBringer.Thirst])
+        self.bloodlust = self.register_skill(HellBringer.Bloodlust, conf["skill"][HellBringer.Bloodlust])
+        self.blood_sword = self.register_skill(HellBringer.BloodSword, conf["skill"][HellBringer.BloodSword])
+        self.bloody_twister = self.register_skill(HellBringer.BloodyTwister, conf["skill"][HellBringer.BloodyTwister])
+        self.derange = self.register_skill(HellBringer.Derange, conf["skill"][HellBringer.Derange])
+        self.enrage = self.register_skill(HellBringer.Enrage, conf["skill"][HellBringer.Enrage])
+        self.extreme_overkill = self.register_skill(
+            HellBringer.ExtremeOverkill,
+            conf["skill"][HellBringer.ExtremeOverkill]
+        )
+        self.gore_cross = self.register_skill(HellBringer.GoreCross, conf["skill"][HellBringer.GoreCross])
+        self.mountainous_wheel = self.register_skill(
+            HellBringer.MountainousWheel,
+            conf["skill"][HellBringer.MountainousWheel]
+        )
+        self.outrage_break = self.register_skill(HellBringer.OutrageBreak, conf["skill"][HellBringer.OutrageBreak])
+        self.raging_fury = self.register_skill(HellBringer.RagingFury, conf["skill"][HellBringer.RagingFury])
+        self.thirst = self.register_skill(HellBringer.Thirst, conf["skill"][HellBringer.Thirst])

@@ -4,7 +4,7 @@ from math import sin, cos, radians
 from character.skill import Skill, SkillType
 from common.log import Logger
 from dungeon.battle import BattleMetadata
-from ui.ui import UIElementCtx
+from ui.ui import UIElementCtx, UIElement
 
 LOGGER = Logger(__name__).logger
 
@@ -13,22 +13,22 @@ DEFAULT_MOVE_LENGTH = 150
 
 
 class CharacterClass(object):
-    Unknown = "Unknown"
-    Champion = "Champion"
-    Evangelist = "Evangelist"
-    HellBringer = "HellBringer"
-    Noblesse = "Noblesse"
-    SilentEye = "SilentEye"
-    Trickster = "Trickster"
-    WreckingBall = "WreckingBall"
+    Unknown = "unknown"
+    Champion = "champion"
+    Evangelist = "evangelist"
+    HellBringer = "hell_bringer"
+    Noblesse = "noblesse"
+    SilentEye = "silent_eye"
+    Trickster = "trickster"
+    WreckingBall = "wrecking_ball"
     class_map = {
-        "Champion": Champion,
-        "Evangelist": Evangelist,
-        "HellBringer": HellBringer,
-        "Noblesse": Noblesse,
-        "SilentEye": SilentEye,
-        "Trickster": Trickster,
-        "WreckingBall": WreckingBall
+        "champion": Champion,
+        "evangelist": Evangelist,
+        "hell_bringer": HellBringer,
+        "noblesse": Noblesse,
+        "silent_eye": SilentEye,
+        "trickster": Trickster,
+        "wrecking_ball": WreckingBall
     }
 
     @classmethod
@@ -41,10 +41,21 @@ class Character(object):
         self.device = device
         self.ui_ctx = ui_ctx
         self.character_class = CharacterClass.from_str(character_class)
-        self.attack = Skill("attack", conf["skill"]["attack"])
+        self.attack = self.register_skill("attack", conf["skill"]["attack"])
+
+    def register_skill(self, name, conf):
+        if "coordinate" not in conf:
+            path = self.ui_ctx.base_dir / UIElementCtx.CategorySkill / self.character_class
+            self.ui_ctx.register_dynamic_ui_elements(path, f"{UIElementCtx.CategorySkill}.{self.character_class}")
+        else:
+            self.ui_ctx.register_ui_element(
+                f"ui.{UIElementCtx.CategorySkill}.{self.character_class}.{name}",
+                UIElement(coordinate=conf["coordinate"])
+            )
+        return Skill(name, conf)
 
     def move_with_rad(self, rad, duration=1, need_stop=None):
-        center = self.ui_ctx.get_ui_coordinate(UIElementCtx.CategoryBase, "move")
+        center = self.ui_ctx.get_ui_coordinate(UIElementCtx.CategoryCommon, "move")
         if not center:
             LOGGER.critical("Failed to get move coordinate.")
             return False

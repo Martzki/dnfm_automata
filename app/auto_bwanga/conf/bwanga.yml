@@ -1,494 +1,524 @@
+ui:
+  base_dir: res/ui
+  common:
+    move: [311, 791]
+  dungeon:
+    card_0: [650, 350]
+    card_1: [1030, 350]
+    card_2: [1400, 350]
+    card_3: [1800, 350]
+    card_4: [650, 880]
+    card_5: [1030, 880]
+    card_6: [1400, 880]
+    card_7: [1800, 880]
 character:
-  &champion Champion:
+  champion:
     skill:
-      &champion_attack attack:
+      attack:
         type: touch
         duration: 1
         cool_down: 0
         exec_limit:
           min_distance: 300
-      &beat_drive beat_drive:
+      beat_drive:
         type: swipe_down
+        coordinate: &default_swipe_skill [1860, 926]
         duration: 0.1
         cool_down: 1
         exec_limit:
           min_distance: 250
-      &bone_crusher bone_crusher:
+      bone_crusher:
         type: touch
         duration: 0.1
         cool_down: 7
         delay: 0.1
         exec_limit:
           min_distance: 250
-      &continuous_strike continuous_strike:
+      continuous_strike:
         type: touch
         duration: 0.1
         cool_down: 1
         exec_limit:
           min_distance: 250
-      &rising_fist rising_fist:
+      rising_fist:
         type: swipe_up
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 1
         delay: 0.35
         exec_limit:
           min_distance: 250
-      &lightning_dance lightning_dance:
+      lightning_dance:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 1
         exec_limit:
           min_distance: 10
-      &kihop_low_kick kihop_low_kick:
+      kihop_low_kick:
         type: touch
         duration: 0.1
         cool_down: 1
         exec_limit:
           min_distance: 300
-      &mountain_pusher mountain_pusher:
+      mountain_pusher:
         type: touch
         duration: 0.1
         cool_down: 1
         exec_limit:
           min_distance: 300
-      &power_fist power_fist:
+      power_fist:
         type: swipe_right
+        coordinate: *default_swipe_skill
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 0
-      &seismic_crash seismic_crash:
+      seismic_crash:
         type: touch
         duration: 0.1
         cool_down: 6
         exec_limit:
           min_distance: 300
-      &super_armor super_armor:
+      super_armor:
         type: swipe_left
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 1
         exec_limit:
           min_distance: 0
-  &evangelist Evangelist:
-    id:
-      - OALeave
+  evangelist:
     skill:
-      &evangelist_attack attack:
+      attack:
         type: touch
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 500
-      &christening_light christening_light:
+      christening_light:
         type: touch
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &crux_of_victoria crux_of_victoria:
+      crux_of_victoria:
         type: swipe_up
+        coordinate: *default_swipe_skill
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &grand_crashing_cross grand_crashing_cross:
+      grand_crashing_cross:
         type: touch
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &purifying_lightning purifying_lightning:
+      purifying_lightning:
         type: swipe_down
+        coordinate: *default_swipe_skill
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &saint_wall saint_wall:
+      saint_wall:
         type: touch
         duration: 0.5
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &shining_cross shining_cross:
+      shining_cross:
         type: touch
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &spear_of_victory spear_of_victory:
+      spear_of_victory:
         type: touch
         duration: 0.2
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &valiant_aria valiant_aria:
+      valiant_aria:
         type: touch
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-  &hell_bringer HellBringer:
-    id:
-      - 典狱长牢马
+  hell_bringer:
     skill:
-      &hell_bringer_attack attack:
+      attack:
         type: touch
         duration: 1
         cool_down: 0
         exec_limit:
           min_distance: 330
-      &bloodlust bloodlust:
+      bloodlust:
         type: touch
         duration: 0.2
         cool_down: 8
         exec_limit:
           min_distance: 200
-      &blood_sword blood_sword:
+      blood_sword:
         type: touch
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &bloody_twister bloody_twister:
+      bloody_twister:
         type: touch
         duration: 5
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &derange derange:
+      derange:
         type: swipe_right
+        coordinate: *default_swipe_skill
         duration: 0.8
         cool_down: 1
         delay: 0.2
         exec_limit:
           min_distance: 10
-      &enrage enrage:
+      enrage:
         type: touch
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &gore_cross gore_cross:
+      gore_cross:
         type: touch
         duration: 0.2
         cool_down: 3
         exec_limit:
           min_distance: 10
-      &extreme_overkill extreme_overkill:
+      extreme_overkill:
         type: touch
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &mountainous_wheel mountainous_wheel:
+      mountainous_wheel:
         type: touch
         duration: 0.1
         cool_down: 1
         exec_limit:
           min_distance: 600
-      &outrage_break outrage_break:
+      outrage_break:
         type: touch
         duration: 2.1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &raging_fury raging_fury:
+      raging_fury:
         type: touch
         duration: 1
         cool_down: 1
         exec_limit:
           min_distance: 10
-      &thirst thirst:
+      thirst:
         type: swipe_left
+        coordinate: *default_swipe_skill
         duration: 0.5
         cool_down: 1
         delay: 0.2
         exec_limit:
           min_distance: 10
-  &noblesse Noblesse:
+  noblesse:
     skill:
-      &noblesse_attack attack:
+      attack:
         type: touch
         duration: 1.5
         cool_down: 0
         exec_limit:
           min_distance: 330
-      &arcane_sword_blast arcane_sword_blast:
+      arcane_sword_blast:
         type: swipe_down
+        coordinate: *default_swipe_skill
         duration: 0.2
         cool_down: 8
         delay: 2
         exec_limit:
           min_distance: 600
-      &ascent ascent:
+      ascent:
         type: touch
         duration: 0.2
         cool_down: 1
         delay: 0.5
         exec_limit:
           min_distance: 300
-      &crescent crescent:
+      crescent:
         type: touch
         duration: 0.2
         cool_down: 1
         exec_limit:
           min_distance: 500
-      &elemental_shift elemental_shift:
+      elemental_shift:
         type: swipe
         duration: 0.2
         cool_down: 1
         delay: 0.5
         exec_limit:
           min_distance: 0
-      &flash flash:
+      flash:
         type: swipe_right
+        coordinate: *default_swipe_skill
         duration: 0.2
         cool_down: 1
         delay: 0.5
         exec_limit:
           min_distance: 800
-      &illusion_sword illusion_sword:
+      illusion_sword:
         type: touch
         duration: 0.2
         cool_down: 5
         delay: 0.5
         exec_limit:
           min_distance: 300
-      &sentiment_du_fer_critical sentiment_du_fer_critical:
+      sentiment_du_fer_critical:
         type: swipe_up
+        coordinate: *default_swipe_skill
         duration: 0.2
         cool_down: 1
         exec_limit:
           min_distance: 0
-      &swift_demon_slash swift_demon_slash:
+      swift_demon_slash:
         type: touch
         duration: 0.5
         cool_down: 1
         exec_limit:
           min_distance: 400
-      &swift_sword swift_sword:
+      swift_sword:
         type: touch
         duration: 0.2
         cool_down: 4
         exec_limit:
           min_distance: 300
-      &tossing_slash tossing_slash:
+      tossing_slash:
         type: touch
         duration: 0.2
         cool_down: 14
         exec_limit:
           min_distance: 100
-      &ultimate_slayer_technique_spacetime_cutter ultimate_slayer_technique_spacetime_cutter:
+      ultimate_slayer_technique_spacetime_cutter:
         type: touch
         duration: 0.2
         cool_down: 1
         delay: 5
         exec_limit:
           min_distance: 0
-  &silent_eye SilentEye:
+  silent_eye:
     skill:
-      &silent_eye_attack attack:
+      attack:
         type: touch
         duration: 2
         cool_down: 0
         delay: 0
         exec_limit:
           min_distance: 300
-      &agni_pentacle agni_pentacle:
+      agni_pentacle:
         type: swipe_up
+        coordinate: *default_swipe_skill
         duration: 0.5
         cool_down: 40
         delay: 0
         exec_limit:
           min_distance: 300
-      &deadly_enticer deadly_enticer:
+      deadly_enticer:
         type: swipe_down
+        coordinate: *default_swipe_skill
         duration: 0.5
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 400
-      &fire_wave_sword fire_wave_sword:
+      fire_wave_sword:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 1
         exec_limit:
           min_distance: 400
-      &force_wave_neutral force_wave_neutral:
+      force_wave_neutral:
         type: touch
         duration: 0.1
         cool_down: 5
         delay: 0
         exec_limit:
           min_distance: 250
-      &ghost_orb ghost_orb:
+      ghost_orb:
         type: touch
         duration: 0.8
         cool_down: 5
         delay: 1
         exec_limit:
           min_distance: 300
-      &ground_quaker ground_quaker:
+      ground_quaker:
         type: swipe_down
+        coordinate: *default_swipe_skill
         duration: 0.5
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 400
-      &ice_wave_sword ice_wave_sword:
+      ice_wave_sword:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 0.3
         exec_limit:
           min_distance: 300
-      &murderous_wave murderous_wave:
+      murderous_wave:
         type: swipe_right
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 1
         delay: 0.8
         exec_limit:
           min_distance: 0
-      &spirit_crescent spirit_crescent:
+      spirit_crescent:
         type: touch
         duration: 0.8
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 200
-      &wave_eye wave_eye:
+      wave_eye:
         type: touch
         duration: 0.2
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 0
-      &wave_radiation wave_radiation:
+      wave_radiation:
         type: touch
         duration: 0.2
         cool_down: 7
         delay: 0
         exec_limit:
           min_distance: 250
-  &trickster Trickster:
+  trickster:
     skill:
-      &trickster_attack attack:
+      attack:
         type: touch
         duration: 0.8
         cool_down: 0
         delay: 0
         exec_limit:
           min_distance: 150
-      &acid_rain acid_rain:
+      acid_rain:
         type: swipe_up
+        coordinate: *default_swipe_skill
         duration: 0.5
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 200
-      &cheeky_doll_shururu cheeky_doll_shururu:
+      cheeky_doll_shururu:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 200
-      &enhanced_magic_missile enhanced_magic_missile:
+      enhanced_magic_missile:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 200
-      &fusion_craft fusion_craft:
+      fusion_craft:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 3
         exec_limit:
           min_distance: 300
-      &gravitas gravitas:
+      gravitas:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 300
-      &lava_potion_no_9 lava_potion_no_9:
+      lava_potion_no_9:
         type: swipe_down
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 300
-      &lollipop lollipop:
+      lollipop:
         type: swipe_right
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 0
-      &showtime showtime:
+      showtime:
         type: swipe_left
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 0
-      &snow_man snow_man:
+      snow_man:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 100
-  &wrecking_ball WreckingBall:
+  wrecking_ball:
     skill:
-      &wrecking_ball_attack attack:
+      attack:
         type: touch
         duration: 2.5
         cool_down: 0
         delay: 0
         exec_limit:
           min_distance: 300
-      &destroyer_90_bunker_bomb destroyer_90_bunker_bomb:
+      destroyer_90_bunker_bomb:
         type: touch
         duration: 0.5
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 600
-      &eagle_eye eagle_eye:
+      eagle_eye:
         type: swipe_left
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 0
-      &fire_concentrate fire_concentrate:
+      fire_concentrate:
         type: swipe_right
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 0
-      &fm_31_grenade_launcher fm_31_grenade_launcher:
+      fm_31_grenade_launcher:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 1
         exec_limit:
           min_distance: 600
-      &fm_92_stinger fm_92_stinger:
+      fm_92_stinger:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 0.5
         exec_limit:
           min_distance: 500
-      &laser_rifle laser_rifle:
+      laser_rifle:
         type: touch
         duration: 0.6
         cool_down: 1
@@ -496,28 +526,30 @@ character:
         exec_limit:
           min_distance: 80
           vertical_only: true
-      &quantum_bomb quantum_bomb:
+      quantum_bomb:
         type: swipe
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 0
-      &satellite_beam satellite_beam:
+      satellite_beam:
         type: swipe
+        coordinate: *default_swipe_skill
         duration: 0.1
         cool_down: 5
         delay: 0
         exec_limit:
           min_distance: 250
-      &shotgun shotgun:
+      shotgun:
         type: touch
         duration: 0.1
         cool_down: 5
         delay: 0
         exec_limit:
           min_distance: 250
-      &steyr_amr steyr_amr:
+      steyr_amr:
         type: touch
         duration: 0.1
         cool_down: 5
@@ -525,411 +557,10 @@ character:
         exec_limit:
           min_distance: 100
           vertical_only: 80
-      &x_1_extruder x_1_extruder:
+      x_1_extruder:
         type: touch
         duration: 0.1
         cool_down: 1
         delay: 0
         exec_limit:
           min_distance: 600
-ui:
-  base:
-    move:
-      coordinate:
-        - 311
-        - 791
-    check_box:
-      key_img:
-        - res/ui/base/check_box*.png
-    confirm:
-      key_img:
-        - res/ui/base/confirm*.png
-    commission:
-      key_img:
-        - res/ui/base/commission*.png
-    speciality:
-      key_img:
-        - res/ui/base/speciality*.png
-    speciality_ridge:
-      key_img:
-        - res/ui/base/speciality_ridge*.png
-    move_to_specific_area:
-      key_img:
-        - res/ui/base/move_to_specific_area*.png
-    package:
-      key_img:
-        - res/ui/base/package*.png
-    repair:
-      key_img:
-        - res/ui/base/repair*.png
-    repair_window_label:
-      key_img:
-        - res/ui/base/repair_window_label*.png
-    repair_window_confirm:
-      key_img:
-        - res/ui/base/repair_window_confirm*.png
-    repair_worn:
-      key_img:
-        - res/ui/base/repair_worn*.png
-    setting_select_character:
-      key_img:
-        - res/ui/base/setting_select_character*.png
-    dungeon_label_ridge:
-      key_img:
-        - res/ui/base/dungeon_label_ridge*.png
-    dungeon_label_bwanga:
-      key_img:
-        - res/ui/base/dungeon_label_bwanga*.png
-    dungeon_select_previous:
-      key_img:
-        - res/ui/base/dungeon_select_previous*.png
-    dungeon_select_start_battle:
-      key_img:
-        - res/ui/base/dungeon_select_start_battle*.png
-    change_character:
-      key_img:
-        - res/ui/base/change_character*.png
-    select_character:
-      key_img:
-        - res/ui/base/select_character*.png
-  dungeon:
-    re_enter_dungeon:
-      key_img:
-        - res/ui/dungeon/re_enter_dungeon.png
-    exit_dungeon:
-      key_img:
-        - res/ui/dungeon/exit_dungeon.png
-    card:
-      key_img:
-        - res/ui/dungeon/card.png
-    card_0:
-      coordinate:
-        - 650
-        - 350
-    card_1:
-      coordinate:
-        - 1030
-        - 350
-    card_2:
-      coordinate:
-        - 1400
-        - 350
-    card_3:
-      coordinate:
-        - 1800
-        - 350
-    card_4:
-      coordinate:
-        - 650
-        - 880
-    card_5:
-      coordinate:
-        - 1030
-        - 880
-    card_6:
-      coordinate:
-        - 1400
-        - 880
-    card_7:
-      coordinate:
-        - 1800
-        - 880
-  skill:
-    *champion :
-      *champion_attack :
-        key_img:
-          - res/ui/skill/champion/attack*.png
-      *beat_drive :
-        coordinate:
-          - 1860
-          - 926
-        key_img:
-          - res/ui/skill/champion/beat_drive.png
-      *bone_crusher :
-        key_img:
-          - res/ui/skill/champion/bone_crusher.png
-      *continuous_strike :
-        key_img:
-          - res/ui/skill/champion/continuous_strike*.png
-      *rising_fist :
-        coordinate:
-          - 1860
-          - 926
-        key_img:
-          - res/ui/skill/champion/rising_fist*.png
-      *lightning_dance :
-        key_img:
-          - res/ui/skill/champion/lightning_dance*.png
-      *kihop_low_kick :
-        key_img:
-          - res/ui/skill/champion/kihop_low_kick*.png
-      *mountain_pusher :
-        key_img:
-          - res/ui/skill/champion/mountain_pusher*.png
-      *power_fist :
-        coordinate:
-          - 1860
-          - 926
-        key_img:
-          - res/ui/skill/champion/power_fist*.png
-      *seismic_crash :
-        key_img:
-          - res/ui/skill/champion/seismic_crash*.png
-      *super_armor :
-        coordinate:
-          - 1860
-          - 926
-        key_img:
-          - res/ui/skill/champion/super_armor*.png
-    *evangelist :
-      *evangelist_attack :
-        key_img:
-          - res/ui/skill/evangelist/attack.png
-      *christening_light :
-        key_img:
-          - res/ui/skill/evangelist/christening_light.png
-      *crux_of_victoria :
-        key_img:
-          - res/ui/skill/evangelist/crux_of_victoria.png
-      *grand_crashing_cross :
-        key_img:
-          - res/ui/skill/evangelist/grand_crashing_cross*.png
-      *purifying_lightning :
-        coordinate:
-          - 1860
-          - 926
-        key_img:
-          - res/ui/skill/evangelist/purifying_lightning.png
-      *saint_wall :
-        key_img:
-          - res/ui/skill/evangelist/saint_wall.png
-      *shining_cross :
-        key_img:
-          - res/ui/skill/evangelist/shining_cross.png
-      *spear_of_victory :
-        key_img:
-          - res/ui/skill/evangelist/spear_of_victory.png
-      *valiant_aria :
-        key_img:
-          - res/ui/skill/evangelist/valiant_aria.png
-    *hell_bringer :
-      *hell_bringer_attack :
-        key_img:
-          - res/ui/skill/hell_bringer/attack*.png
-      *bloodlust :
-        key_img:
-          - res/ui/skill/hell_bringer/bloodlust.png
-      *blood_sword :
-        key_img:
-          - res/ui/skill/hell_bringer/blood_sword.png
-      *bloody_twister :
-        key_img:
-          - res/ui/skill/hell_bringer/bloody_twister.png
-      *derange :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/hell_bringer/derange*.png
-      *enrage :
-        key_img:
-          - res/ui/skill/hell_bringer/enrage.png
-      *extreme_overkill :
-        key_img:
-          - res/ui/skill/hell_bringer/extreme_overkill.png
-      *gore_cross :
-        key_img:
-          - res/ui/skill/hell_bringer/gore_cross.png
-      *mountainous_wheel :
-        key_img:
-          - res/ui/skill/hell_bringer/mountainous_wheel.png
-      *outrage_break :
-        key_img:
-          - res/ui/skill/hell_bringer/outrage_break.png
-      *raging_fury :
-        key_img:
-          - res/ui/skill/hell_bringer/raging_fury.png
-      *thirst :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/hell_bringer/thirst*.png
-    *noblesse :
-      *noblesse_attack :
-        key_img:
-          - res/ui/skill/noblesse/attack*.png
-      *arcane_sword_blast :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/noblesse/arcane_sword_blast*.png
-      *ascent :
-        key_img:
-          - res/ui/skill/noblesse/ascent*.png
-      *crescent :
-        key_img:
-          - res/ui/skill/noblesse/crescent*.png
-      *elemental_shift :
-        key_img:
-          - res/ui/skill/noblesse/elemental_shift*.png
-      *flash :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/noblesse/flash*.png
-      *illusion_sword :
-        key_img:
-          - res/ui/skill/noblesse/illusion_sword*.png
-      *sentiment_du_fer_critical :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/noblesse/sentiment_du_fer_critical*.png
-      *swift_demon_slash :
-        key_img:
-          - res/ui/skill/noblesse/swift_demon_slash*.png
-      *swift_sword :
-        key_img:
-          - res/ui/skill/noblesse/swift_sword*.png
-      *tossing_slash :
-        key_img:
-          - res/ui/skill/noblesse/tossing_slash*.png
-      *ultimate_slayer_technique_spacetime_cutter :
-        key_img:
-          - res/ui/skill/noblesse/ultimate_slayer_technique_spacetime_cutter*.png
-    *silent_eye :
-      *silent_eye_attack :
-        key_img:
-          - res/ui/skill/silent_eye/attack*.png
-      *agni_pentacle :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/silent_eye/agni_pentacle*.png
-      *deadly_enticer:
-        key_img:
-          - res/ui/skill/silent_eye/deadly_enticer*.png
-      *fire_wave_sword:
-        key_img:
-          - res/ui/skill/silent_eye/fire_wave_sword*.png
-      *force_wave_neutral:
-        key_img:
-          - res/ui/skill/silent_eye/force_wave_neutral*.png
-      *ghost_orb:
-        key_img:
-          - res/ui/skill/silent_eye/ghost_orb*.png
-      *ground_quaker:
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/silent_eye/ground_quaker*.png
-      *ice_wave_sword:
-        key_img:
-          - res/ui/skill/silent_eye/ice_wave_sword*.png
-      *murderous_wave:
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/silent_eye/murderous_wave*.png
-      *spirit_crescent:
-        key_img:
-          - res/ui/skill/silent_eye/spirit_crescent*.png
-      *wave_eye:
-        key_img:
-          - res/ui/skill/silent_eye/wave_eye*.png
-      *wave_radiation:
-        key_img:
-          - res/ui/skill/silent_eye/wave_radiation*.png
-    *trickster :
-      *trickster_attack :
-        key_img:
-          - res/ui/skill/trickster/attack*.png
-      *acid_rain :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/trickster/acid_rain*.png
-      *cheeky_doll_shururu :
-        key_img:
-          - res/ui/skill/trickster/cheeky_doll_shururu*.png
-      *enhanced_magic_missile :
-        key_img:
-          - res/ui/skill/trickster/enhanced_magic_missile*.png
-      *fusion_craft :
-        key_img:
-          - res/ui/skill/trickster/fusion_craft*.png
-      *gravitas :
-        key_img:
-          - res/ui/skill/trickster/gravitas*.png
-      *lava_potion_no_9 :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/trickster/lava_potion_no_9*.png
-      *lollipop :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/trickster/lollipop*.png
-      *showtime :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/trickster/showtime*.png
-      *snow_man :
-        key_img:
-          - res/ui/skill/trickster/snow_man*.png
-    *wrecking_ball :
-      *wrecking_ball_attack :
-        key_img:
-          - res/ui/skill/wrecking_ball/attack*.png
-      *destroyer_90_bunker_bomb :
-        key_img:
-          - res/ui/skill/wrecking_ball/destroyer_90_bunker_bomb*.png
-      *eagle_eye :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/wrecking_ball/eagle_eye*.png
-      *fire_concentrate :
-        coordinate:
-          - 1856
-          - 932
-        key_img:
-          - res/ui/skill/wrecking_ball/fire_concentrate*.png
-      *fm_31_grenade_launcher :
-        key_img:
-          - res/ui/skill/wrecking_ball/fm_31_grenade_launcher*.png
-      *fm_92_stinger :
-        key_img:
-          - res/ui/skill/wrecking_ball/fm_92_stinger*.png
-      *laser_rifle :
-        key_img:
-          - res/ui/skill/wrecking_ball/laser_rifle*.png
-      *quantum_bomb :
-        key_img:
-          - res/ui/skill/wrecking_ball/quantum_bomb*.png
-      *satellite_beam :
-        key_img:
-          - res/ui/skill/wrecking_ball/satellite_beam*.png
-      *shotgun :
-        key_img:
-          - res/ui/skill/wrecking_ball/shotgun*.png
-      *steyr_amr :
-        key_img:
-          - res/ui/skill/wrecking_ball/steyr_amr*.png
-      *x_1_extruder :
-        key_img:
-          - res/ui/skill/wrecking_ball/x_1_extruder*.png

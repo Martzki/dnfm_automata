@@ -1,5 +1,4 @@
 from character.character import Character, CharacterClass
-from character.skill import Skill
 
 
 class Evangelist(Character):
@@ -14,11 +13,20 @@ class Evangelist(Character):
 
     def __init__(self, device, ui_ctx, conf):
         super().__init__(device, ui_ctx, CharacterClass.Evangelist, conf)
-        self.christening_light = Skill(Evangelist.ChristeningLight, conf["skill"][Evangelist.ChristeningLight])
-        self.crux_of_victoria = Skill(Evangelist.CruxOfVictoria, conf["skill"][Evangelist.CruxOfVictoria])
-        self.grand_crashing_cross = Skill(Evangelist.GrandCrashingCross, conf["skill"][Evangelist.GrandCrashingCross])
-        self.purifying_lightning = Skill(Evangelist.PurifyingLightning, conf["skill"][Evangelist.PurifyingLightning])
-        self.spear_of_victory = Skill(Evangelist.SpearOfVictory, conf["skill"][Evangelist.SpearOfVictory])
-        self.saint_wall = Skill(Evangelist.SaintWall, conf["skill"][Evangelist.SaintWall])
-        self.shining_cross = Skill(Evangelist.ShiningCross, conf["skill"][Evangelist.ShiningCross])
-        self.valiant_aria = Skill(Evangelist.ValiantAria, conf["skill"][Evangelist.ValiantAria])
+        self.christening_light = self.register_skill(
+            Evangelist.ChristeningLight,
+            conf["skill"][Evangelist.ChristeningLight]
+        )
+        self.crux_of_victoria = self.register_skill(Evangelist.CruxOfVictoria, conf["skill"][Evangelist.CruxOfVictoria])
+        self.grand_crashing_cross = self.register_skill(
+            Evangelist.GrandCrashingCross,
+            conf["skill"][Evangelist.GrandCrashingCross]
+        )
+        self.purifying_lightning = self.register_skill(
+            Evangelist.PurifyingLightning,
+            conf["skill"][Evangelist.PurifyingLightning]
+        )
+        self.spear_of_victory = self.register_skill(Evangelist.SpearOfVictory, conf["skill"][Evangelist.SpearOfVictory])
+        self.saint_wall = self.register_skill(Evangelist.SaintWall, conf["skill"][Evangelist.SaintWall])
+        self.shining_cross = self.register_skill(Evangelist.ShiningCross, conf["skill"][Evangelist.ShiningCross])
+        self.valiant_aria = self.register_skill(Evangelist.ValiantAria, conf["skill"][Evangelist.ValiantAria])
