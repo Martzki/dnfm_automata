@@ -1,4 +1,5 @@
 import argparse
+import os.path
 import random
 
 import yaml
@@ -7,21 +8,22 @@ from func_timeout import func_set_timeout, FunctionTimedOut
 from app.auto_bwanga import room
 from app.auto_bwanga.room import validate_next_room
 from app.base_app import BaseApp
-from character.champion import Champion
+from runtime.character.champion import Champion
 from character.character import Character
-from character.evangelist import Evangelist
-from character.hell_bringer import HellBringer
-from character.noblesse import Noblesse
-from character.silent_eye import SilentEye
-from character.trickster import Trickster
-from character.wrecking_ball import WreckingBall
+from runtime.character.evangelist import Evangelist
+from runtime.character.hell_bringer import HellBringer
+from runtime.character.noblesse import Noblesse
+from runtime.character.silent_eye import SilentEye
+from runtime.character.trickster import Trickster
+from runtime.character.wrecking_ball import WreckingBall
 from common.log import Logger
-from common.util import timeout_handler
+from common.util import timeout_handler, get_resource_base_dir
 from detector.detector import Detector
 from device.device import Device
 from device.scrcpy_device import ScrcpyDevice
 from dungeon.dungeon import Dungeon, DungeonReEntered, DungeonRoomChanged, DungeonFinished
-from ui.ui import UIElementCtx
+from runtime.ui import ui_elements
+from ui.ui import UIElementCtx, UIElement
 
 LOGGER = Logger(__name__).logger
 
@@ -29,15 +31,15 @@ LOGGER = Logger(__name__).logger
 class Bwanga(Dungeon):
     def goto_dungeon(self):
         LOGGER.info("Start to go to dungeon")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward", delay=1)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward_adventure_level")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward_mount_thunderime")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "adventure_reward_move_to_area")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_adventure_level", timeout=120)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_bwanga")
-        self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "dungeon_label_bwanga", timeout=3)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "dungeon_select_start_battle")
+        self.ui_ctx.click_ui_element(ui_elements.Common.Adventure)
+        self.ui_ctx.click_ui_element(ui_elements.Common.AdventureReward, delay=1)
+        self.ui_ctx.click_ui_element(ui_elements.Common.AdventureRewardAdventureLevel)
+        self.ui_ctx.click_ui_element(ui_elements.Common.AdventureRewardMountThunderime)
+        self.ui_ctx.click_ui_element(ui_elements.Common.AdventureRewardMoveToArea)
+        self.ui_ctx.click_ui_element(ui_elements.Dungeon.DungeonSelectAdventureLevel, timeout=120)
+        self.ui_ctx.click_ui_element(ui_elements.Dungeon.DungeonSelectBwanga)
+        self.ui_ctx.wait_ui_element(ui_elements.Dungeon.DungeonLabelBwanga, timeout=3)
+        self.ui_ctx.click_ui_element(ui_elements.Dungeon.DungeonSelectStartBattle)
         try:
             self.wait_in_dungeon()
         except FunctionTimedOut:
@@ -168,7 +170,7 @@ class BwangaApp(BaseApp):
 
                 try:
                     self.return_to_base_scenario()
-                    self.dungeon.repair_equipments(UIElementCtx.CategoryCommon)
+                    self.dungeon.repair_equipments(in_dungeon=False)
                     self.return_to_base_scenario()
                     self.dungeon.goto_dungeon()
                 except FunctionTimedOut:
@@ -189,7 +191,7 @@ class BwangaApp(BaseApp):
         pass
 
 
-def get_character_list(device, character_config):
+def get_character_list(device, app_config):
     init_func = {
         "champion": Champion,
         "evangelist": Evangelist,
@@ -204,8 +206,8 @@ def get_character_list(device, character_config):
     character_map = {}
     for priority in range(3):
         sub_list = []
-        for character in character_config["character"]:
-            each = character_config["character"][character]
+        for character in app_config["character"]:
+            each = app_config["character"][character]
             if each["priority"] != priority:
                 continue
 
@@ -213,7 +215,7 @@ def get_character_list(device, character_config):
             each["id"] = character
             each["character"] = character_map.get(
                 character_class,
-                init_func[character_class](device, ui_ctx, config["character"][character_class])
+                init_func[character_class](device, ui_ctx)
             )
             character_map[character_class] = each["character"]
             sub_list.append(each)
@@ -229,23 +231,23 @@ if __name__ == '__main__':
     parser.add_argument("--device", dest="device", type=str, help="ADB device serial")
     parser.add_argument("--conf", dest="conf", type=str, help="APP config file")
     parser.add_argument("--weights", dest="weights", type=str, help="YOLO weights file")
-    parser.add_argument("--character-conf", dest="character_conf", type=str, help="character config file")
+    parser.add_argument("--app-conf", dest="app_conf", type=str, help="APP config file")
 
     args = parser.parse_args()
 
     with open(args.conf, "r") as config_file:
         config = yaml.load(config_file, Loader=yaml.Loader)
 
-    with open(args.character_conf, "r") as character_config_file:
-        character_config = yaml.load(character_config_file, Loader=yaml.Loader)
+    with open(args.app_conf, "r") as app_config_file:
+        app_config = yaml.load(app_config_file, Loader=yaml.Loader)
 
     device = ScrcpyDevice(args.device)
     detector = Detector(args.weights)
-    ui_ctx = UIElementCtx(device, detector, config["ui"]["base_dir"])
+    ui_ctx = UIElementCtx(device, detector, get_resource_base_dir(args.conf, config["ui"]["base_dir"]))
     ui_ctx.load(config["ui"])
-    ui_ctx.load_character(character_config)
+    ui_ctx.load(app_config, get_resource_base_dir(args.app_conf, app_config["ui"]["base_dir"]))
 
-    app = BwangaApp(device, detector, get_character_list(device, character_config), ui_ctx)
+    app = BwangaApp(device, detector, get_character_list(device, app_config), ui_ctx)
     room.register_room(app)
 
     app.init()

@@ -1,6 +1,7 @@
 import inspect
 import os
 import time
+from pathlib import Path
 
 import cv2
 
@@ -26,3 +27,16 @@ def timeout_handler(exception, log, last_frame):
             time.sleep(1)
     except Exception as e:
         LOGGER.error(e)
+
+
+def get_file_key(file_name):
+    return file_name.split('.')[0]
+
+
+def to_camel_case(camel_case):
+    elements = camel_case.split("_")
+    return "".join(elem.title() for elem in elements)
+
+
+def get_resource_base_dir(config_path, base_dir):
+    return Path(os.path.dirname(config_path)) / base_dir

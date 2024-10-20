@@ -1,6 +1,6 @@
 from app.auto_bwanga.room_handler import *
-from character.character import CharacterClass
-from character.hell_bringer import HellBringer
+from runtime.character.character_class import CharacterClass
+from runtime.character.hell_bringer import HellBringer
 from dungeon.strategy import BattleStrategy
 
 default_battle_strategy = BattleStrategy()

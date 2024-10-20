@@ -6,10 +6,17 @@ from func_timeout import FunctionTimedOut
 
 from common.log import Logger
 
+from runtime.ui import ui_elements
+
 LOGGER = Logger(__name__).logger
 
 
 class UIElement(object):
+    CategoryCharacter = "character"
+    CategoryCommon = "common"
+    CategoryDungeon = "dungeon"
+    CategorySkill = "skill"
+
     def __init__(self, coordinate=None, key_img_list=None, key_text_list=None):
         assert coordinate or key_img_list or key_text_list, \
             f"Invalid arguments: {coordinate}, {key_img_list}, {key_text_list}"
@@ -28,11 +35,6 @@ class UIElement(object):
 
 
 class UIElementCtx(object):
-    CategoryCharacter = "character"
-    CategoryCommon = "common"
-    CategoryDungeon = "dungeon"
-    CategorySkill = "skill"
-
     def __init__(self, device, detector, base_dir='.'):
         self.ui_element_map = {}
         self.base_dir = Path(base_dir)
@@ -53,32 +55,25 @@ class UIElementCtx(object):
 
         for each in element_map.keys():
             self.register_ui_element(
-                f"ui.{prefix}.{each}",
+                f"{prefix}.{each}",
                 UIElement(key_img_list=element_map[each]["key_img_list"])
             )
 
-    def load(self, conf):
-        for category in [UIElementCtx.CategoryCommon, UIElementCtx.CategoryDungeon]:
+    def load(self, conf, base_dir=None):
+        if base_dir is None:
+            base_dir = self.base_dir
+
+        for category in [getattr(UIElement, c) for c in vars(UIElement).keys() if not c.startswith("__")]:
+            # Register static elements.
             if category not in conf:
                 continue
 
-            # Register static elements.
             for each in conf[category]:
                 coordinate = conf[category][each]
-                self.register_ui_element(f"ui.{category}.{each}", UIElement(coordinate=coordinate))
+                self.register_ui_element(f"{category}.{each}", UIElement(coordinate=coordinate))
 
             # Register dynamic elements.
-            self.register_dynamic_ui_elements(self.base_dir / category, category)
-
-    def load_character(self, conf):
-        if UIElementCtx.CategoryCharacter not in conf:
-            LOGGER.error(f"{UIElementCtx.CategoryCharacter} nof found in conf: {conf}")
-            return
-
-        self.register_dynamic_ui_elements(
-            self.base_dir / UIElementCtx.CategoryCharacter,
-            UIElementCtx.CategoryCharacter
-        )
+            self.register_dynamic_ui_elements(base_dir / category, category)
 
     def get_coordinate(self, key, use_cache=True, conf_thres=0.65):
         if key not in self.ui_element_map:
@@ -101,24 +96,24 @@ class UIElementCtx(object):
         return coordinate
 
     def get_skill_coordinate(self, character_class, name):
-        return self.get_coordinate(f"ui.{UIElementCtx.CategorySkill}.{character_class}.{name}", conf_thres=0.65)
+        return self.get_coordinate(f"{UIElement.CategorySkill}.{character_class}.{name}", conf_thres=0.65)
 
-    def get_ui_coordinate(self, category, key, use_cache=True, conf_thres=0.85):
-        return self.get_coordinate(f"ui.{category}.{key}", use_cache, conf_thres=conf_thres)
+    def get_ui_coordinate(self, key, use_cache=True, conf_thres=0.85):
+        return self.get_coordinate(f"{key}", use_cache, conf_thres=conf_thres)
 
-    def wait_ui_element(self, category, name, timeout=10):
+    def wait_ui_element(self, key, timeout=10):
         start = time.time()
         while True:
             if time.time() - start > timeout:
-                raise FunctionTimedOut(f"Waiting UI element: ui.{category}.{name} timeout")
+                raise FunctionTimedOut(f"Waiting UI element: {key} timeout")
 
-            coordinate = self.get_ui_coordinate(category, name, use_cache=False)
+            coordinate = self.get_ui_coordinate(key, use_cache=False)
             if coordinate is not None:
                 return coordinate
 
     def double_check(self):
         try:
-            check_box = self.wait_ui_element(UIElementCtx.CategoryCommon, "check_box", timeout=2)
+            check_box = self.wait_ui_element(ui_elements.Common.CheckBox, timeout=2)
             self.device.touch(check_box, 0.1)
             time.sleep(0.5)
         except FunctionTimedOut:
@@ -126,18 +121,18 @@ class UIElementCtx(object):
             pass
 
         try:
-            confirm = self.wait_ui_element(UIElementCtx.CategoryCommon, "confirm", timeout=2)
+            confirm = self.wait_ui_element(ui_elements.Common.Confirm, timeout=2)
             self.device.touch(confirm, 0.1)
             time.sleep(0.5)
         except FunctionTimedOut:
             return
 
-    def click_ui_element(self, category, name, double_check=False, timeout=10, delay=0.5):
+    def click_ui_element(self, key, double_check=False, timeout=10, delay=0.5):
         try:
-            element = self.wait_ui_element(category, name, timeout)
+            element = self.wait_ui_element(key, timeout)
             self.device.touch(element, 0.1)
         except FunctionTimedOut as e:
-            raise LookupError(f"Failed to get coordinate of {category} {name}: {e}")
+            raise LookupError(f"Failed to get coordinate of {key}: {e}")
 
         if double_check:
             self.double_check()

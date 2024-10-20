@@ -1,8 +1,8 @@
 import time
 
 from app.auto_bwanga.room_handler import *
-from character.character import CharacterClass
-from character.wrecking_ball import WreckingBall
+from runtime.character.character_class import CharacterClass
+from runtime.character.wrecking_ball import WreckingBall
 from dungeon.strategy import BattleStrategy
 
 
@@ -10,7 +10,7 @@ class DefaultBattleStrategy(BattleStrategy):
     def __init__(self):
         super().__init__()
         self.register_skill(WreckingBall.Shotgun, 10, 0)
-        self.register_skill(WreckingBall.SteyrAMR, 20, 0)
+        self.register_skill(WreckingBall.SteyrAmr, 20, 0)
 
 
 class Room0Handler(BwangaRoom0Handler):

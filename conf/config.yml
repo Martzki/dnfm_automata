@@ -1,0 +1,567 @@
+ui:
+  base_dir: ../res/ui # Relative path of current file.
+  common:
+    move: [311, 791]
+  dungeon:
+    card_0: [650, 350]
+    card_1: [1030, 350]
+    card_2: [1400, 350]
+    card_3: [1800, 350]
+    card_4: [650, 880]
+    card_5: [1030, 880]
+    card_6: [1400, 880]
+    card_7: [1800, 880]
+character:
+  champion:
+    skill:
+      attack:
+        type: touch
+        duration: 1
+        cool_down: 0
+        exec_limit:
+          min_distance: 300
+      beat_drive:
+        type: swipe_down
+        coordinate: &default_swipe_skill [1860, 926]
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 250
+      bone_crusher:
+        type: touch
+        duration: 0.1
+        cool_down: 7
+        delay: 0.1
+        exec_limit:
+          min_distance: 250
+      continuous_strike:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 250
+      rising_fist:
+        type: swipe_up
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 1
+        delay: 0.35
+        exec_limit:
+          min_distance: 250
+      lightning_dance:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 1
+        exec_limit:
+          min_distance: 10
+      kihop_low_kick:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 300
+      mountain_pusher:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 300
+      power_fist:
+        type: swipe_right
+        coordinate: *default_swipe_skill
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 0
+      seismic_crash:
+        type: touch
+        duration: 0.1
+        cool_down: 6
+        exec_limit:
+          min_distance: 300
+      super_armor:
+        type: swipe_left
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 0
+  evangelist:
+    skill:
+      attack:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 500
+      christening_light:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      crux_of_victoria:
+        type: swipe_up
+        coordinate: *default_swipe_skill
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      grand_crashing_cross:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      purifying_lightning:
+        type: swipe_down
+        coordinate: *default_swipe_skill
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      saint_wall:
+        type: touch
+        duration: 0.5
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      shining_cross:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      spear_of_victory:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      valiant_aria:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+  hell_bringer:
+    skill:
+      attack:
+        type: touch
+        duration: 1
+        cool_down: 0
+        exec_limit:
+          min_distance: 330
+      bloodlust:
+        type: touch
+        duration: 0.2
+        cool_down: 8
+        exec_limit:
+          min_distance: 200
+      blood_sword:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      bloody_twister:
+        type: touch
+        duration: 5
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      derange:
+        type: swipe_right
+        coordinate: *default_swipe_skill
+        duration: 0.8
+        cool_down: 1
+        delay: 0.2
+        exec_limit:
+          min_distance: 10
+      enrage:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      gore_cross:
+        type: touch
+        duration: 0.2
+        cool_down: 3
+        exec_limit:
+          min_distance: 10
+      extreme_overkill:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      mountainous_wheel:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 600
+      outrage_break:
+        type: touch
+        duration: 2.1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      raging_fury:
+        type: touch
+        duration: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 10
+      thirst:
+        type: swipe_left
+        coordinate: *default_swipe_skill
+        duration: 0.5
+        cool_down: 1
+        delay: 0.2
+        exec_limit:
+          min_distance: 10
+  noblesse:
+    skill:
+      attack:
+        type: touch
+        duration: 1.5
+        cool_down: 0
+        exec_limit:
+          min_distance: 330
+      arcane_sword_blast:
+        type: swipe_down
+        coordinate: *default_swipe_skill
+        duration: 0.2
+        cool_down: 8
+        delay: 2
+        exec_limit:
+          min_distance: 600
+      ascent:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        delay: 0.5
+        exec_limit:
+          min_distance: 300
+      crescent:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        exec_limit:
+          min_distance: 500
+      elemental_shift:
+        type: swipe
+        duration: 0.2
+        cool_down: 1
+        delay: 0.5
+        exec_limit:
+          min_distance: 0
+      flash:
+        type: swipe_right
+        coordinate: *default_swipe_skill
+        duration: 0.2
+        cool_down: 1
+        delay: 0.5
+        exec_limit:
+          min_distance: 800
+      illusion_sword:
+        type: touch
+        duration: 0.2
+        cool_down: 5
+        delay: 0.5
+        exec_limit:
+          min_distance: 300
+      sentiment_du_fer_critical:
+        type: swipe_up
+        coordinate: *default_swipe_skill
+        duration: 0.2
+        cool_down: 1
+        exec_limit:
+          min_distance: 0
+      swift_demon_slash:
+        type: touch
+        duration: 0.5
+        delay: 1
+        cool_down: 1
+        exec_limit:
+          min_distance: 400
+      swift_sword:
+        type: touch
+        duration: 0.2
+        cool_down: 4
+        exec_limit:
+          min_distance: 300
+      tossing_slash:
+        type: touch
+        duration: 0.2
+        cool_down: 14
+        exec_limit:
+          min_distance: 100
+      ultimate_slayer_technique_spacetime_cutter:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        delay: 5
+        exec_limit:
+          min_distance: 0
+  silent_eye:
+    skill:
+      attack:
+        type: touch
+        duration: 2
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      agni_pentacle:
+        type: swipe_up
+        coordinate: *default_swipe_skill
+        duration: 0.5
+        cool_down: 40
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      deadly_enticer:
+        type: swipe_down
+        coordinate: *default_swipe_skill
+        duration: 0.5
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 400
+      fire_wave_sword:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 1
+        exec_limit:
+          min_distance: 400
+      force_wave_neutral:
+        type: touch
+        duration: 0.1
+        cool_down: 5
+        delay: 0
+        exec_limit:
+          min_distance: 250
+      ghost_orb:
+        type: touch
+        duration: 0.8
+        cool_down: 5
+        delay: 1
+        exec_limit:
+          min_distance: 300
+      ground_quaker:
+        type: swipe_down
+        coordinate: *default_swipe_skill
+        duration: 0.5
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 400
+      ice_wave_sword:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0.3
+        exec_limit:
+          min_distance: 300
+      murderous_wave:
+        type: swipe_right
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 1
+        delay: 0.8
+        exec_limit:
+          min_distance: 0
+      spirit_crescent:
+        type: touch
+        duration: 0.8
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 200
+      wave_eye:
+        type: touch
+        duration: 0.2
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      wave_radiation:
+        type: touch
+        duration: 0.2
+        cool_down: 7
+        delay: 0
+        exec_limit:
+          min_distance: 250
+  trickster:
+    skill:
+      attack:
+        type: touch
+        duration: 0.8
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 150
+      acid_rain:
+        type: swipe_up
+        coordinate: *default_swipe_skill
+        duration: 0.5
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 200
+      cheeky_doll_shururu:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 200
+      enhanced_magic_missile:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 200
+      fusion_craft:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 3
+        exec_limit:
+          min_distance: 300
+      gravitas:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      lava_potion_no_9:
+        type: swipe_down
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      lollipop:
+        type: swipe_right
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      showtime:
+        type: swipe_left
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      snow_man:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 100
+  wrecking_ball:
+    skill:
+      attack:
+        type: touch
+        duration: 2.5
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      destroyer_90_bunker_bomb:
+        type: touch
+        duration: 0.5
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 600
+      eagle_eye:
+        type: swipe_left
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      fire_concentrate:
+        type: swipe_right
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      fm_31_grenade_launcher:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 1
+        exec_limit:
+          min_distance: 600
+      fm_92_stinger:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0.5
+        exec_limit:
+          min_distance: 500
+      laser_rifle:
+        type: touch
+        duration: 0.6
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 80
+          vertical_only: true
+      quantum_bomb:
+        type: swipe
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      satellite_beam:
+        type: swipe
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 5
+        delay: 0
+        exec_limit:
+          min_distance: 250
+      shotgun:
+        type: touch
+        duration: 0.1
+        cool_down: 5
+        delay: 0
+        exec_limit:
+          min_distance: 250
+      steyr_amr:
+        type: touch
+        duration: 0.1
+        cool_down: 5
+        delay: 0
+        exec_limit:
+          min_distance: 100
+          vertical_only: 80
+      x_1_extruder:
+        type: touch
+        duration: 0.1
+        cool_down: 1
+        delay: 0
+        exec_limit:
+          min_distance: 600
