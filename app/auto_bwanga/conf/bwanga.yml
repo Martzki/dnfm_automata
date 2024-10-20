@@ -284,6 +284,7 @@ character:
       swift_demon_slash:
         type: touch
         duration: 0.5
+        delay: 1
         cool_down: 1
         exec_limit:
           min_distance: 400
