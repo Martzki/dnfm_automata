@@ -21,7 +21,7 @@ from common.util import timeout_handler
 from detector.detector import Detector
 from device.device import Device
 from device.scrcpy_device import ScrcpyDevice
-from dungeon.dungeon import Dungeon, DungeonReEntered, DungeonRoomChanged
+from dungeon.dungeon import Dungeon, DungeonReEntered, DungeonRoomChanged, DungeonFinished
 from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
@@ -56,8 +56,7 @@ class BwangaApp(BaseApp):
 
     @func_set_timeout(1800)
     def battle_in_dungeon(self, character: Character):
-        dungeon_finished = False
-        dungeon_finished_time = None
+        self.dungeon.clear()
         room_5_visited = False
         last_room_id = -1
         last_wrong_room_id = -1
@@ -65,16 +64,7 @@ class BwangaApp(BaseApp):
         while True:
             room = self.dungeon.get_room()
             if not room:
-                if not dungeon_finished or time.time() - dungeon_finished_time < 10:
-                    continue
-
-                try:
-                    self.dungeon.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "exit_dungeon",
-                                                         timeout=5, delay=10)
-                    LOGGER.info("exit dungeon")
-                    return
-                except LookupError:
-                    continue
+                continue
 
             if not validate_next_room(last_room_id, room.room_id):
                 if room.room_id != last_wrong_room_id:
@@ -96,15 +86,13 @@ class BwangaApp(BaseApp):
 
             LOGGER.info("detect room {}".format(room.room_id))
 
-            if room.room_id == 0:
-                dungeon_finished = False
-
             room_args = {
                 'last_room_id': last_room_id,
                 'room_5_visited': room_5_visited
             }
 
             dungeon_re_entered = False
+            dungeon_finished = False
             try:
                 room.exec(character, **room_args)
             except FunctionTimedOut as e:
@@ -115,19 +103,23 @@ class BwangaApp(BaseApp):
                     dungeon_re_entered = True
             except DungeonRoomChanged as e:
                 LOGGER.info(e)
+            except DungeonFinished:
+                dungeon_finished = True
             finally:
-                LOGGER.info(f"room {room.room_id} finished")
+                LOGGER.info(f"Room {room.room_id} finished")
                 last_room_id = -1 if dungeon_re_entered else room.room_id
+
+            if dungeon_finished:
+                LOGGER.info("Dungeon finished")
+                return
 
             if room.room_id == 5:
                 room_5_visited = True
 
             if room.is_last or dungeon_re_entered:
-                LOGGER.info("Dungeon re-entered" if dungeon_re_entered else "Dungeon finished")
+                LOGGER.info("Dungeon re-entered" if dungeon_re_entered else "Battle finished")
                 self.dungeon.clear()
                 room_5_visited = False
-                dungeon_finished = True
-                dungeon_finished_time = time.time()
 
     def start(self):
         LOGGER.info("App started")
@@ -138,6 +130,13 @@ class BwangaApp(BaseApp):
         try:
             for character in self.character_list:
                 self.change_character(character["id"])
+
+                fatigue_points = self.dungeon.get_fatigue_points()
+                LOGGER.info(f"{character['id']}'s fatigue points: {fatigue_points}")
+
+                if fatigue_points == 0:
+                    LOGGER.info(f"Get zero fatigue points, skip {character['id']}")
+                    continue
 
                 try:
                     self.repair_equipments()

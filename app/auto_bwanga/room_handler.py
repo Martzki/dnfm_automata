@@ -4,7 +4,7 @@ from character.character import Character
 from common.log import Logger
 from common.util import timeout_handler
 from dungeon.battle import Gate
-from dungeon.dungeon import DungeonRoomHandler
+from dungeon.dungeon import DungeonRoomHandler, DungeonFinished
 from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
@@ -119,8 +119,16 @@ class BwangaRoom8Handler(DungeonRoomHandler):
             self.re_pick_items(character)
         except FunctionTimedOut as e:
             timeout_handler(e, LOGGER.warning, self.dungeon.device.last_frame)
-        finally:
+
+        fatigue_points = self.dungeon.get_fatigue_points()
+        LOGGER.info(f"Current fatigue_points: {fatigue_points}")
+
+        if fatigue_points != 0:
             self.dungeon.re_enter()
+        else:
+            self.dungeon.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "exit_dungeon",
+                                                 timeout=5, delay=10)
+            raise DungeonFinished()
 
 
 class BwangaRoom9Handler(DungeonRoomHandler):

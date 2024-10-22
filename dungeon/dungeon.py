@@ -24,6 +24,10 @@ class DungeonRoomChanged(Exception):
     pass
 
 
+class DungeonFinished(Exception):
+    pass
+
+
 class DungeonRoomHandler(object):
     def __init__(self, dungeon, room_id, character_class, strategy=None):
         self.dungeon = dungeon
@@ -40,7 +44,7 @@ class DungeonRoomHandler(object):
         if room_id != self.room_id:
             raise DungeonRoomChanged(f"Room changed from {self.room_id} to {room_id}")
 
-    def re_search_dungeon(self, character):
+    def re_search_dungeon(self, character, ignore_room_change=False):
         LOGGER.info("re-search dungeon")
         if time.time() - self.last_search_time > 3:
             self.search_times = 0
@@ -50,7 +54,10 @@ class DungeonRoomHandler(object):
             angle_list_len = len(self.search_angle)
             scale_search_times = self.search_times // 2
             angle = self.search_angle[scale_search_times % angle_list_len]
-            character.move(angle, 0.4 + 0.4 * (scale_search_times // angle_list_len), self.check_room_change)
+            character.move(
+                angle, 0.4 + 0.4 * (scale_search_times // angle_list_len),
+                None if ignore_room_change else self.check_room_change
+            )
 
         self.search_times += 1
         self.last_search_time = time.time()
@@ -158,6 +165,7 @@ class DungeonRoomHandler(object):
         @param anchor_gate_direction: anchor gate direction
         @param anchor_vector: vector from anchor gate to anchor coordinate
         """
+
         def get_gate(metadata, direction):
             if direction == Gate.DirectionUp:
                 return metadata.up_gate
@@ -251,7 +259,7 @@ class DungeonRoomHandler(object):
                 time.sleep(0.2)
                 continue
 
-            self.re_search_dungeon(character)
+            self.re_search_dungeon(character, ignore_room_change)
 
     @func_set_timeout(15)
     def re_pick_items(self, character: Character):
@@ -459,3 +467,38 @@ class Dungeon(object):
                 )
             except LookupError as e:
                 LOGGER.error(f"Failed to re-enter dungeon: {e}")
+
+    def get_fatigue_points(self):
+        @func_set_timeout(5)
+        def get_value():
+            while True:
+                frame = self.ui_ctx.device.last_frame()
+                fatigue_points_area = frame[
+                                      75:130,
+                                      160:310
+                                      ]
+                try:
+                    result = self.ui_ctx.detector.ocr.ocr(fatigue_points_area)
+                    if len(result) < 0 or not result[0] or len(result[0]) < 0 or len(result[0][0]) != 2:
+                        continue
+
+                    element = result[0][0][1]
+                    # ('23', 0.9993093609809875)
+                    if len(element) != 2 or element[1] < 0.95:
+                        continue
+
+                    try:
+                        value = int(element[0].split('/')[0])
+                        if 0 <= value <= 200:
+                            return value
+                    except ValueError as e:
+                        LOGGER.warning(f"Failed to OCR fatigue points: {e}")
+                        continue
+                except RuntimeError as e:
+                    LOGGER.error(e)
+                    raise
+
+        try:
+            return get_value()
+        except FunctionTimedOut:
+            return -1
