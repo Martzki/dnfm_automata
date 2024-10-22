@@ -1,6 +1,6 @@
 import time
 
-from func_timeout import FunctionTimedOut
+from func_timeout import FunctionTimedOut, func_set_timeout
 
 from common.log import Logger
 from ui.ui import UIElementCtx
