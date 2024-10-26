@@ -67,10 +67,13 @@ class BwangaRoom5Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
         super().__init__(dungeon, 5, character_class, strategy)
 
-    def post_handler(self, enter_times, character: Character, **kwargs):
+    def pre_handler(self, enter_times, character: Character, **kwargs):
+        if enter_times > 1:
+            return
+
         character.move(225, 0.8)
         try:
-            self.re_search_dungeon(character)
+            self.re_pick_items(character)
         except FunctionTimedOut:
             pass
 

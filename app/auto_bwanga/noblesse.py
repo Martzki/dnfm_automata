@@ -132,8 +132,9 @@ class Room5Handler(BwangaRoom5Handler):
         noblesse.exec_skill(noblesse.ultimate_slayer_technique_spacetime_cutter)
         noblesse.move(180, 0.5)
 
+        super().pre_handler(enter_times, noblesse, **kwargs)
+
     def post_handler(self, enter_times, noblesse: Noblesse, **kwargs):
-        super().post_handler(enter_times, noblesse, **kwargs)
         self.move_to_next_room(noblesse)
 
 

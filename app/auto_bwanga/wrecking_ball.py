@@ -131,8 +131,9 @@ class Room5Handler(BwangaRoom5Handler):
         wrecking_ball.exec_skill(wrecking_ball.quantum_bomb, swipe_angle=225, delay=0.5)
         wrecking_ball.exec_skill(wrecking_ball.x_1_extruder, duration=1.5, delay=2)
 
+        super().pre_handler(enter_times, wrecking_ball, **kwargs)
+
     def post_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
-        super().post_handler(enter_times, wrecking_ball, **kwargs)
         self.move_to_next_room(wrecking_ball)
 
 

@@ -118,8 +118,9 @@ class Room5Handler(BwangaRoom5Handler):
         trickster.move(250, 0.4)
         trickster.exec_skill(trickster.fusion_craft, delay=8.5)
 
+        super().pre_handler(enter_times, trickster, **kwargs)
+
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
-        super().post_handler(enter_times, trickster, **kwargs)
         self.move_to_next_room(trickster)
 
 

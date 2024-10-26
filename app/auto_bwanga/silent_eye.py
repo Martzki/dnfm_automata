@@ -136,8 +136,9 @@ class Room5Handler(BwangaRoom5Handler):
         silent_eye.move(15, 0.8)
         silent_eye.exec_skill(silent_eye.agni_pentacle)
 
+        super().pre_handler(enter_times, silent_eye, **kwargs)
+
     def post_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
-        super().post_handler(enter_times, silent_eye, **kwargs)
         self.move_to_next_room(silent_eye)
 
 
