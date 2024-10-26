@@ -122,8 +122,9 @@ class Room5Handler(BwangaRoom5Handler):
         evangelist.move(270, 0.5)
         evangelist.exec_skill(evangelist.crux_of_victoria, delay=7)
 
+        super().pre_handler(enter_times, evangelist, **kwargs)
+
     def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
-        super().post_handler(enter_times, evangelist, **kwargs)
         self.move_to_next_room(evangelist)
 
 

@@ -146,8 +146,9 @@ class Room5Handler(BwangaRoom5Handler):
         champion.exec_skill(champion.continuous_strike, delay=0.2)
         champion.exec_skill(champion.continuous_strike, delay=0.2)
 
+        super().pre_handler(enter_times, champion, **kwargs)
+
     def post_handler(self, enter_times, champion: Champion, **kwargs):
-        super().post_handler(enter_times, champion, **kwargs)
         self.move_to_next_room(champion)
 
 

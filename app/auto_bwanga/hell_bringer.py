@@ -122,8 +122,9 @@ class Room5Handler(BwangaRoom5Handler):
         hell_bringer.move(270, 0.3)
         hell_bringer.exec_skill(hell_bringer.extreme_overkill, delay=2.5)
 
+        super().pre_handler(enter_times, hell_bringer, **kwargs)
+
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
-        super().post_handler(enter_times, hell_bringer, **kwargs)
         self.move_to_next_room(hell_bringer)
 
 

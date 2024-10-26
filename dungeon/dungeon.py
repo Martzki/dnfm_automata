@@ -232,23 +232,28 @@ class DungeonRoomHandler(object):
         :param ignore_room_change: whether ignore room change when moving or not
         :return: None
         """
-        item, distance = meta.get_closest_item()
-        if item is None:
-            LOGGER.info("Failed to found closest item")
-            return True
+        for i in range(5):
+            if i != 0:
+                meta = self.dungeon.get_battle_metadata()
+                if not meta.has_item():
+                    continue
 
-        if meta.character:
-            LOGGER.info(f"Move toward item from {meta.character.coordinate()} to {item.coordinate()}")
-            character.move_toward(
-                meta.character.coordinate(),
-                item.coordinate(),
-                None if ignore_room_change else self.check_room_change
-            )
-            time.sleep(0.1)
-            return
+            item, distance = meta.get_closest_item()
+            if item is None:
+                LOGGER.info("Failed to found closest item")
+                continue
 
-        if self.re_search_dungeon(character):
-            return
+            if meta.character:
+                LOGGER.info(f"Move toward item from {meta.character.coordinate()} to {item.coordinate()}")
+                character.move_toward(
+                    meta.character.coordinate(),
+                    item.coordinate(),
+                    None if ignore_room_change else self.check_room_change
+                )
+                time.sleep(0.1)
+                continue
+
+            self.re_search_dungeon(character)
 
     @func_set_timeout(15)
     def re_pick_items(self, character: Character):
