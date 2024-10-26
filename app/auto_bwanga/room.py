@@ -50,7 +50,7 @@ def register_room(app):
     wrecking_ball_handlers = wrecking_ball_init_handlers(dungeon)
 
     for i in range(len(evangelist_handlers)):
-        room = DungeonRoom(DUNGEON_NAME, i)
+        room = DungeonRoom(DUNGEON_NAME, i, i == 8)
         room.register_handler(champion_handlers[i])
         room.register_handler(evangelist_handlers[i])
         room.register_handler(hell_bringer_handlers[i])

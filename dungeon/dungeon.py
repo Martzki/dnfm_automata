@@ -20,6 +20,10 @@ class DungeonReEntered(Exception):
     pass
 
 
+class DungeonRoomChanged(Exception):
+    pass
+
+
 class DungeonRoomHandler(object):
     def __init__(self, dungeon, room_id, character_class, strategy=None):
         self.dungeon = dungeon
@@ -34,8 +38,7 @@ class DungeonRoomHandler(object):
     def check_room_change(self):
         room_id = self.dungeon.get_battle_metadata().room_id
         if room_id != self.room_id:
-            LOGGER.info(f"Room changed from {self.room_id} to {room_id}")
-        return room_id != self.room_id
+            raise DungeonRoomChanged(f"Room changed from {self.room_id} to {room_id}")
 
     def re_search_dungeon(self, character):
         LOGGER.info("re-search dungeon")
@@ -47,13 +50,10 @@ class DungeonRoomHandler(object):
             angle_list_len = len(self.search_angle)
             scale_search_times = self.search_times // 2
             angle = self.search_angle[scale_search_times % angle_list_len]
-            if character.move(angle, 0.4 + 0.4 * (scale_search_times // angle_list_len), self.check_room_change):
-                return True
+            character.move(angle, 0.4 + 0.4 * (scale_search_times // angle_list_len), self.check_room_change)
 
         self.search_times += 1
         self.last_search_time = time.time()
-
-        return False
 
     def move_toward_monster(self, character, skill, meta):
         """
@@ -180,8 +180,7 @@ class DungeonRoomHandler(object):
                     break
 
                 if not meta.character:
-                    if self.re_search_dungeon(character):
-                        return
+                    self.re_search_dungeon(character)
                     continue
 
                 if anchor_gate_direction and anchor_vector:
@@ -192,15 +191,13 @@ class DungeonRoomHandler(object):
                             anchor_gate.coordinate()[1] + anchor_vector[1]
                         )
                         LOGGER.debug(f"Move from {meta.character.coordinate()} to anchor {anchor}")
-                        if character.move_toward(meta.character.coordinate(), anchor, self.check_room_change):
-                            return
+                        character.move_toward(meta.character.coordinate(), anchor, self.check_room_change)
                         continue
 
                 self.re_search_dungeon(character)
 
             LOGGER.debug("Found gate, move")
-            if character.move_toward(meta.character.coordinate(), next_gate.coordinate(), self.check_room_change):
-                return
+            character.move_toward(meta.character.coordinate(), next_gate.coordinate(), self.check_room_change)
 
     def battle(self, character, meta):
         now = time.time()
@@ -234,6 +231,7 @@ class DungeonRoomHandler(object):
         """
         for i in range(5):
             if i != 0:
+                time.sleep(0.1)
                 meta = self.dungeon.get_battle_metadata()
                 if not meta.has_item():
                     continue
@@ -250,7 +248,7 @@ class DungeonRoomHandler(object):
                     item.coordinate(),
                     None if ignore_room_change else self.check_room_change
                 )
-                time.sleep(0.1)
+                time.sleep(0.2)
                 continue
 
             self.re_search_dungeon(character)
@@ -302,8 +300,7 @@ class DungeonRoomHandler(object):
             # Search open gate.
             else:
                 LOGGER.info("Search open gate")
-                if self.re_search_dungeon(character):
-                    return True
+                self.re_search_dungeon(character)
 
     def post_handler(self, enter_times, character: Character, **kwargs):
         """
@@ -317,9 +314,10 @@ class DungeonRoomHandler(object):
 
 
 class DungeonRoom(object):
-    def __init__(self, dungeon, room_id):
+    def __init__(self, dungeon, room_id, is_last=False):
         self.dungeon = dungeon
         self.room_id = room_id
+        self.is_last = is_last
         self.handler_map = {}
         self.enter_times = 0
         self.revive_times = 0
@@ -341,9 +339,11 @@ class DungeonRoom(object):
 
         handler = self.handler_map[character.character_class]
         handler.pre_handler(self.enter_times, character, **kwargs)
-        if handler.handler(self.enter_times, character, **kwargs) and self.room_id != 8:
-            LOGGER.info("room changed, break")
-            return
+        try:
+            handler.handler(self.enter_times, character, **kwargs)
+        except DungeonRoomChanged:
+            if not self.is_last:
+                raise
         handler.post_handler(self.enter_times, character, **kwargs)
 
 

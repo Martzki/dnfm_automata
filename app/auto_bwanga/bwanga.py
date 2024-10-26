@@ -21,7 +21,7 @@ from common.util import timeout_handler
 from detector.detector import Detector
 from device.device import Device
 from device.scrcpy_device import ScrcpyDevice
-from dungeon.dungeon import Dungeon, DungeonReEntered
+from dungeon.dungeon import Dungeon, DungeonReEntered, DungeonRoomChanged
 from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
@@ -96,6 +96,8 @@ class BwangaApp(BaseApp):
                     self.dungeon.revive(room)
                 except DungeonReEntered:
                     dungeon_re_entered = True
+            except DungeonRoomChanged as e:
+                LOGGER.info(e)
             finally:
                 LOGGER.info(f"room {room.room_id} finished")
                 last_room_id = -1 if dungeon_re_entered else room.room_id
@@ -103,7 +105,7 @@ class BwangaApp(BaseApp):
             if room.room_id == 5:
                 room_5_visited = True
 
-            if room.room_id == 8 or dungeon_re_entered:
+            if room.is_last or dungeon_re_entered:
                 LOGGER.info("Dungeon re-entered" if dungeon_re_entered else "Dungeon finished")
                 self.dungeon.clear()
                 room_5_visited = False
