@@ -25,7 +25,7 @@ class Room0Handler(BwangaRoom0Handler):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.lava_potion_no_9)
 
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster)
 
 
 class Room1Handler(BwangaRoom1Handler):
@@ -44,7 +44,7 @@ class Room1Handler(BwangaRoom1Handler):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.acid_rain)
 
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster)
 
 
 class Room2Handler(BwangaRoom2Handler):
@@ -62,7 +62,7 @@ class Room2Handler(BwangaRoom2Handler):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.gravitas)
 
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster)
 
 
 class Room3Handler(BwangaRoom3Handler):
@@ -80,7 +80,7 @@ class Room3Handler(BwangaRoom3Handler):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.lava_potion_no_9)
 
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster)
 
 
 class Room4Handler(BwangaRoom4Handler):
@@ -98,12 +98,13 @@ class Room4Handler(BwangaRoom4Handler):
         trickster.exec_skill(trickster.lava_potion_no_9)
 
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
-        if enter_times == 1:
+        room_5_visited = kwargs.get("room_5_visited", False)
+        if not room_5_visited:
             trickster.wait_skill_cool_down(trickster.fusion_craft)
-        elif enter_times == 2:
+        else:
             trickster.wait_skill_cool_down(trickster.cheeky_doll_shururu)
 
-        self.move_to_next_room(trickster, enter_times, kwargs.get("room_5_visited", False))
+        self.move_to_next_room(trickster, room_5_visited)
 
 
 class Room5Handler(BwangaRoom5Handler):
@@ -115,11 +116,11 @@ class Room5Handler(BwangaRoom5Handler):
             return
 
         trickster.move(250, 0.4)
-        trickster.exec_skill(trickster.fusion_craft, delay=8)
-        trickster.move(180, 0.4)
+        trickster.exec_skill(trickster.fusion_craft, delay=8.5)
 
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
-        self.move_to_next_room(trickster, enter_times)
+        super().post_handler(enter_times, trickster, **kwargs)
+        self.move_to_next_room(trickster)
 
 
 class Room6Handler(BwangaRoom6Handler):
@@ -139,7 +140,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.lava_potion_no_9)
 
-        self.move_to_next_room(trickster, enter_times, kwargs.get("room_5_visited", False))
+        self.move_to_next_room(trickster, kwargs.get("room_5_visited", False))
 
 
 class Room7Handler(BwangaRoom7Handler):
@@ -157,7 +158,7 @@ class Room7Handler(BwangaRoom7Handler):
         if enter_times == 1:
             trickster.wait_skill_cool_down(trickster.gravitas)
 
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster, kwargs.get("room_5_visited", False))
 
 
 class Room8Handler(BwangaRoom8Handler):
@@ -182,7 +183,7 @@ class Room9Handler(BwangaRoom9Handler):
         pass
 
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster)
 
 
 class Room10Handler(BwangaRoom10Handler):
@@ -193,7 +194,7 @@ class Room10Handler(BwangaRoom10Handler):
         pass
 
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster)
 
 
 class Room11Handler(BwangaRoom11Handler):
@@ -204,7 +205,7 @@ class Room11Handler(BwangaRoom11Handler):
         pass
 
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
-        self.move_to_next_room(trickster, enter_times)
+        self.move_to_next_room(trickster)
 
 
 def init_handlers(dungeon):

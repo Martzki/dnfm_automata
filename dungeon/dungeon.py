@@ -7,7 +7,7 @@ from character.character import Character
 from common.log import Logger
 from detector.detector import Detector
 from device.device import Device
-from dungeon.battle import BattleMetadata
+from dungeon.battle import BattleMetadata, Gate
 from dungeon.strategy import BattleStrategy
 from ui.ui import UIElementCtx
 
@@ -31,7 +31,7 @@ class DungeonRoomHandler(object):
         self.last_exec_skill_time = time.time()
         self.battle_strategy = strategy if strategy else BattleStrategy()
 
-    def room_changed(self):
+    def check_room_change(self):
         room_id = self.dungeon.get_battle_metadata().room_id
         if room_id != self.room_id:
             LOGGER.info(f"Room changed from {self.room_id} to {room_id}")
@@ -47,7 +47,7 @@ class DungeonRoomHandler(object):
             angle_list_len = len(self.search_angle)
             scale_search_times = self.search_times // 2
             angle = self.search_angle[scale_search_times % angle_list_len]
-            if character.move(angle, 0.4 + 0.4 * (scale_search_times // angle_list_len), self.room_changed):
+            if character.move(angle, 0.4 + 0.4 * (scale_search_times // angle_list_len), self.check_room_change):
                 return True
 
         self.search_times += 1
@@ -148,6 +148,60 @@ class DungeonRoomHandler(object):
 
         character.move_toward(src, dst)
 
+    @func_set_timeout(30)
+    def move_to_next_room(self, character: Character, gate_direction, anchor_gate_direction=None, anchor_vector=None):
+        """
+        Move to next room until room changed. This function will not return explicitly and
+         only break when a DungeonRoomChanged or FunctionTimeout exception raised.
+        @param character: character under control
+        @param gate_direction: next room direction
+        @param anchor_gate_direction: anchor gate direction
+        @param anchor_vector: vector from anchor gate to anchor coordinate
+        """
+        def get_gate(metadata, direction):
+            if direction == Gate.DirectionUp:
+                return metadata.up_gate
+            elif direction == Gate.DirectionDown:
+                return metadata.down_gate
+            elif direction == Gate.DirectionLeft:
+                return metadata.left_gate
+            elif direction == Gate.DirectionRight:
+                return metadata.right_gate
+            else:
+                raise ValueError(f"Unexpected direction: {direction}")
+
+        LOGGER.debug(f"Searching next room gate for room {self.room_id}")
+
+        while True:
+            while True:
+                meta = self.dungeon.get_battle_metadata()
+                next_gate = get_gate(meta, gate_direction)
+                if next_gate and next_gate.is_open and meta.character:
+                    break
+
+                if not meta.character:
+                    if self.re_search_dungeon(character):
+                        return
+                    continue
+
+                if anchor_gate_direction and anchor_vector:
+                    anchor_gate = get_gate(meta, anchor_gate_direction)
+                    if anchor_gate:
+                        anchor = (
+                            anchor_gate.coordinate()[0] + anchor_vector[0],
+                            anchor_gate.coordinate()[1] + anchor_vector[1]
+                        )
+                        LOGGER.debug(f"Move from {meta.character.coordinate()} to anchor {anchor}")
+                        if character.move_toward(meta.character.coordinate(), anchor, self.check_room_change):
+                            return
+                        continue
+
+                self.re_search_dungeon(character)
+
+            LOGGER.debug("Found gate, move")
+            if character.move_toward(meta.character.coordinate(), next_gate.coordinate(), self.check_room_change):
+                return
+
     def battle(self, character, meta):
         now = time.time()
         if now - self.last_exec_skill_time > 3:
@@ -188,7 +242,7 @@ class DungeonRoomHandler(object):
             character.move_toward(
                 meta.character.coordinate(),
                 item.coordinate(),
-                None if ignore_room_change else self.room_changed
+                None if ignore_room_change else self.check_room_change
             )
             time.sleep(0.1)
             return
@@ -196,8 +250,16 @@ class DungeonRoomHandler(object):
         if self.re_search_dungeon(character):
             return
 
-    def maintain_equipments(self):
-        pass
+    @func_set_timeout(15)
+    def re_pick_items(self, character: Character):
+        # Pick up left items.
+        while True:
+            meta = self.dungeon.get_battle_metadata()
+
+            if not meta.has_item():
+                break
+
+            self.pick_items(character, meta, ignore_room_change=True)
 
     def pre_handler(self, enter_times, character: Character, **kwargs):
         """
@@ -218,9 +280,6 @@ class DungeonRoomHandler(object):
         """
 
         while True:
-            if self.room_changed():
-                return True
-
             meta = self.dungeon.get_battle_metadata()
 
             # Find monster and battle.
@@ -234,14 +293,12 @@ class DungeonRoomHandler(object):
             # Open gate found, break.
             elif meta.has_open_gate():
                 LOGGER.info("Found open gate, break")
-                break
+                return
             # Search open gate.
             else:
                 LOGGER.info("Search open gate")
                 if self.re_search_dungeon(character):
                     return True
-
-        return False
 
     def post_handler(self, enter_times, character: Character, **kwargs):
         """

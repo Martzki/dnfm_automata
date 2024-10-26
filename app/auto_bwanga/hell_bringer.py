@@ -25,7 +25,7 @@ class Room0Handler(BwangaRoom0Handler):
         if enter_times == 1:
             hell_bringer.wait_skill_cool_down(hell_bringer.blood_sword)
 
-        self.move_to_next_room(hell_bringer, enter_times)
+        self.move_to_next_room(hell_bringer)
 
 
 class Room1Handler(BwangaRoom1Handler):
@@ -45,7 +45,7 @@ class Room1Handler(BwangaRoom1Handler):
             hell_bringer.wait_skill_cool_down(hell_bringer.raging_fury)
             hell_bringer.wait_skill_cool_down(hell_bringer.extreme_overkill)
 
-        self.move_to_next_room(hell_bringer, enter_times)
+        self.move_to_next_room(hell_bringer)
 
 
 class Room2Handler(BwangaRoom2Handler):
@@ -65,7 +65,7 @@ class Room2Handler(BwangaRoom2Handler):
         if enter_times == 1:
             hell_bringer.wait_skill_cool_down(hell_bringer.bloody_twister)
 
-        self.move_to_next_room(hell_bringer, enter_times)
+        self.move_to_next_room(hell_bringer)
 
 
 class Room3Handler(BwangaRoom3Handler):
@@ -83,7 +83,7 @@ class Room3Handler(BwangaRoom3Handler):
         if enter_times == 1:
             hell_bringer.wait_skill_cool_down(hell_bringer.enrage)
 
-        self.move_to_next_room(hell_bringer, enter_times)
+        self.move_to_next_room(hell_bringer)
 
 
 class Room4Handler(BwangaRoom4Handler):
@@ -101,13 +101,14 @@ class Room4Handler(BwangaRoom4Handler):
         hell_bringer.exec_skill(hell_bringer.enrage)
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
-        if enter_times == 1:
+        room_5_visited = kwargs.get("room_5_visited", False)
+        if not room_5_visited:
             hell_bringer.wait_skill_cool_down(hell_bringer.extreme_overkill)
-        elif enter_times == 2:
+        else:
             hell_bringer.wait_skill_cool_down(hell_bringer.mountainous_wheel)
             hell_bringer.wait_skill_cool_down(hell_bringer.blood_sword)
 
-        self.move_to_next_room(hell_bringer, enter_times, kwargs.get("room_5_visited", False))
+        self.move_to_next_room(hell_bringer, room_5_visited)
 
 
 class Room5Handler(BwangaRoom5Handler):
@@ -119,11 +120,11 @@ class Room5Handler(BwangaRoom5Handler):
             return
 
         hell_bringer.move(270, 0.3)
-        hell_bringer.exec_skill(hell_bringer.extreme_overkill, delay=1.5)
-        hell_bringer.move(225, 1)
+        hell_bringer.exec_skill(hell_bringer.extreme_overkill, delay=2.5)
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
-        self.move_to_next_room(hell_bringer, enter_times)
+        super().post_handler(enter_times, hell_bringer, **kwargs)
+        self.move_to_next_room(hell_bringer)
 
 
 class Room6Handler(BwangaRoom6Handler):
@@ -144,7 +145,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             hell_bringer.wait_skill_cool_down(hell_bringer.enrage)
 
-        self.move_to_next_room(hell_bringer, enter_times, kwargs.get("room_5_visited", False))
+        self.move_to_next_room(hell_bringer, kwargs.get("room_5_visited", False))
 
 
 class Room7Handler(BwangaRoom7Handler):
@@ -163,7 +164,7 @@ class Room7Handler(BwangaRoom7Handler):
         if enter_times == 1:
             hell_bringer.wait_skill_cool_down(hell_bringer.outrage_break)
 
-        self.move_to_next_room(hell_bringer, enter_times)
+        self.move_to_next_room(hell_bringer)
 
 
 class Room8Handler(BwangaRoom8Handler):
@@ -188,7 +189,7 @@ class Room9Handler(BwangaRoom9Handler):
         pass
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
-        self.move_to_next_room(hell_bringer, enter_times)
+        self.move_to_next_room(hell_bringer)
 
 
 class Room10Handler(BwangaRoom10Handler):
@@ -199,7 +200,7 @@ class Room10Handler(BwangaRoom10Handler):
         pass
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
-        self.move_to_next_room(hell_bringer, enter_times)
+        self.move_to_next_room(hell_bringer)
 
 
 class Room11Handler(BwangaRoom11Handler):
@@ -210,7 +211,7 @@ class Room11Handler(BwangaRoom11Handler):
         pass
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
-        self.move_to_next_room(hell_bringer, enter_times)
+        self.move_to_next_room(hell_bringer)
 
 
 def init_handlers(dungeon):

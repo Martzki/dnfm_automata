@@ -30,7 +30,7 @@ class Room0Handler(BwangaRoom0Handler):
         if enter_times == 1:
             champion.wait_skill_cool_down(champion.continuous_strike)
 
-        self.move_to_next_room(champion, enter_times)
+        self.move_to_next_room(champion)
 
 
 class Room1Handler(BwangaRoom1Handler):
@@ -52,7 +52,7 @@ class Room1Handler(BwangaRoom1Handler):
         if enter_times == 1:
             champion.wait_skill_cool_down(champion.seismic_crash)
 
-        self.move_to_next_room(champion, enter_times)
+        self.move_to_next_room(champion)
 
 
 class Room2Handler(BwangaRoom2Handler):
@@ -72,7 +72,7 @@ class Room2Handler(BwangaRoom2Handler):
         if enter_times == 1:
             champion.wait_skill_cool_down(champion.lightning_dance)
 
-        self.move_to_next_room(champion, enter_times)
+        self.move_to_next_room(champion)
 
 
 class Room3Handler(BwangaRoom3Handler):
@@ -91,7 +91,7 @@ class Room3Handler(BwangaRoom3Handler):
             champion.wait_skill_cool_down(champion.seismic_crash)
             champion.wait_skill_cool_down(champion.mountain_pusher)
 
-        self.move_to_next_room(champion, enter_times)
+        self.move_to_next_room(champion)
 
 
 class Room4Handler(BwangaRoom4Handler):
@@ -121,7 +121,7 @@ class Room4Handler(BwangaRoom4Handler):
         else:
             champion.wait_skill_cool_down(champion.seismic_crash)
 
-        self.move_to_next_room(champion, enter_times, room_5_visited)
+        self.move_to_next_room(champion, room_5_visited)
 
 
 class Room5Handler(BwangaRoom5Handler):
@@ -147,7 +147,8 @@ class Room5Handler(BwangaRoom5Handler):
         champion.exec_skill(champion.continuous_strike, delay=0.2)
 
     def post_handler(self, enter_times, champion: Champion, **kwargs):
-        self.move_to_next_room(champion, enter_times)
+        super().post_handler(enter_times, champion, **kwargs)
+        self.move_to_next_room(champion)
 
 
 class Room6Handler(BwangaRoom6Handler):
@@ -168,7 +169,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             champion.wait_skill_cool_down(champion.lightning_dance)
 
-        self.move_to_next_room(champion, enter_times, kwargs.get("room_5_visited", False))
+        self.move_to_next_room(champion, kwargs.get("room_5_visited", False))
 
 
 class Room7Handler(BwangaRoom7Handler):
@@ -186,7 +187,7 @@ class Room7Handler(BwangaRoom7Handler):
         if enter_times == 1:
             champion.wait_skill_cool_down(champion.rising_fist)
 
-        self.move_to_next_room(champion, enter_times)
+        self.move_to_next_room(champion, kwargs.get("room_5_visited", False))
 
 
 class Room8Handler(BwangaRoom8Handler):
@@ -210,7 +211,7 @@ class Room9Handler(BwangaRoom9Handler):
         pass
 
     def post_handler(self, enter_times, champion: Champion, **kwargs):
-        self.move_to_next_room(champion, enter_times)
+        self.move_to_next_room(champion)
 
 
 class Room10Handler(BwangaRoom10Handler):
@@ -221,7 +222,7 @@ class Room10Handler(BwangaRoom10Handler):
         pass
 
     def post_handler(self, enter_times, champion: Champion, **kwargs):
-        self.move_to_next_room(champion, enter_times)
+        self.move_to_next_room(champion)
 
 
 class Room11Handler(BwangaRoom11Handler):
@@ -232,7 +233,7 @@ class Room11Handler(BwangaRoom11Handler):
         pass
 
     def post_handler(self, enter_times, champion: Champion, **kwargs):
-        self.move_to_next_room(champion, enter_times)
+        self.move_to_next_room(champion)
 
 
 def init_handlers(dungeon):

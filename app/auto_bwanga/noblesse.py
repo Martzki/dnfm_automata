@@ -34,7 +34,7 @@ class Room0Handler(BwangaRoom0Handler):
         if enter_times == 1:
             noblesse.wait_skill_cool_down(noblesse.arcane_sword_blast)
 
-        self.move_to_next_room(noblesse, enter_times)
+        self.move_to_next_room(noblesse)
 
 
 class Room1Handler(BwangaRoom1Handler):
@@ -54,7 +54,7 @@ class Room1Handler(BwangaRoom1Handler):
             noblesse.wait_skill_cool_down(noblesse.illusion_sword)
             noblesse.wait_skill_cool_down(noblesse.ascent)
 
-        self.move_to_next_room(noblesse, enter_times)
+        self.move_to_next_room(noblesse)
 
 
 class Room2Handler(BwangaRoom2Handler):
@@ -74,7 +74,7 @@ class Room2Handler(BwangaRoom2Handler):
         if enter_times == 1:
             noblesse.wait_skill_cool_down(noblesse.crescent)
 
-        self.move_to_next_room(noblesse, enter_times)
+        self.move_to_next_room(noblesse)
 
 
 class Room3Handler(BwangaRoom3Handler):
@@ -92,7 +92,7 @@ class Room3Handler(BwangaRoom3Handler):
         if enter_times == 1:
             noblesse.wait_skill_cool_down(noblesse.flash)
 
-        self.move_to_next_room(noblesse, enter_times)
+        self.move_to_next_room(noblesse)
 
 
 class Room4Handler(BwangaRoom4Handler):
@@ -118,7 +118,7 @@ class Room4Handler(BwangaRoom4Handler):
         else:
             noblesse.wait_skill_cool_down(noblesse.arcane_sword_blast)
 
-        self.move_to_next_room(noblesse, enter_times, room_5_visited)
+        self.move_to_next_room(noblesse, room_5_visited)
 
 
 class Room5Handler(BwangaRoom5Handler):
@@ -133,7 +133,8 @@ class Room5Handler(BwangaRoom5Handler):
         noblesse.move(180, 0.5)
 
     def post_handler(self, enter_times, noblesse: Noblesse, **kwargs):
-        self.move_to_next_room(noblesse, enter_times)
+        super().post_handler(enter_times, noblesse, **kwargs)
+        self.move_to_next_room(noblesse)
 
 
 class Room6Handler(BwangaRoom6Handler):
@@ -151,7 +152,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             noblesse.wait_skill_cool_down(noblesse.crescent)
 
-        self.move_to_next_room(noblesse, enter_times, kwargs.get("room_5_visited", False))
+        self.move_to_next_room(noblesse, kwargs.get("room_5_visited", False))
 
 
 class Room7Handler(BwangaRoom7Handler):
@@ -169,7 +170,7 @@ class Room7Handler(BwangaRoom7Handler):
         if enter_times == 1:
             noblesse.wait_skill_cool_down(noblesse.swift_demon_slash)
 
-        self.move_to_next_room(noblesse, enter_times)
+        self.move_to_next_room(noblesse, kwargs.get("room_5_visited", False))
 
 
 class Room8Handler(BwangaRoom8Handler):
@@ -192,7 +193,7 @@ class Room9Handler(BwangaRoom9Handler):
         pass
 
     def post_handler(self, enter_times, noblesse: Noblesse, **kwargs):
-        self.move_to_next_room(noblesse, enter_times)
+        self.move_to_next_room(noblesse)
 
 
 class Room10Handler(BwangaRoom10Handler):
@@ -203,7 +204,7 @@ class Room10Handler(BwangaRoom10Handler):
         pass
 
     def post_handler(self, enter_times, noblesse: Noblesse, **kwargs):
-        self.move_to_next_room(noblesse, enter_times)
+        self.move_to_next_room(noblesse)
 
 
 class Room11Handler(BwangaRoom11Handler):
@@ -214,7 +215,7 @@ class Room11Handler(BwangaRoom11Handler):
         pass
 
     def post_handler(self, enter_times, noblesse: Noblesse, **kwargs):
-        self.move_to_next_room(noblesse, enter_times)
+        self.move_to_next_room(noblesse)
 
 
 def init_handlers(dungeon):
