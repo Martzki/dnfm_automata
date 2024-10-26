@@ -165,7 +165,7 @@ class Room7Handler(BwangaRoom7Handler):
         if enter_times == 1:
             hell_bringer.wait_skill_cool_down(hell_bringer.outrage_break)
 
-        self.move_to_next_room(hell_bringer)
+        self.move_to_next_room(hell_bringer, kwargs.get("room_5_visited", False))
 
 
 class Room8Handler(BwangaRoom8Handler):

@@ -54,7 +54,7 @@ class Character(object):
             )
         return Skill(name, conf)
 
-    def move_with_rad(self, rad, duration=1, need_stop=None):
+    def move_with_rad(self, rad, duration=1, move_check=None):
         center = self.ui_ctx.get_ui_coordinate(UIElementCtx.CategoryCommon, "move")
         if not center:
             LOGGER.critical("Failed to get move coordinate.")
@@ -68,27 +68,24 @@ class Character(object):
         start = time.time()
         self.device.raw_touch(coordinate, press=True)
 
-        stop = False
-        while True:
-            if need_stop and need_stop():
-                stop = True
-                break
+        try:
+            while True:
+                if move_check:
+                    move_check()
 
-            if time.time() - start > duration:
-                break
+                if time.time() - start > duration:
+                    break
+        finally:
+            self.device.raw_touch(coordinate, press=False)
 
-        self.device.raw_touch(coordinate, press=False)
+    def move(self, angle, duration=1, move_check=None):
+        self.move_with_rad(radians(angle), duration, move_check)
 
-        return stop
-
-    def move(self, angle, duration=1, need_stop=None):
-        return self.move_with_rad(radians(angle), duration, need_stop)
-
-    def move_toward(self, src, dst, need_stop=None):
+    def move_toward(self, src, dst, move_check=None):
         distance = BattleMetadata.get_distance(src, dst)
         duration = BattleMetadata.get_move_duration(distance)
         LOGGER.info(f"move({src}, {dst}, {duration})")
-        return self.move_with_rad(BattleMetadata.get_rad(src, dst), duration, need_stop)
+        self.move_with_rad(BattleMetadata.get_rad(src, dst), duration, move_check)
 
     def get_skill(self, skill_name):
         skill = getattr(self, skill_name, None)
