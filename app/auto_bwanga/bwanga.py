@@ -60,6 +60,8 @@ class BwangaApp(BaseApp):
         dungeon_finished_time = None
         room_5_visited = False
         last_room_id = -1
+        last_wrong_room_id = -1
+        wrong_room_cnt = 0
         while True:
             room = self.dungeon.get_room()
             if not room:
@@ -75,7 +77,22 @@ class BwangaApp(BaseApp):
                     continue
 
             if not validate_next_room(last_room_id, room.room_id):
-                continue
+                if room.room_id != last_wrong_room_id:
+                    last_wrong_room_id = room.room_id
+                    wrong_room_cnt = 0
+                else:
+                    wrong_room_cnt += 1
+
+                if wrong_room_cnt < 10:
+                    continue
+
+                LOGGER.warning(
+                    f"Try to correct current room from last "
+                    f"room {last_room_id} to room {last_wrong_room_id}"
+                )
+
+            last_wrong_room_id = -1
+            wrong_room_cnt = 0
 
             LOGGER.info("detect room {}".format(room.room_id))
 
