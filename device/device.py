@@ -2,6 +2,9 @@ class Device(object):
     def start(self):
         pass
 
+    def stop(self):
+        pass
+
     def last_frame(self):
         pass
 

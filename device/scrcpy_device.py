@@ -49,3 +49,6 @@ class ScrcpyDevice(Device):
 
     def start(self, threaded=True):
         self.client.start(threaded)
+
+    def stop(self):
+        self.client.stop()
