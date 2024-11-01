@@ -1,6 +1,5 @@
 import argparse
 import random
-import time
 
 import yaml
 from func_timeout import func_set_timeout, FunctionTimedOut
@@ -217,4 +216,7 @@ if __name__ == '__main__':
 
     app.init()
 
-    app.start()
+    try:
+        app.start()
+    finally:
+        app.stop()

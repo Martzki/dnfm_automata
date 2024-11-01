@@ -18,6 +18,12 @@ class BaseApp(object):
         self.device.register_frame_handler(self.frame_handler)
         self.device.start()
 
+    def start(self):
+        pass
+
+    def stop(self):
+        self.device.stop()
+
     def init_handler(self):
         pass
 
