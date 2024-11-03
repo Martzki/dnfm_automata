@@ -101,7 +101,7 @@ class Room4Handler(BwangaRoom4Handler):
         evangelist.exec_skill(evangelist.shining_cross)
 
     def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
-        room_5_visited = kwargs.get("room_5_visited", False)
+        room_5_visited = 5 in kwargs.get('visited_room_list', [])
         if not room_5_visited:
             evangelist.wait_skill_cool_down(evangelist.crux_of_victoria)
         else:
@@ -150,6 +150,7 @@ class Room7Handler(BwangaRoom7Handler):
         super().__init__(dungeon, CharacterClass.Evangelist, default_battle_strategy)
 
     def pre_handler(self, enter_times, character: Evangelist, **kwargs):
+        super().pre_handler(enter_times, character, **kwargs)
         if enter_times > 1:
             return
 

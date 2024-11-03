@@ -108,7 +108,7 @@ class Room4Handler(BwangaRoom4Handler):
         silent_eye.exec_skill(silent_eye.wave_radiation)
 
     def post_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
-        room_5_visited = kwargs.get("room_5_visited", False)
+        room_5_visited = 5 in kwargs.get('visited_room_list', [])
         if not room_5_visited:
             silent_eye.wait_skill_cool_down(silent_eye.wave_radiation)
             silent_eye.wait_skill_cool_down(silent_eye.agni_pentacle)
@@ -164,6 +164,7 @@ class Room7Handler(BwangaRoom7Handler):
         super().__init__(dungeon, CharacterClass.SilentEye, DefaultBattleStrategy())
 
     def pre_handler(self, enter_times, character: SilentEye, **kwargs):
+        super().pre_handler(enter_times, character, **kwargs)
         if enter_times > 1:
             return
 

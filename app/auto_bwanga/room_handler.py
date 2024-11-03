@@ -4,7 +4,7 @@ from character.character import Character
 from common.log import Logger
 from common.util import timeout_handler
 from dungeon.battle import Gate
-from dungeon.dungeon import DungeonRoomHandler, DungeonFinished
+from dungeon.dungeon import DungeonRoomHandler, DungeonFinished, DungeonReEntered
 from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
@@ -19,8 +19,17 @@ class BwangaRoom0Handler(DungeonRoomHandler):
         super().move_to_next_room(character, Gate.DirectionDown, Gate.DirectionUp, anchor_vector=(240, 470))
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character)
+        fatigue_points = self.dungeon.get_fatigue_points()
+        if fatigue_points <= 0 or fatigue_points > character.reserve_fatigue_points:
+            self.move_to_next_room(character)
+            return
+
+        LOGGER.info(
+            f"Current fatigue points: {fatigue_points} is not greater than "
+            f"{character.reserve_fatigue_points}, back to town"
+        )
+
+        self.dungeon.back_to_town()
 
 
 class BwangaRoom1Handler(DungeonRoomHandler):
@@ -32,8 +41,22 @@ class BwangaRoom1Handler(DungeonRoomHandler):
         super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionUp, anchor_vector=(400, 100))
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character)
+        fatigue_points = self.dungeon.get_fatigue_points()
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        else:
+            self.move_to_next_room(character)
 
 
 class BwangaRoom2Handler(DungeonRoomHandler):
@@ -41,12 +64,32 @@ class BwangaRoom2Handler(DungeonRoomHandler):
         super().__init__(dungeon, 2, character_class, strategy)
 
     @func_set_timeout(30)
-    def move_to_next_room(self, character: Character):
-        super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(1500, -50))
+    def move_to_next_room(self, character: Character, direction):
+        if direction == Gate.DirectionRight:
+            super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(1500, -50))
+        else:
+            super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionRight, anchor_vector=(-1200, 100))
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character)
+        fatigue_points = self.dungeon.get_fatigue_points()
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        elif fatigue_points == 0 and 1 not in visited_room_list:
+            self.move_to_next_room(character, Gate.DirectionLeft)
+        else:
+            self.move_to_next_room(character, Gate.DirectionRight)
 
 
 class BwangaRoom3Handler(DungeonRoomHandler):
@@ -54,12 +97,32 @@ class BwangaRoom3Handler(DungeonRoomHandler):
         super().__init__(dungeon, 3, character_class, strategy)
 
     @func_set_timeout(30)
-    def move_to_next_room(self, character: Character):
-        super().move_to_next_room(character, Gate.DirectionUp, Gate.DirectionLeft, anchor_vector=(700, 0))
+    def move_to_next_room(self, character: Character, direction):
+        if direction == Gate.DirectionUp:
+            super().move_to_next_room(character, Gate.DirectionUp, Gate.DirectionLeft, anchor_vector=(700, 0))
+        else:
+            super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionUp, anchor_vector=(-500, 0))
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character)
+        fatigue_points = self.dungeon.get_fatigue_points()
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        elif fatigue_points == 0 and 2 not in visited_room_list:
+            self.move_to_next_room(character, Gate.DirectionLeft)
+        else:
+            self.move_to_next_room(character, Gate.DirectionUp)
 
 
 class BwangaRoom4Handler(DungeonRoomHandler):
@@ -67,20 +130,48 @@ class BwangaRoom4Handler(DungeonRoomHandler):
         super().__init__(dungeon, 4, character_class, strategy)
 
     def pre_handler(self, enter_times, character: Character, **kwargs):
-        last_room_id = kwargs.get("last_room_id", -1)
-        if last_room_id == 5:
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if len(visited_room_list) > 0 and visited_room_list[-1] == 5:
             character.move(340, 0.8)
 
     @func_set_timeout(30)
-    def move_to_next_room(self, character: Character, room_5_visited: bool):
-        if not room_5_visited:
+    def move_to_next_room(self, character: Character, direction):
+        if direction == Gate.DirectionLeft:
             super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionUp, anchor_vector=(-500, 150))
+        elif direction == Gate.DirectionRight:
+            super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionUp, anchor_vector=(400, 150))
+        elif direction == Gate.DirectionUp:
+            super().move_to_next_room(character, Gate.DirectionUp, Gate.DirectionLeft, anchor_vector=(500, 0))
         else:
-            super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionUp, anchor_vector=(100, 400))
+            super().move_to_next_room(character, Gate.DirectionDown, Gate.DirectionLeft, anchor_vector=(500, 00))
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character, kwargs.get("room_5_visited", False))
+        fatigue_points = self.dungeon.get_fatigue_points()
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        elif 5 not in visited_room_list:
+            self.move_to_next_room(character, Gate.DirectionLeft)
+        elif fatigue_points == 0 or (fatigue_points == 5 and character.reserve_fatigue_points == 0):
+            if 3 not in visited_room_list:
+                self.move_to_next_room(character, Gate.DirectionDown)
+            elif 9 not in visited_room_list:
+                self.move_to_next_room(character, Gate.DirectionUp)
+            else:
+                self.move_to_next_room(character, Gate.DirectionRight)
+        else:
+            self.move_to_next_room(character, Gate.DirectionRight)
 
 
 class BwangaRoom5Handler(DungeonRoomHandler):
@@ -91,7 +182,7 @@ class BwangaRoom5Handler(DungeonRoomHandler):
         if enter_times > 1:
             return
 
-        character.move(225, 0.8)
+        character.move(225, 0.6)
         try:
             self.re_pick_items(character)
         except FunctionTimedOut:
@@ -102,8 +193,22 @@ class BwangaRoom5Handler(DungeonRoomHandler):
         super().move_to_next_room(character, Gate.DirectionRight)
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character)
+        fatigue_points = self.dungeon.get_fatigue_points()
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        else:
+            self.move_to_next_room(character)
 
 
 class BwangaRoom6Handler(DungeonRoomHandler):
@@ -111,15 +216,32 @@ class BwangaRoom6Handler(DungeonRoomHandler):
         super().__init__(dungeon, 6, character_class, strategy)
 
     @func_set_timeout(30)
-    def move_to_next_room(self, character: Character, room_5_visited: bool):
-        if not room_5_visited:
-            super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionRight, anchor_vector=(-200, 0))
-        else:
+    def move_to_next_room(self, character: Character, direction):
+        if direction == Gate.DirectionRight:
             super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(200, 0))
+        else:
+            super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionRight, anchor_vector=(-200, 0))
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character, kwargs.get("room_5_visited", False))
+        fatigue_points = self.dungeon.get_fatigue_points()
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        elif 5 not in visited_room_list:
+            self.move_to_next_room(character, Gate.DirectionLeft)
+        else:
+            self.move_to_next_room(character, Gate.DirectionRight)
 
 
 class BwangaRoom7Handler(DungeonRoomHandler):
@@ -127,15 +249,36 @@ class BwangaRoom7Handler(DungeonRoomHandler):
         super().__init__(dungeon, 7, character_class, strategy)
 
     @func_set_timeout(30)
-    def move_to_next_room(self, character: Character, room_5_visited: bool):
-        if not room_5_visited:
-            super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionRight, anchor_vector=(-1200, 0))
-        else:
+    def move_to_next_room(self, character: Character, direction):
+        if direction == Gate.DirectionRight:
             super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(1200, 0))
+        else:
+            super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionRight, anchor_vector=(-1200, 0))
+
+    def pre_handler(self, enter_times, character: Character, **kwargs):
+        if self.room_id in kwargs.get('visited_room_list', []):
+            character.move(0, 1)
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character, kwargs.get("room_5_visited", False))
+        fatigue_points = self.dungeon.get_fatigue_points()
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        elif 5 not in visited_room_list:
+            self.move_to_next_room(character, Gate.DirectionLeft)
+        else:
+            self.move_to_next_room(character, Gate.DirectionRight)
 
 
 class BwangaRoom8Handler(DungeonRoomHandler):
@@ -171,12 +314,43 @@ class BwangaRoom9Handler(DungeonRoomHandler):
         super().__init__(dungeon, 9, character_class, strategy)
 
     @func_set_timeout(30)
-    def move_to_next_room(self, character: Character):
-        super().move_to_next_room(character, Gate.DirectionDown, Gate.DirectionLeft, anchor_vector=(1500, 300))
+    def move_to_next_room(self, character: Character, direction):
+        if direction == Gate.DirectionDown:
+            super().move_to_next_room(character, Gate.DirectionDown, Gate.DirectionLeft, anchor_vector=(1500, 300))
+        else:
+            super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionDown, anchor_vector=(-1000, -500))
+
+    def pre_handler(self, enter_times, character: Character, **kwargs):
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if len(visited_room_list) < 1:
+            return
+
+        last_room = visited_room_list[-1]
+        if last_room == 4:
+            character.move(90, 0.5)
+        elif last_room == 10 and self.room_id in visited_room_list:
+            character.move(340, 1)
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character)
+        fatigue_points = self.dungeon.get_fatigue_points()
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        elif fatigue_points == 0 and 10 not in visited_room_list:
+            self.move_to_next_room(character, Gate.DirectionLeft)
+        else:
+            self.move_to_next_room(character, Gate.DirectionDown)
 
 
 class BwangaRoom10Handler(DungeonRoomHandler):
@@ -184,12 +358,40 @@ class BwangaRoom10Handler(DungeonRoomHandler):
         super().__init__(dungeon, 10, character_class, strategy)
 
     @func_set_timeout(30)
-    def move_to_next_room(self, character: Character):
-        super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(1500, 0))
+    def move_to_next_room(self, character: Character, direction):
+        if direction == Gate.DirectionRight:
+            super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(1500, 0))
+        else:
+            super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionRight, anchor_vector=(-1500, 0))
+
+    def pre_handler(self, enter_times, character: Character, **kwargs):
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if len(visited_room_list) < 1 or self.room_id not in visited_room_list:
+            return
+
+        last_room = visited_room_list[-1]
+        character.move(0 if last_room == 11 else 180, 1)
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character)
+        fatigue_points = self.dungeon.get_fatigue_points()
+        visited_room_list = kwargs.get('visited_room_list', [])
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        elif fatigue_points == 0 and 11 not in visited_room_list:
+            self.move_to_next_room(character, Gate.DirectionLeft)
+        else:
+            self.move_to_next_room(character, Gate.DirectionRight)
 
 
 class BwangaRoom11Handler(DungeonRoomHandler):
@@ -201,5 +403,19 @@ class BwangaRoom11Handler(DungeonRoomHandler):
         super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionDown, anchor_vector=(200, -700))
 
     def post_handler(self, enter_times, character: Character, **kwargs):
-        super().post_handler(enter_times, character, **kwargs)
-        self.move_to_next_room(character)
+        fatigue_points = self.dungeon.get_fatigue_points()
+        if 0 < fatigue_points <= character.reserve_fatigue_points:
+            LOGGER.info(
+                f"Current fatigue points: {fatigue_points} is not greater than "
+                f"{character.reserve_fatigue_points}, back to town"
+            )
+
+            self.dungeon.back_to_town()
+        elif fatigue_points == 1:
+            try:
+                self.dungeon.back_to_town()
+            except DungeonFinished:
+                self.dungeon.goto_dungeon()
+                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+        else:
+            self.move_to_next_room(character)

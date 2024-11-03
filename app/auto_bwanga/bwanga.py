@@ -56,11 +56,11 @@ class BwangaApp(BaseApp):
     @func_set_timeout(1800)
     def battle_in_dungeon(self, character: Character):
         self.dungeon.clear()
-        room_5_visited = False
         last_room_id = -1
         last_wrong_room_id = -1
         wrong_room_cnt = 0
         battle_cnt = 0
+        visited_room_list = []
         while True:
             room = self.dungeon.get_room()
             if not room:
@@ -87,8 +87,7 @@ class BwangaApp(BaseApp):
             LOGGER.info("detect room {}".format(room.room_id))
 
             room_args = {
-                'last_room_id': last_room_id,
-                'room_5_visited': room_5_visited
+                'visited_room_list': visited_room_list,
             }
 
             if battle_cnt != 0 and battle_cnt % 5 == 0:
@@ -106,7 +105,11 @@ class BwangaApp(BaseApp):
                     dungeon_re_entered = True
             except DungeonRoomChanged as e:
                 LOGGER.info(e)
-            except DungeonFinished:
+            except DungeonReEntered as e:
+                LOGGER.info(e)
+                dungeon_re_entered = True
+            except DungeonFinished as e:
+                LOGGER.info(e)
                 dungeon_finished = True
             finally:
                 LOGGER.info(f"Room {room.room_id} finished")
@@ -116,14 +119,13 @@ class BwangaApp(BaseApp):
                 LOGGER.info("Dungeon finished")
                 return
 
-            if room.room_id == 5:
-                room_5_visited = True
-
             if room.is_last or dungeon_re_entered:
                 LOGGER.info("Dungeon re-entered" if dungeon_re_entered else "Battle finished")
                 self.dungeon.clear()
-                room_5_visited = False
+                visited_room_list = []
                 battle_cnt += 1
+            else:
+                visited_room_list.append(last_room_id)
 
     def start(self):
         LOGGER.info("App started")

@@ -289,7 +289,6 @@ class DungeonRoomHandler(object):
         :param enter_times: the times entering this room
         :return: room changed or not
         """
-
         while True:
             meta = self.dungeon.get_battle_metadata()
 
@@ -318,16 +317,7 @@ class DungeonRoomHandler(object):
         :param character: character under control
         :return: None
         """
-        fatigue_points = self.dungeon.get_fatigue_points()
-        if fatigue_points <= 0 or fatigue_points > character.reserve_fatigue_points:
-            return
-
-        LOGGER.info(
-            f"Current fatigue points: {fatigue_points} is less or equal to "
-            f"{character.reserve_fatigue_points}, back to town"
-        )
-
-        self.dungeon.back_to_town()
+        pass
 
 
 class DungeonRoom(object):
@@ -376,7 +366,6 @@ class Dungeon(object):
             'inference_cnt': 0,
             'inference_time': 0
         }
-        self.room_id = BattleMetadata.UnknownRoomId
 
     def goto_dungeon(self):
         pass
@@ -493,7 +482,7 @@ class Dungeon(object):
 
                     element = result[0][0][1]
                     # ('23', 0.9993093609809875)
-                    if len(element) != 2 or element[1] < 0.95:
+                    if len(element) != 2 or element[1] < 0.98:
                         continue
 
                     try:
@@ -508,7 +497,9 @@ class Dungeon(object):
                     raise
 
         try:
-            return get_value()
+            value = get_value()
+            LOGGER.info(f"Get fatigue points: {value}")
+            return value
         except FunctionTimedOut:
             return -1
 
@@ -521,7 +512,7 @@ class Dungeon(object):
                 "confirm",
                 delay=15
             )
-            raise DungeonFinished()
+            raise DungeonFinished("Dungeon finished")
         except LookupError as e:
             self.device.back()
             LOGGER.warning(f"Failed to back to town: {e}")

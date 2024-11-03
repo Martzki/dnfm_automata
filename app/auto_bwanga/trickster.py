@@ -98,7 +98,7 @@ class Room4Handler(BwangaRoom4Handler):
         trickster.exec_skill(trickster.lava_potion_no_9)
 
     def post_handler(self, enter_times, trickster: Trickster, **kwargs):
-        room_5_visited = kwargs.get("room_5_visited", False)
+        room_5_visited = 5 in kwargs.get('visited_room_list', [])
         if not room_5_visited:
             trickster.wait_skill_cool_down(trickster.fusion_craft)
         else:
@@ -146,6 +146,7 @@ class Room7Handler(BwangaRoom7Handler):
         super().__init__(dungeon, CharacterClass.Trickster, default_battle_strategy)
 
     def pre_handler(self, enter_times, trickster: Trickster, **kwargs):
+        super().pre_handler(enter_times, trickster, **kwargs)
         if enter_times > 1:
             return
 
