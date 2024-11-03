@@ -525,3 +525,41 @@ class Dungeon(object):
         except LookupError as e:
             self.device.back()
             LOGGER.warning(f"Failed to back to town: {e}")
+
+    def return_to_dungeon_scenario(self):
+        LOGGER.info("Start to return to dungeon scenario")
+
+        while True:
+            try:
+                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "confirm", timeout=3)
+            except FunctionTimedOut:
+                self.device.back()
+                continue
+
+            break
+
+        self.device.back()
+
+        time.sleep(1)
+
+        LOGGER.info("Succeed to return to dungeon scenario")
+
+    def repair_equipments(self, category):
+        LOGGER.info("Start to repair worn equipments")
+
+        self.ui_ctx.click_ui_element(category, "package", timeout=5)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair", timeout=3)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_label", timeout=3)
+
+        try:
+            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_confirm", timeout=3)
+        except LookupError:
+            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_worn", timeout=3)
+
+            try:
+                self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_confirm", timeout=3)
+            except LookupError:
+                # Maybe worn is fully repaired.
+                pass
+
+        LOGGER.info("Succeed to repair worn equipments")

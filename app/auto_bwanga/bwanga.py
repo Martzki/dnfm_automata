@@ -60,6 +60,7 @@ class BwangaApp(BaseApp):
         last_room_id = -1
         last_wrong_room_id = -1
         wrong_room_cnt = 0
+        battle_cnt = 0
         while True:
             room = self.dungeon.get_room()
             if not room:
@@ -90,6 +91,9 @@ class BwangaApp(BaseApp):
                 'room_5_visited': room_5_visited
             }
 
+            if battle_cnt != 0 and battle_cnt % 5 == 0:
+                room_args['repair_equipments'] = True
+
             dungeon_re_entered = False
             dungeon_finished = False
             try:
@@ -119,6 +123,7 @@ class BwangaApp(BaseApp):
                 LOGGER.info("Dungeon re-entered" if dungeon_re_entered else "Battle finished")
                 self.dungeon.clear()
                 room_5_visited = False
+                battle_cnt += 1
 
     def start(self):
         LOGGER.info("App started")
@@ -143,7 +148,9 @@ class BwangaApp(BaseApp):
                     continue
 
                 try:
-                    self.repair_equipments()
+                    self.return_to_base_scenario()
+                    self.dungeon.repair_equipments(UIElementCtx.CategoryCommon)
+                    self.return_to_base_scenario()
                     self.dungeon.goto_dungeon()
                 except FunctionTimedOut:
                     LOGGER.warning(f"Go to dungeon timeout, skip {each['id']}")
