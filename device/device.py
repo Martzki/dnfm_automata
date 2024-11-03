@@ -10,3 +10,6 @@ class Device(object):
 
     def touch(self, coordinate, duration):
         pass
+
+    def back(self):
+        pass

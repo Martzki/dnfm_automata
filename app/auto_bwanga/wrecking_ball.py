@@ -31,7 +31,7 @@ class Room0Handler(BwangaRoom0Handler):
         if enter_times == 1:
             wrecking_ball.wait_skill_cool_down(wrecking_ball.destroyer_90_bunker_bomb)
 
-        self.move_to_next_room(wrecking_ball)
+        super().post_handler(enter_times, wrecking_ball, **kwargs)
 
 
 class Room1Handler(BwangaRoom1Handler):
@@ -50,7 +50,7 @@ class Room1Handler(BwangaRoom1Handler):
         if enter_times == 1:
             wrecking_ball.wait_skill_cool_down(wrecking_ball.fm_31_grenade_launcher)
 
-        self.move_to_next_room(wrecking_ball)
+        super().post_handler(enter_times, wrecking_ball, **kwargs)
 
 
 class Room2Handler(BwangaRoom2Handler):
@@ -68,7 +68,7 @@ class Room2Handler(BwangaRoom2Handler):
         if enter_times == 1:
             wrecking_ball.wait_skill_cool_down(wrecking_ball.laser_rifle)
 
-        self.move_to_next_room(wrecking_ball)
+        super().post_handler(enter_times, wrecking_ball, **kwargs)
 
 
 class Room3Handler(BwangaRoom3Handler):
@@ -88,7 +88,7 @@ class Room3Handler(BwangaRoom3Handler):
         if enter_times == 1:
             wrecking_ball.wait_skill_cool_down(wrecking_ball.fm_92_stinger)
 
-        self.move_to_next_room(wrecking_ball)
+        super().post_handler(enter_times, wrecking_ball, **kwargs)
 
 
 class Room4Handler(BwangaRoom4Handler):
@@ -115,7 +115,7 @@ class Room4Handler(BwangaRoom4Handler):
         else:
             wrecking_ball.wait_skill_cool_down(wrecking_ball.laser_rifle)
 
-        self.move_to_next_room(wrecking_ball, room_5_visited)
+        super().post_handler(enter_times, wrecking_ball, **kwargs)
 
 
 class Room5Handler(BwangaRoom5Handler):
@@ -133,9 +133,6 @@ class Room5Handler(BwangaRoom5Handler):
 
         super().pre_handler(enter_times, wrecking_ball, **kwargs)
 
-    def post_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
-        self.move_to_next_room(wrecking_ball)
-
 
 class Room6Handler(BwangaRoom6Handler):
     def __init__(self, dungeon):
@@ -152,7 +149,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             wrecking_ball.wait_skill_cool_down(wrecking_ball.fm_31_grenade_launcher)
 
-        self.move_to_next_room(wrecking_ball, kwargs.get("room_5_visited", False))
+        super().post_handler(enter_times, wrecking_ball, **kwargs)
 
 
 class Room7Handler(BwangaRoom7Handler):
@@ -172,7 +169,7 @@ class Room7Handler(BwangaRoom7Handler):
             wrecking_ball.wait_skill_cool_down(wrecking_ball.destroyer_90_bunker_bomb)
             wrecking_ball.wait_skill_cool_down(wrecking_ball.fm_92_stinger)
 
-        self.move_to_next_room(wrecking_ball, kwargs.get("room_5_visited", False))
+        super().post_handler(enter_times, wrecking_ball, **kwargs)
 
 
 class Room8Handler(BwangaRoom8Handler):
@@ -192,33 +189,15 @@ class Room9Handler(BwangaRoom9Handler):
     def __init__(self, dungeon):
         super().__init__(dungeon, CharacterClass.WreckingBall, DefaultBattleStrategy())
 
-    def pre_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
-        pass
-
-    def post_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
-        self.move_to_next_room(wrecking_ball)
-
 
 class Room10Handler(BwangaRoom10Handler):
     def __init__(self, dungeon):
         super().__init__(dungeon, CharacterClass.WreckingBall, DefaultBattleStrategy())
 
-    def pre_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
-        pass
-
-    def post_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
-        self.move_to_next_room(wrecking_ball)
-
 
 class Room11Handler(BwangaRoom11Handler):
     def __init__(self, dungeon):
         super().__init__(dungeon, CharacterClass.WreckingBall, DefaultBattleStrategy())
-
-    def pre_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
-        pass
-
-    def post_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
-        self.move_to_next_room(wrecking_ball)
 
 
 def init_handlers(dungeon):

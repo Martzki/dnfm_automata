@@ -41,6 +41,7 @@ class Character(object):
         self.device = device
         self.ui_ctx = ui_ctx
         self.character_class = CharacterClass.from_str(character_class)
+        self.reserve_fatigue_points = 0
         self.attack = self.register_skill("attack", conf["skill"]["attack"])
 
     def register_skill(self, name, conf):

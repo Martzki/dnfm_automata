@@ -14,9 +14,12 @@ character:
   hell_bringer_0:
     character_class: hell_bringer
     priority: 2
+    reserve_fatigue_points: 100
   noblesse_0:
     character_class: noblesse
     priority: 2
+    reserve_fatigue_points: 2
   champion_0:
     character_class: champion
     priority: 2
+    reserve_fatigue_points: 2

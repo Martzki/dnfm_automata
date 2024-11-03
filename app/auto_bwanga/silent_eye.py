@@ -28,7 +28,7 @@ class Room0Handler(BwangaRoom0Handler):
         if enter_times == 1:
             silent_eye.wait_skill_cool_down(silent_eye.ground_quaker)
 
-        self.move_to_next_room(silent_eye)
+        super().post_handler(enter_times, silent_eye, **kwargs)
 
 
 class Room1Handler(BwangaRoom1Handler):
@@ -48,7 +48,7 @@ class Room1Handler(BwangaRoom1Handler):
         if enter_times == 1:
             silent_eye.wait_skill_cool_down(silent_eye.spirit_crescent)
 
-        self.move_to_next_room(silent_eye)
+        super().post_handler(enter_times, silent_eye, **kwargs)
 
 
 class Room2Handler(BwangaRoom2Handler):
@@ -67,7 +67,7 @@ class Room2Handler(BwangaRoom2Handler):
         if enter_times == 1:
             silent_eye.wait_skill_cool_down(silent_eye.deadly_enticer)
 
-        self.move_to_next_room(silent_eye)
+        super().post_handler(enter_times, silent_eye, **kwargs)
 
 
 class Room3Handler(BwangaRoom3Handler):
@@ -86,7 +86,7 @@ class Room3Handler(BwangaRoom3Handler):
         if enter_times == 1:
             silent_eye.wait_skill_cool_down(silent_eye.wave_eye)
 
-        self.move_to_next_room(silent_eye)
+        super().post_handler(enter_times, silent_eye, **kwargs)
 
 
 class Room4Handler(BwangaRoom4Handler):
@@ -116,7 +116,7 @@ class Room4Handler(BwangaRoom4Handler):
         else:
             silent_eye.wait_skill_cool_down(silent_eye.ground_quaker)
 
-        self.move_to_next_room(silent_eye, room_5_visited)
+        super().post_handler(enter_times, silent_eye, **kwargs)
 
 
 class Room5Handler(BwangaRoom5Handler):
@@ -138,9 +138,6 @@ class Room5Handler(BwangaRoom5Handler):
 
         super().pre_handler(enter_times, silent_eye, **kwargs)
 
-    def post_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
-        self.move_to_next_room(silent_eye)
-
 
 class Room6Handler(BwangaRoom6Handler):
     def __init__(self, dungeon):
@@ -159,7 +156,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             silent_eye.wait_skill_cool_down(silent_eye.deadly_enticer)
 
-        self.move_to_next_room(silent_eye, kwargs.get("room_5_visited", False))
+        super().post_handler(enter_times, silent_eye, **kwargs)
 
 
 class Room7Handler(BwangaRoom7Handler):
@@ -180,7 +177,7 @@ class Room7Handler(BwangaRoom7Handler):
             silent_eye.wait_skill_cool_down(silent_eye.fire_wave_sword)
             silent_eye.wait_skill_cool_down(silent_eye.ghost_orb)
 
-        self.move_to_next_room(silent_eye, kwargs.get("room_5_visited", False))
+        super().post_handler(enter_times, silent_eye, **kwargs)
 
 
 class Room8Handler(BwangaRoom8Handler):
@@ -203,33 +200,15 @@ class Room9Handler(BwangaRoom9Handler):
     def __init__(self, dungeon):
         super().__init__(dungeon, CharacterClass.SilentEye, DefaultBattleStrategy())
 
-    def pre_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
-        pass
-
-    def post_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
-        self.move_to_next_room(silent_eye)
-
 
 class Room10Handler(BwangaRoom10Handler):
     def __init__(self, dungeon):
         super().__init__(dungeon, CharacterClass.SilentEye, DefaultBattleStrategy())
 
-    def pre_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
-        pass
-
-    def post_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
-        self.move_to_next_room(silent_eye)
-
 
 class Room11Handler(BwangaRoom11Handler):
     def __init__(self, dungeon):
         super().__init__(dungeon, CharacterClass.SilentEye, DefaultBattleStrategy())
-
-    def pre_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
-        pass
-
-    def post_handler(self, enter_times, silent_eye: SilentEye, **kwargs):
-        self.move_to_next_room(silent_eye)
 
 
 def init_handlers(dungeon):

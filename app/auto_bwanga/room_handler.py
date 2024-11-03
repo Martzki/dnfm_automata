@@ -18,6 +18,10 @@ class BwangaRoom0Handler(DungeonRoomHandler):
     def move_to_next_room(self, character: Character):
         super().move_to_next_room(character, Gate.DirectionDown, Gate.DirectionUp, anchor_vector=(240, 470))
 
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character)
+
 
 class BwangaRoom1Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
@@ -26,6 +30,10 @@ class BwangaRoom1Handler(DungeonRoomHandler):
     @func_set_timeout(30)
     def move_to_next_room(self, character: Character):
         super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionUp, anchor_vector=(400, 100))
+
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character)
 
 
 class BwangaRoom2Handler(DungeonRoomHandler):
@@ -36,6 +44,10 @@ class BwangaRoom2Handler(DungeonRoomHandler):
     def move_to_next_room(self, character: Character):
         super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(1500, -50))
 
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character)
+
 
 class BwangaRoom3Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
@@ -44,6 +56,10 @@ class BwangaRoom3Handler(DungeonRoomHandler):
     @func_set_timeout(30)
     def move_to_next_room(self, character: Character):
         super().move_to_next_room(character, Gate.DirectionUp, Gate.DirectionLeft, anchor_vector=(700, 0))
+
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character)
 
 
 class BwangaRoom4Handler(DungeonRoomHandler):
@@ -61,6 +77,10 @@ class BwangaRoom4Handler(DungeonRoomHandler):
             super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionUp, anchor_vector=(-500, 150))
         else:
             super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionUp, anchor_vector=(100, 400))
+
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character, kwargs.get("room_5_visited", False))
 
 
 class BwangaRoom5Handler(DungeonRoomHandler):
@@ -81,6 +101,10 @@ class BwangaRoom5Handler(DungeonRoomHandler):
     def move_to_next_room(self, character: Character):
         super().move_to_next_room(character, Gate.DirectionRight)
 
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character)
+
 
 class BwangaRoom6Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
@@ -93,6 +117,10 @@ class BwangaRoom6Handler(DungeonRoomHandler):
         else:
             super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(200, 0))
 
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character, kwargs.get("room_5_visited", False))
+
 
 class BwangaRoom7Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
@@ -104,6 +132,10 @@ class BwangaRoom7Handler(DungeonRoomHandler):
             super().move_to_next_room(character, Gate.DirectionLeft, Gate.DirectionRight, anchor_vector=(-1200, 0))
         else:
             super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(1200, 0))
+
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character, kwargs.get("room_5_visited", False))
 
 
 class BwangaRoom8Handler(DungeonRoomHandler):
@@ -123,7 +155,7 @@ class BwangaRoom8Handler(DungeonRoomHandler):
         fatigue_points = self.dungeon.get_fatigue_points()
         LOGGER.info(f"Current fatigue_points: {fatigue_points}")
 
-        if fatigue_points != 0:
+        if fatigue_points > character.reserve_fatigue_points:
             self.dungeon.re_enter()
         else:
             self.dungeon.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "exit_dungeon",
@@ -139,6 +171,10 @@ class BwangaRoom9Handler(DungeonRoomHandler):
     def move_to_next_room(self, character: Character):
         super().move_to_next_room(character, Gate.DirectionDown, Gate.DirectionLeft, anchor_vector=(1500, 300))
 
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character)
+
 
 class BwangaRoom10Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
@@ -148,6 +184,10 @@ class BwangaRoom10Handler(DungeonRoomHandler):
     def move_to_next_room(self, character: Character):
         super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionLeft, anchor_vector=(1500, 0))
 
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character)
+
 
 class BwangaRoom11Handler(DungeonRoomHandler):
     def __init__(self, dungeon, character_class, strategy):
@@ -156,3 +196,7 @@ class BwangaRoom11Handler(DungeonRoomHandler):
     @func_set_timeout(30)
     def move_to_next_room(self, character: Character):
         super().move_to_next_room(character, Gate.DirectionRight, Gate.DirectionDown, anchor_vector=(200, -700))
+
+    def post_handler(self, enter_times, character: Character, **kwargs):
+        super().post_handler(enter_times, character, **kwargs)
+        self.move_to_next_room(character)
