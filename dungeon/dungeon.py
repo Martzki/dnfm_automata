@@ -318,7 +318,16 @@ class DungeonRoomHandler(object):
         :param character: character under control
         :return: None
         """
-        pass
+        fatigue_points = self.dungeon.get_fatigue_points()
+        if fatigue_points <= 0 or fatigue_points > character.reserve_fatigue_points:
+            return
+
+        LOGGER.info(
+            f"Current fatigue points: {fatigue_points} is less or equal to "
+            f"{character.reserve_fatigue_points}, back to town"
+        )
+
+        self.dungeon.back_to_town()
 
 
 class DungeonRoom(object):
@@ -502,3 +511,17 @@ class Dungeon(object):
             return get_value()
         except FunctionTimedOut:
             return -1
+
+    def back_to_town(self):
+        try:
+            self.device.back()
+            time.sleep(2)
+            self.ui_ctx.click_ui_element(
+                UIElementCtx.CategoryCommon,
+                "confirm",
+                delay=15
+            )
+            raise DungeonFinished()
+        except LookupError as e:
+            self.device.back()
+            LOGGER.warning(f"Failed to back to town: {e}")

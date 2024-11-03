@@ -25,7 +25,7 @@ class Room0Handler(BwangaRoom0Handler):
             evangelist.wait_skill_cool_down(evangelist.saint_wall)
             evangelist.wait_skill_cool_down(evangelist.purifying_lightning)
 
-        self.move_to_next_room(evangelist)
+        super().post_handler(enter_times, evangelist, **kwargs)
 
 
 class Room1Handler(BwangaRoom1Handler):
@@ -46,7 +46,7 @@ class Room1Handler(BwangaRoom1Handler):
             evangelist.wait_skill_cool_down(evangelist.spear_of_victory)
             evangelist.wait_skill_cool_down(evangelist.purifying_lightning)
 
-        self.move_to_next_room(evangelist)
+        super().post_handler(enter_times, evangelist, **kwargs)
 
 
 class Room2Handler(BwangaRoom2Handler):
@@ -65,7 +65,7 @@ class Room2Handler(BwangaRoom2Handler):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.valiant_aria)
 
-        self.move_to_next_room(evangelist)
+        super().post_handler(enter_times, evangelist, **kwargs)
 
 
 class Room3Handler(BwangaRoom3Handler):
@@ -83,7 +83,7 @@ class Room3Handler(BwangaRoom3Handler):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.shining_cross)
 
-        self.move_to_next_room(evangelist)
+        super().post_handler(enter_times, evangelist, **kwargs)
 
 
 class Room4Handler(BwangaRoom4Handler):
@@ -108,7 +108,7 @@ class Room4Handler(BwangaRoom4Handler):
             evangelist.wait_skill_cool_down(evangelist.saint_wall)
             evangelist.wait_skill_cool_down(evangelist.christening_light)
 
-        self.move_to_next_room(evangelist, room_5_visited)
+        super().post_handler(enter_times, evangelist, **kwargs)
 
 
 class Room5Handler(BwangaRoom5Handler):
@@ -123,9 +123,6 @@ class Room5Handler(BwangaRoom5Handler):
         evangelist.exec_skill(evangelist.crux_of_victoria, delay=7)
 
         super().pre_handler(enter_times, evangelist, **kwargs)
-
-    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
-        self.move_to_next_room(evangelist)
 
 
 class Room6Handler(BwangaRoom6Handler):
@@ -145,7 +142,7 @@ class Room6Handler(BwangaRoom6Handler):
         if enter_times == 1:
             evangelist.wait_skill_cool_down(evangelist.purifying_lightning)
 
-        self.move_to_next_room(evangelist, kwargs.get("room_5_visited", False))
+        super().post_handler(enter_times, evangelist, **kwargs)
 
 
 class Room7Handler(BwangaRoom7Handler):
@@ -165,7 +162,7 @@ class Room7Handler(BwangaRoom7Handler):
             evangelist.wait_skill_cool_down(evangelist.grand_crashing_cross)
             evangelist.wait_skill_cool_down(evangelist.shining_cross)
 
-        self.move_to_next_room(evangelist, kwargs.get("room_5_visited", False))
+        super().post_handler(enter_times, evangelist, **kwargs)
 
 
 class Room8Handler(BwangaRoom8Handler):
@@ -185,33 +182,15 @@ class Room9Handler(BwangaRoom9Handler):
     def __init__(self, dungeon):
         super().__init__(dungeon, CharacterClass.Evangelist, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
-        pass
-
-    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
-        self.move_to_next_room(evangelist)
-
 
 class Room10Handler(BwangaRoom10Handler):
     def __init__(self, dungeon):
         super().__init__(dungeon, CharacterClass.Evangelist, default_battle_strategy)
 
-    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
-        pass
-
-    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
-        self.move_to_next_room(evangelist)
-
 
 class Room11Handler(BwangaRoom11Handler):
     def __init__(self, dungeon):
         super().__init__(dungeon, CharacterClass.Evangelist, default_battle_strategy)
-
-    def pre_handler(self, enter_times, evangelist: Evangelist, **kwargs):
-        pass
-
-    def post_handler(self, enter_times, evangelist: Evangelist, **kwargs):
-        self.move_to_next_room(evangelist)
 
 
 def init_handlers(dungeon):

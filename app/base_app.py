@@ -67,7 +67,7 @@ class BaseApp(object):
         self.device.swipe(src, dst)
 
     def back(self):
-        self.device.client.device.keyevent("BACK")
+        self.device.back()
 
     def return_to_base_scenario(self):
         LOGGER.info("Start to return to base scenario")

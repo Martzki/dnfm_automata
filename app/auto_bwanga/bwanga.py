@@ -127,24 +127,29 @@ class BwangaApp(BaseApp):
         self.mute_game(True)
 
         try:
-            for character in self.character_list:
-                self.change_character(character["id"])
+            for each in self.character_list:
+                self.change_character(each["id"])
 
+                character = each["character"]
+                character.reserve_fatigue_points = each.get("reserve_fatigue_points", 0)
                 fatigue_points = self.dungeon.get_fatigue_points()
-                LOGGER.info(f"{character['id']}'s fatigue points: {fatigue_points}")
+                LOGGER.info(f"{each['id']}'s fatigue points: {fatigue_points}")
 
-                if fatigue_points == 0:
-                    LOGGER.info(f"Get zero fatigue points, skip {character['id']}")
+                if fatigue_points <= character.reserve_fatigue_points:
+                    LOGGER.info(
+                        f"Fatigue points: {fatigue_points} is not greater than "
+                        f"{character.reserve_fatigue_points}, skip"
+                    )
                     continue
 
                 try:
                     self.repair_equipments()
                     self.dungeon.goto_dungeon()
                 except FunctionTimedOut:
-                    LOGGER.warning(f"Go to dungeon timeout, skip {character['id']}")
+                    LOGGER.warning(f"Go to dungeon timeout, skip {each['id']}")
                     continue
 
-                self.battle_in_dungeon(character["character"])
+                self.battle_in_dungeon(character)
         except FunctionTimedOut as e:
             timeout_handler(f"App timeout: {e}", LOGGER.critical, self.device.last_frame)
         finally:

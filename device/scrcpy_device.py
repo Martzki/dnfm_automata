@@ -52,3 +52,6 @@ class ScrcpyDevice(Device):
 
     def stop(self):
         self.client.stop()
+
+    def back(self):
+        self.client.device.keyevent("BACK")
