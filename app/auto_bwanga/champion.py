@@ -114,7 +114,7 @@ class Room4Handler(BwangaRoom4Handler):
         champion.exec_skill(champion.attack, duration=1)
 
     def post_handler(self, enter_times, champion: Champion, **kwargs):
-        room_5_visited = kwargs.get("room_5_visited", False)
+        room_5_visited = 5 in kwargs.get('visited_room_list', [])
         if not room_5_visited:
             champion.wait_skill_cool_down(champion.beat_drive)
             champion.wait_skill_cool_down(champion.kihop_low_kick)
@@ -175,6 +175,7 @@ class Room7Handler(BwangaRoom7Handler):
         super().__init__(dungeon, CharacterClass.Champion, DefaultBattleStrategy())
 
     def pre_handler(self, enter_times, character: Champion, **kwargs):
+        super().pre_handler(enter_times, character, **kwargs)
         if enter_times > 1:
             return
 

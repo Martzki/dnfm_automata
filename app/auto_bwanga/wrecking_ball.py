@@ -108,7 +108,7 @@ class Room4Handler(BwangaRoom4Handler):
         wrecking_ball.exec_skill(wrecking_ball.fm_92_stinger)
 
     def post_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
-        room_5_visited = kwargs.get("room_5_visited", False)
+        room_5_visited = 5 in kwargs.get('visited_room_list', [])
         if not room_5_visited:
             wrecking_ball.wait_skill_cool_down(wrecking_ball.quantum_bomb)
             wrecking_ball.wait_skill_cool_down(wrecking_ball.x_1_extruder)
@@ -157,6 +157,7 @@ class Room7Handler(BwangaRoom7Handler):
         super().__init__(dungeon, CharacterClass.WreckingBall, DefaultBattleStrategy())
 
     def pre_handler(self, enter_times, wrecking_ball: WreckingBall, **kwargs):
+        super().pre_handler(enter_times, wrecking_ball, **kwargs)
         if enter_times > 1:
             return
 

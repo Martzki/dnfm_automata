@@ -101,7 +101,7 @@ class Room4Handler(BwangaRoom4Handler):
         hell_bringer.exec_skill(hell_bringer.enrage)
 
     def post_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
-        room_5_visited = kwargs.get("room_5_visited", False)
+        room_5_visited = 5 in kwargs.get('visited_room_list', [])
         if not room_5_visited:
             hell_bringer.wait_skill_cool_down(hell_bringer.extreme_overkill)
         else:
@@ -151,6 +151,7 @@ class Room7Handler(BwangaRoom7Handler):
         super().__init__(dungeon, CharacterClass.HellBringer, default_battle_strategy)
 
     def pre_handler(self, enter_times, hell_bringer: HellBringer, **kwargs):
+        super().pre_handler(enter_times, hell_bringer, **kwargs)
         if enter_times > 1:
             return
 
