@@ -478,7 +478,7 @@ class Dungeon(object):
                 LOGGER.error(f"Failed to re-enter dungeon: {e}")
 
     def get_fatigue_points(self):
-        @func_set_timeout(5)
+        @func_set_timeout(10)
         def get_value():
             while True:
                 frame = self.ui_ctx.device.last_frame()

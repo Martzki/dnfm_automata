@@ -135,17 +135,30 @@ class BwangaApp(BaseApp):
             for each in self.character_list:
                 self.change_character(each["id"])
 
-                character = each["character"]
-                character.reserve_fatigue_points = each.get("reserve_fatigue_points", 0)
+                self.return_to_base_scenario()
                 fatigue_points = self.dungeon.get_fatigue_points()
                 LOGGER.info(f"{each['id']}'s fatigue points: {fatigue_points}")
 
+                character = each["character"]
+                character.reserve_fatigue_points = each.get("reserve_fatigue_points", 0)
                 if fatigue_points <= character.reserve_fatigue_points:
                     LOGGER.info(
                         f"Fatigue points: {fatigue_points} is not greater than "
                         f"{character.reserve_fatigue_points}, skip"
                     )
                     continue
+
+                suit_id = each.get("suit_id", -1)
+                original_suit_id = -1
+                if suit_id != -1:
+                    original_suit_id = self.get_current_suit_id()
+                    if original_suit_id == -1:
+                        LOGGER.error("Failed to get current suit id")
+                        continue
+
+                    LOGGER.info(f"Get original suit id: {original_suit_id}")
+                    if original_suit_id != suit_id:
+                        self.change_suit(suit_id)
 
                 try:
                     self.return_to_base_scenario()
@@ -157,6 +170,9 @@ class BwangaApp(BaseApp):
                     continue
 
                 self.battle_in_dungeon(character)
+
+                if suit_id != -1 and original_suit_id != suit_id:
+                    self.change_suit(original_suit_id)
         except FunctionTimedOut as e:
             timeout_handler(f"App timeout: {e}", LOGGER.critical, self.device.last_frame)
         finally:

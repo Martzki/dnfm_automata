@@ -113,4 +113,27 @@ class BaseApp(object):
             # Current character is target character.
             LOGGER.info(f"Current character is already {character}")
 
+    def get_current_suit_id(self):
         self.return_to_base_scenario()
+
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "package", delay=1)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "attire", delay=1)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "deformation", delay=1)
+
+        for suit_id in range(1, 4):
+            try:
+                self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, f"suit_{suit_id}", timeout=3)
+                return suit_id
+            except FunctionTimedOut:
+                pass
+
+        return -1
+
+    def change_suit(self, suit_id):
+        LOGGER.info(f"Change suit to {suit_id}")
+        self.return_to_base_scenario()
+
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "package", delay=1)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "attire", delay=1)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "deformation", delay=1)
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, f"unselected_suit_{suit_id}", delay=1)

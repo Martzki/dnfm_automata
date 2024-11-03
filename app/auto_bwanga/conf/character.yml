@@ -19,7 +19,9 @@ character:
     character_class: noblesse
     priority: 2
     reserve_fatigue_points: 2
+    suit_id: 1
   champion_0:
     character_class: champion
     priority: 2
     reserve_fatigue_points: 2
+    suit_id: 3
