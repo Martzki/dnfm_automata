@@ -66,9 +66,6 @@ class BaseApp(object):
         dst = (min(src[0] + distance, self.device.client.resolution[0]), src[1])
         self.device.swipe(src, dst)
 
-    def back(self):
-        self.device.back()
-
     def return_to_base_scenario(self):
         LOGGER.info("Start to return to base scenario")
 
@@ -76,40 +73,16 @@ class BaseApp(object):
             try:
                 self.ui_ctx.wait_ui_element(UIElementCtx.CategoryCommon, "setting_select_character", timeout=3)
             except FunctionTimedOut:
-                self.back()
+                self.device.back()
                 continue
 
             break
 
-        self.back()
+        self.device.back()
 
         time.sleep(1)
 
         LOGGER.info("Succeed to return to base scenario")
-
-    def repair_equipments(self):
-        LOGGER.info("Start to repair worn equipments")
-
-        self.return_to_base_scenario()
-
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "package", timeout=3)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair", timeout=3)
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_label", timeout=3)
-
-        try:
-            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_confirm", timeout=3)
-        except LookupError:
-            self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_worn", timeout=3)
-
-            try:
-                self.ui_ctx.click_ui_element(UIElementCtx.CategoryCommon, "repair_window_confirm", timeout=3)
-            except LookupError:
-                # Maybe worn is fully repaired.
-                pass
-
-        self.return_to_base_scenario()
-
-        LOGGER.info("Succeed to repair worn equipments")
 
     def change_character(self, character):
         LOGGER.info(f"Change character to {character}")
