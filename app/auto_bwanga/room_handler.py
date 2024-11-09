@@ -298,7 +298,7 @@ class BwangaRoom8Handler(DungeonRoomHandler):
         fatigue_points = self.dungeon.get_fatigue_points()
         LOGGER.info(f"Current fatigue_points: {fatigue_points}")
 
-        if fatigue_points > character.reserve_fatigue_points:
+        if fatigue_points > character.reserve_fatigue_points or fatigue_points < 0:
             if kwargs.get('repair_equipments', False):
                 self.dungeon.repair_equipments(UIElementCtx.CategoryDungeon)
                 self.dungeon.return_to_dungeon_scenario()
