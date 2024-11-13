@@ -22,7 +22,7 @@ def timeout_handler(exception, log, last_frame):
     try:
         frame = inspect.stack()[1]
         for i in range(5):
-            cv2.imwrite(f"{frame.filename}:{frame.lineno}_timeout_{i}.png", last_frame())
+            cv2.imwrite(f"{frame.filename}_{frame.lineno}_timeout_{i}.png", last_frame())
             time.sleep(1)
     except Exception as e:
         LOGGER.error(e)

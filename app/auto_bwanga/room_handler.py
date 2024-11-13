@@ -50,11 +50,7 @@ class BwangaRoom1Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         else:
             self.move_to_next_room(character)
 
@@ -81,11 +77,7 @@ class BwangaRoom2Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         elif fatigue_points == 0 and 1 not in visited_room_list:
             self.move_to_next_room(character, Gate.DirectionLeft)
         else:
@@ -114,11 +106,7 @@ class BwangaRoom3Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         elif fatigue_points == 0 and 2 not in visited_room_list:
             self.move_to_next_room(character, Gate.DirectionLeft)
         else:
@@ -156,11 +144,7 @@ class BwangaRoom4Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         elif 5 not in visited_room_list:
             self.move_to_next_room(character, Gate.DirectionLeft)
         elif fatigue_points == 0 or (fatigue_points == 5 and character.reserve_fatigue_points == 0):
@@ -202,11 +186,7 @@ class BwangaRoom5Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         else:
             self.move_to_next_room(character)
 
@@ -233,11 +213,7 @@ class BwangaRoom6Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         elif 5 not in visited_room_list:
             self.move_to_next_room(character, Gate.DirectionLeft)
         else:
@@ -270,11 +246,7 @@ class BwangaRoom7Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         elif 5 not in visited_room_list:
             self.move_to_next_room(character, Gate.DirectionLeft)
         else:
@@ -302,7 +274,7 @@ class BwangaRoom8Handler(DungeonRoomHandler):
             if kwargs.get('repair_equipments', False):
                 self.dungeon.repair_equipments(UIElementCtx.CategoryDungeon)
                 self.dungeon.return_to_dungeon_scenario()
-            self.dungeon.re_enter()
+            self.dungeon.continue_battle()
         else:
             self.dungeon.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "exit_dungeon",
                                                  timeout=5, delay=10)
@@ -342,11 +314,7 @@ class BwangaRoom9Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         elif fatigue_points == 0 and 10 not in visited_room_list:
             self.move_to_next_room(character, Gate.DirectionLeft)
         else:
@@ -383,11 +351,7 @@ class BwangaRoom10Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         elif fatigue_points == 0 and 11 not in visited_room_list:
             self.move_to_next_room(character, Gate.DirectionLeft)
         else:
@@ -412,10 +376,6 @@ class BwangaRoom11Handler(DungeonRoomHandler):
 
             self.dungeon.back_to_town()
         elif fatigue_points == 1:
-            try:
-                self.dungeon.back_to_town()
-            except DungeonFinished:
-                self.dungeon.goto_dungeon()
-                raise DungeonReEntered("Re-enter dungeon to battle in all rooms")
+            self.dungeon.re_enter()
         else:
             self.move_to_next_room(character)
