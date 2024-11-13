@@ -100,7 +100,11 @@ class BwangaApp(BaseApp):
             except FunctionTimedOut as e:
                 timeout_handler(f"Timeout in room {room.room_id}: {e}", LOGGER.warning, self.device.last_frame)
                 try:
-                    self.dungeon.revive(room)
+                    if self.dungeon.check_character_dead():
+                        self.dungeon.revive(room)
+                    else:
+                        LOGGER.warning("Stuck in room, try to re-enter dungeon")
+                        self.dungeon.re_enter()
                 except DungeonReEntered:
                     dungeon_re_entered = True
             except DungeonRoomChanged as e:

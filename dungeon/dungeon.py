@@ -338,7 +338,7 @@ class DungeonRoom(object):
     def register_handler(self, handler):
         self.handler_map[handler.character_class] = handler
 
-    @func_set_timeout(180)
+    @func_set_timeout(120)
     def exec(self, character, **kwargs):
         assert character.character_class in self.handler_map, "Handler of class {} is not registered".format(
             character.character_class)
@@ -424,22 +424,25 @@ class Dungeon(object):
         # Touch empty area to skip picking.
         self.device.touch((100, 100), 0.1)
 
-    def re_enter(self):
-        LOGGER.info("Start to re-enter dungeon")
-        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "re_enter_dungeon", double_check=True, timeout=15)
+    def continue_battle(self):
+        LOGGER.info("Continue battle")
+        self.ui_ctx.click_ui_element(UIElementCtx.CategoryDungeon, "continue_battle", double_check=True, timeout=15)
 
     @func_set_timeout(10)
     def wait_in_dungeon(self):
         while self.get_room() is None:
             continue
 
-    def revive(self, room):
+    def check_character_dead(self):
         try:
             self.ui_ctx.wait_ui_element(UIElementCtx.CategoryDungeon, "dead_revive")
+            LOGGER.info("Character is dead")
+            return True
         except FunctionTimedOut:
-            LOGGER.warning("Character not dead")
-            return
+            LOGGER.info("Character is not dead")
+            return False
 
+    def revive(self, room):
         # Revive.
         if room.revive_times < MAX_REVIVE_TIMES:
             room.revive_times += 1
@@ -516,6 +519,13 @@ class Dungeon(object):
         except LookupError as e:
             self.device.back()
             LOGGER.warning(f"Failed to back to town: {e}")
+
+    def re_enter(self):
+        try:
+            self.back_to_town()
+        except DungeonFinished:
+            self.goto_dungeon()
+            raise DungeonReEntered("Re-enter dungeon")
 
     def return_to_dungeon_scenario(self):
         LOGGER.info("Start to return to dungeon scenario")
