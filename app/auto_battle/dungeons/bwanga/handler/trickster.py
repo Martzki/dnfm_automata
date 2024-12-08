@@ -1,4 +1,4 @@
-from app.auto_bwanga.room_handler import *
+from app.auto_battle.dungeons.bwanga.handler.room_handler import *
 from runtime.character.character_class import CharacterClass
 from runtime.character.trickster import Trickster
 from dungeon.strategy import BattleStrategy

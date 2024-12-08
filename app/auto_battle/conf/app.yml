@@ -3,27 +3,34 @@ ui:
 character:
   silent_eye_0:
     character_class: silent_eye
+    dungeon: bwanga
     priority: 0
   wrecking_ball_0:
     character_class: wrecking_ball
+    dungeon: bwanga
     priority: 0
   evangelist_0:
     character_class: evangelist
+    dungeon: bwanga
     priority: 0
   trickster_0:
     character_class: trickster
+    dungeon: bwanga
     priority: 1
   hell_bringer_0:
     character_class: hell_bringer
+    dungeon: bwanga
     priority: 2
     reserve_fatigue_points: 2
   noblesse_0:
     character_class: noblesse
+    dungeon: bwanga
     priority: 2
     reserve_fatigue_points: 2
     suit_id: 1
   champion_0:
     character_class: champion
+    dungeon: bwanga
     priority: 2
     reserve_fatigue_points: 2
     suit_id: 3
