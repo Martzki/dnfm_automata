@@ -65,12 +65,10 @@ class UIElementCtx(object):
 
         for category in [getattr(UIElement, c) for c in vars(UIElement).keys() if not c.startswith("__")]:
             # Register static elements.
-            if category not in conf:
-                continue
-
-            for each in conf[category]:
-                coordinate = conf[category][each]
-                self.register_ui_element(f"{category}.{each}", UIElement(coordinate=coordinate))
+            if category in conf:
+                for each in conf[category]:
+                    coordinate = conf[category][each]
+                    self.register_ui_element(f"{category}.{each}", UIElement(coordinate=coordinate))
 
             # Register dynamic elements.
             self.register_dynamic_ui_elements(base_dir / category, category)

@@ -10,5 +10,5 @@ export PYTHONPATH=/workspace/bwanga
 trap "pkill -9 -f bwanga" 2
 
 pkill -9 -f bwanga
-python3 app/auto_bwanga/bwanga.py --device R3CN509VDWH --weights app/auto_bwanga/weights/exp21.onnx --conf conf/config.yml --app-conf app/auto_bwanga/conf/bwanga.yml >> ${LOG} 2>&1
+python3 app/auto_battle/main.py --device R3CN509VDWH --weights app/auto_battle/weights/exp21.onnx --conf conf/config.yml --app-conf app/auto_battle/conf/app.yml >> ${LOG} 2>&1
 ${1}

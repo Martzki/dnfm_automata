@@ -5,12 +5,13 @@ from func_timeout import func_set_timeout, FunctionTimedOut
 
 from character.character import Character
 from common.log import Logger
+from common.util import timeout_handler
 from detector.detector import Detector
 from device.device import Device
 from dungeon.battle import BattleMetadata, Gate
 from dungeon.strategy import BattleStrategy
 from runtime.ui import ui_elements
-from ui.ui import UIElementCtx, UIElement
+from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 DEFAULT_AREA_HEIGHT = 60
@@ -358,6 +359,7 @@ class DungeonRoom(object):
 class Dungeon(object):
     def __init__(self, device: Device, detector: Detector, ui_ctx: UIElementCtx):
         self.room_map = {}
+        self.valid_next_room = {}
         self.device = device
         self.detector = detector
         self.ui_ctx = ui_ctx
@@ -377,6 +379,12 @@ class Dungeon(object):
 
     def register_room(self, room):
         self.room_map[room.room_id] = room
+
+    def register_rooms(self):
+        pass
+
+    def validate_next_room(self, old_room_id, new_room_id):
+        return old_room_id == new_room_id or new_room_id in self.valid_next_room.get(old_room_id, [])
 
     def get_battle_metadata(self):
         start = time.time()
@@ -563,3 +571,81 @@ class Dungeon(object):
                 pass
 
         LOGGER.info("Succeed to repair worn equipments")
+
+    @func_set_timeout(1800)
+    def battle(self, character: Character):
+        self.clear()
+        last_room_id = -1
+        last_wrong_room_id = -1
+        wrong_room_cnt = 0
+        battle_cnt = 0
+        visited_room_list = []
+        while True:
+            room = self.get_room()
+            if not room:
+                continue
+
+            if not self.validate_next_room(last_room_id, room.room_id):
+                if room.room_id != last_wrong_room_id:
+                    last_wrong_room_id = room.room_id
+                    wrong_room_cnt = 0
+                else:
+                    wrong_room_cnt += 1
+
+                if wrong_room_cnt < 10:
+                    continue
+
+                LOGGER.warning(
+                    f"Try to correct current room from last "
+                    f"room {last_room_id} to room {last_wrong_room_id}"
+                )
+
+            last_wrong_room_id = -1
+            wrong_room_cnt = 0
+
+            LOGGER.info("detect room {}".format(room.room_id))
+
+            room_args = {
+                'visited_room_list': visited_room_list,
+            }
+
+            if battle_cnt != 0 and battle_cnt % 5 == 0:
+                room_args['repair_equipments'] = True
+
+            dungeon_re_entered = False
+            dungeon_finished = False
+            try:
+                room.exec(character, **room_args)
+            except FunctionTimedOut as e:
+                timeout_handler(f"Timeout in room {room.room_id}: {e}", LOGGER.warning, self.device.last_frame)
+                try:
+                    if self.check_character_dead():
+                        self.revive(room)
+                    else:
+                        LOGGER.warning("Stuck in room, try to re-enter dungeons")
+                        self.re_enter()
+                except DungeonReEntered:
+                    dungeon_re_entered = True
+            except DungeonRoomChanged as e:
+                LOGGER.info(e)
+            except DungeonReEntered as e:
+                LOGGER.info(e)
+                dungeon_re_entered = True
+            except DungeonFinished as e:
+                LOGGER.info(e)
+                dungeon_finished = True
+            finally:
+                LOGGER.info(f"Room {room.room_id} finished")
+                last_room_id = -1 if dungeon_re_entered else room.room_id
+
+            if dungeon_finished:
+                LOGGER.info("Dungeon finished")
+                return
+
+            if room.is_last or dungeon_re_entered:
+                LOGGER.info("Dungeon re-entered" if dungeon_re_entered else "Battle finished")
+                self.clear()
+                visited_room_list = []
+                battle_cnt += 1
+            else:
+                visited_room_list.append(last_room_id)

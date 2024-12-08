@@ -7,6 +7,7 @@ from typing import TextIO
 import yaml
 
 from common.util import get_file_key, to_camel_case
+from ui.ui import UIElement
 
 
 def mkdir(path):
@@ -38,9 +39,16 @@ def generate_ui_elements(path_list, config_list, output_dir):
         target, f"# Change UI elements file(*png) in {path_list} instead."
     )
 
-    res_map = {}
+
+    res_dir_list = []
     for path in path_list:
-        res_dir = Path(path)
+        for category in [getattr(UIElement, c) for c in vars(UIElement).keys() if not c.startswith("__")]:
+            res_dir = Path(path) / category
+            if res_dir.exists():
+                res_dir_list.append(res_dir)
+
+    res_map = {}
+    for res_dir in res_dir_list:
         category = res_dir.name
         if category not in res_map:
             res_map[category] = set()
