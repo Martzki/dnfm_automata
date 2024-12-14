@@ -99,7 +99,7 @@ class Monster(BattleObject):
 class BattleMetadata(object):
     UnknownRoomId = -1
 
-    def __init__(self, frame=None, detector=None):
+    def __init__(self, frame=None, detector=None, dungeon=None):
         self.character = None
         self.frame = frame
         self.items = []
@@ -117,7 +117,7 @@ class BattleMetadata(object):
         if frame is None or detector is None:
             return
 
-        result = detector.inference(frame)
+        result = detector.inference(dungeon, frame)
         for obj in result:
             if obj.category == BattleObjectCategory.Character:
                 self.character = Character(obj.left_top, obj.right_bottom)

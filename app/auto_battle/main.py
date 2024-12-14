@@ -1,4 +1,5 @@
 import argparse
+import os
 import random
 
 import yaml
@@ -135,7 +136,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--device", dest="device", type=str, help="ADB device serial")
     parser.add_argument("--conf", dest="conf", type=str, help="APP config file")
-    parser.add_argument("--weights", dest="weights", type=str, help="YOLO weights file")
+    parser.add_argument("--model-conf", dest="model_conf", type=str, help="Model config file")
     parser.add_argument("--app-conf", dest="app_conf", type=str, help="APP config file")
 
     args = parser.parse_args()
@@ -146,8 +147,12 @@ if __name__ == '__main__':
     with open(args.app_conf, "r") as app_config_file:
         app_config = yaml.load(app_config_file, Loader=yaml.Loader)
 
+    with open(args.model_conf, "r") as model_config_file:
+        model_yaml = yaml.load(model_config_file, Loader=yaml.Loader)
+        model_config = {model: os.path.dirname(args.model_conf) + "/" + model_yaml[model] for model in model_yaml}
+
     device = ScrcpyDevice(args.device)
-    detector = Detector(args.weights)
+    detector = Detector(model_config)
     ui_ctx = UIElementCtx(device, detector, get_resource_base_dir(args.conf, config["ui"]["base_dir"]))
     ui_ctx.load(config["ui"])
     ui_ctx.load(app_config, get_resource_base_dir(args.app_conf, app_config["ui"]["base_dir"]))

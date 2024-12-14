@@ -357,13 +357,14 @@ class DungeonRoom(object):
 
 
 class Dungeon(object):
-    def __init__(self, device: Device, detector: Detector, ui_ctx: UIElementCtx):
+    def __init__(self, name: str, device: Device, detector: Detector, ui_ctx: UIElementCtx):
+        self.name = name
         self.room_map = {}
         self.valid_next_room = {}
         self.device = device
         self.detector = detector
         self.ui_ctx = ui_ctx
-        self.battle_metadata = BattleMetadata()
+        self.battle_metadata = BattleMetadata(dungeon=self.name)
         self.stats = {
             'last_dump_ts': time.time(),
             'inference_cnt': 0,
@@ -389,7 +390,7 @@ class Dungeon(object):
     def get_battle_metadata(self):
         start = time.time()
         frame = self.device.last_frame()
-        meta = BattleMetadata(frame, self.detector)
+        meta = BattleMetadata(frame, self.detector, self.name)
         now = time.time()
         self.stats['inference_cnt'] += 1
         self.stats['inference_time'] += now - start
@@ -405,7 +406,7 @@ class Dungeon(object):
 
     def get_room(self):
         frame = self.device.last_frame()
-        meta = BattleMetadata(frame, self.detector)
+        meta = BattleMetadata(frame, self.detector, self.name)
         return self.room_map.get(meta.room_id, None)
 
     def pick_cards(self, card_list=None):
