@@ -28,11 +28,13 @@ class BfMatchKpDes(object):
 
 
 class Detector(object):
-    def __init__(self, weights):
+    def __init__(self, weights_config):
         self.ocr = PaddleOCR(use_angle_cls=True, enable_mkldnn=False, lang="en", show_log=False)
         self.sift = cv2.SIFT_create()
         self.bf_matcher = cv2.BFMatcher()
-        self.model = Onnx(weights)
+        self.models = {}
+        for name, weights in weights_config:
+            self.models[name] = Onnx(weights)
 
     def ocr_match(self, img, key_text_list):
         result = self.ocr.ocr(img, cls=True)
@@ -128,5 +130,6 @@ class Detector(object):
         # return self.bf_match(frame, key_img_list)
         return self.template_match(frame, key_img_list)
 
-    def inference(self, frame, conf_thres=0.8, save_img=False) -> [YoloResult]:
-        return self.model.inference(frame, conf_thres=conf_thres, save_img=save_img)
+    def inference(self, model, frame, conf_thres=0.8, save_img=False) -> [YoloResult]:
+        assert model in self.models, f"Unregistered model {model}"
+        return self.models.get(model).inference(frame, conf_thres=conf_thres, save_img=save_img)

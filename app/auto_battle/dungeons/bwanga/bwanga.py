@@ -27,7 +27,7 @@ Bwanga Room
 
 class Bwanga(Dungeon):
     def __init__(self, device: Device, detector: Detector, ui_ctx: UIElementCtx):
-        super().__init__(device, detector, ui_ctx)
+        super().__init__(DUNGEON_NAME, device, detector, ui_ctx)
         self.valid_next_room = {
             -1: [0],
             0: [1, 11],
