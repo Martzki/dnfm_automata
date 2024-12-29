@@ -1,6 +1,5 @@
 import argparse
 import os
-
 from pathlib import Path
 from typing import TextIO
 
@@ -38,7 +37,6 @@ def generate_ui_elements(path_list, config_list, output_dir):
     write_line(
         target, f"# Change UI elements file(*png) in {path_list} instead."
     )
-
 
     res_dir_list = []
     for path in path_list:

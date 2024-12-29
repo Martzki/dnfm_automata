@@ -5,7 +5,6 @@ import cv2
 from func_timeout import FunctionTimedOut
 
 from common.log import Logger
-
 from runtime.ui import ui_elements
 
 LOGGER = Logger(__name__).logger

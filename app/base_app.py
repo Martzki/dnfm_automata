@@ -1,11 +1,11 @@
 import time
 
-from func_timeout import FunctionTimedOut, func_set_timeout
+from func_timeout import FunctionTimedOut
 
 from common.log import Logger
 from common.util import to_camel_case
 from runtime.ui import ui_elements
-from ui.ui import UIElementCtx, UIElement
+from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
 
@@ -46,25 +46,25 @@ class BaseApp(object):
 
     def swipe_up(self, coordinate=None, distance=200):
         src = coordinate if coordinate else (
-        self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+            self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
         dst = (src[0], max(src[1] - distance, 0))
         self.device.swipe(src, dst)
 
     def swipe_down(self, coordinate=None, distance=200):
         src = coordinate if coordinate else (
-        self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+            self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
         dst = (src[0], min(src[1] + distance, self.device.client.resolution[1]))
         self.device.swipe(src, dst)
 
     def swipe_left(self, coordinate=None, distance=200):
         src = coordinate if coordinate else (
-        self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+            self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
         dst = (max(src[0] - distance, 0), src[1])
         self.device.swipe(src, dst)
 
     def swipe_right(self, coordinate=None, distance=200):
         src = coordinate if coordinate else (
-        self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
+            self.device.client.resolution[0] // 2, self.device.client.resolution[1] // 2)
         dst = (min(src[0] + distance, self.device.client.resolution[0]), src[1])
         self.device.swipe(src, dst)
 

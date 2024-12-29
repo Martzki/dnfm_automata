@@ -8,6 +8,11 @@ from func_timeout import FunctionTimedOut
 from app.auto_battle.dungeons.pirates import pirates
 from app.auto_battle.dungeons.pirates.pirates import Pirates
 from app.base_app import BaseApp
+from common.log import Logger
+from common.util import timeout_handler, get_resource_base_dir
+from detector.detector import Detector
+from device.device import Device
+from device.scrcpy_device import ScrcpyDevice
 from runtime.character.champion import Champion
 from runtime.character.desperado import Desperado
 from runtime.character.evangelist import Evangelist
@@ -17,11 +22,6 @@ from runtime.character.noblesse import Noblesse
 from runtime.character.silent_eye import SilentEye
 from runtime.character.trickster import Trickster
 from runtime.character.wrecking_ball import WreckingBall
-from common.log import Logger
-from common.util import timeout_handler, get_resource_base_dir
-from detector.detector import Detector
-from device.device import Device
-from device.scrcpy_device import ScrcpyDevice
 from ui.ui import UIElementCtx
 
 LOGGER = Logger(__name__).logger
@@ -76,7 +76,8 @@ class AutoBattleApp(BaseApp):
                     if original_suit_id != suit_id:
                         self.change_suit(suit_id)
 
-                self.set_fatigue_points_config(each.get("gain_tradable_item", True), each.get("fatigue_points_burn", False))
+                self.set_fatigue_points_config(each.get("gain_tradable_item", True),
+                                               each.get("fatigue_points_burn", False))
 
                 try:
                     self.return_to_base_scenario()

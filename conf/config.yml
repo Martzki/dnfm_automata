@@ -1,16 +1,16 @@
 ui:
   base_dir: ../res/ui # Relative path of current file.
   common:
-    move: [311, 791]
+    move: [ 311, 791 ]
   dungeon:
-    card_0: [650, 350]
-    card_1: [1030, 350]
-    card_2: [1400, 350]
-    card_3: [1800, 350]
-    card_4: [650, 880]
-    card_5: [1030, 880]
-    card_6: [1400, 880]
-    card_7: [1800, 880]
+    card_0: [ 650, 350 ]
+    card_1: [ 1030, 350 ]
+    card_2: [ 1400, 350 ]
+    card_3: [ 1800, 350 ]
+    card_4: [ 650, 880 ]
+    card_5: [ 1030, 880 ]
+    card_6: [ 1400, 880 ]
+    card_7: [ 1800, 880 ]
 character:
   champion:
     skill:
@@ -22,7 +22,7 @@ character:
           min_distance: 300
       beat_drive:
         type: swipe_down
-        coordinate: &default_swipe_skill [1860, 926]
+        coordinate: &default_swipe_skill [ 1860, 926 ]
         duration: 0.1
         cool_down: 1
         exec_limit:

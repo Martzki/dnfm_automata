@@ -1,9 +1,9 @@
 import time
 
 from app.auto_battle.dungeons.bwanga.handler.room_handler import *
+from dungeon.strategy import BattleStrategy
 from runtime.character.character_class import CharacterClass
 from runtime.character.wrecking_ball import WreckingBall
-from dungeon.strategy import BattleStrategy
 
 
 class DefaultBattleStrategy(BattleStrategy):
