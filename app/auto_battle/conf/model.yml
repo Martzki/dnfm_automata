@@ -1,1 +1,2 @@
 bwanga: ../weights/exp21.onnx # Relative path of current file.
+pirates: ../weights/exp32.onnx

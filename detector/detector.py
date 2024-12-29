@@ -33,7 +33,7 @@ class Detector(object):
         self.sift = cv2.SIFT_create()
         self.bf_matcher = cv2.BFMatcher()
         self.models = {}
-        for name, weights in weights_config:
+        for name, weights in weights_config.items():
             self.models[name] = Onnx(weights)
 
     def ocr_match(self, img, key_text_list):

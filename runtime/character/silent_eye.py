@@ -17,6 +17,7 @@ class SilentEye(Character):
     SpiritCrescent = "spirit_crescent"
     WaveEye = "wave_eye"
     WaveRadiation = "wave_radiation"
+    AsuraSpiritSlash = "asura_spirit_slash"
 
     def __init__(self, device, ui_ctx):
         super().__init__(device, ui_ctx, CharacterClass.SilentEye)
@@ -142,5 +143,15 @@ class SilentEye(Character):
                 "cool_down": 7,
                 "delay": 0,
                 "exec_limit": {"min_distance": 250},
+            },
+        )
+        self.asura_spirit_slash = self.register_skill(
+            SilentEye.AsuraSpiritSlash,
+            {
+                "type": "touch",
+                "duration": 0.2,
+                "cool_down": 0,
+                "delay": 0.5,
+                "exec_limit": {"min_distance": 600},
             },
         )

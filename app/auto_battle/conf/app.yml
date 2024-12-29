@@ -3,16 +3,21 @@ ui:
 character:
   silent_eye_0:
     character_class: silent_eye
-    dungeon: bwanga
+    dungeon: pirates
     priority: 0
+    reserve_fatigue_points: 0
   wrecking_ball_0:
     character_class: wrecking_ball
-    dungeon: bwanga
+    dungeon: pirates
     priority: 0
+    reserve_fatigue_points: 0
   evangelist_0:
     character_class: evangelist
-    dungeon: bwanga
+    dungeon: pirates
     priority: 0
+    gain_tradable_item: true
+    fatigue_points_burn: false
+    reserve_fatigue_points: 0
   trickster_0:
     character_class: trickster
     dungeon: bwanga
@@ -34,3 +39,17 @@ character:
     priority: 2
     reserve_fatigue_points: 2
     suit_id: 3
+  desperado_0:
+    character_class: desperado
+    dungeon: pirates
+    priority: 0
+    gain_tradable_item: true
+    fatigue_points_burn: false
+    reserve_fatigue_points: 0
+  grand_master_0:
+    character_class: grand_master
+    dungeon: pirates
+    priority: 0
+    gain_tradable_item: true
+    fatigue_points_burn: false
+    reserve_fatigue_points: 0

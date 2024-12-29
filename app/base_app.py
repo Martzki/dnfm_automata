@@ -117,7 +117,6 @@ class BaseApp(object):
 
     def get_current_suit_id(self):
         self.return_to_base_scenario()
-
         self.ui_ctx.click_ui_element(ui_elements.Common.Package, delay=1)
         self.ui_ctx.click_ui_element(ui_elements.Common.Attire, delay=1)
         self.ui_ctx.click_ui_element(ui_elements.Common.Deformation, delay=1)
@@ -133,9 +132,29 @@ class BaseApp(object):
 
     def change_suit(self, suit_id):
         LOGGER.info(f"Change suit to {suit_id}")
-        self.return_to_base_scenario()
 
+        self.return_to_base_scenario()
         self.ui_ctx.click_ui_element(ui_elements.Common.Package, delay=1)
         self.ui_ctx.click_ui_element(ui_elements.Common.Attire, delay=1)
         self.ui_ctx.click_ui_element(ui_elements.Common.Deformation, delay=1)
         self.ui_ctx.click_ui_element(getattr(ui_elements.Common, f"UnselectedSuit{suit_id}"), delay=1)
+
+    def set_fatigue_points_config(self, gaining_tradable_item: bool, fattigue_points_burning: bool):
+        self.return_to_base_scenario()
+        self.ui_ctx.click_ui_element(ui_elements.Common.FatiguePointsConfig)
+
+        action = "enable" if fattigue_points_burning else "disable"
+        LOGGER.info(f"Start to {action} fatigue points burning")
+        try:
+            button = ui_elements.Common.EnableFatiguePointsBurning if fattigue_points_burning else ui_elements.Common.DisableFatiguePointsBurning
+            self.ui_ctx.click_ui_element(button)
+        except LookupError:
+            LOGGER.info(f"Fatigue points burning is already {action}")
+
+        action = "enable" if gaining_tradable_item else "disable"
+        LOGGER.info(f"Start to {action} gaining tradable item")
+        try:
+            button = ui_elements.Common.EnableGainingTradableItem if gaining_tradable_item else ui_elements.Common.DisableGainingTradableItem
+            self.ui_ctx.click_ui_element(button)
+        except LookupError:
+            LOGGER.info(f"Gaining tradable item is already {action}")

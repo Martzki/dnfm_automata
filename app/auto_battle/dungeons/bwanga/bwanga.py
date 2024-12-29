@@ -45,7 +45,7 @@ class Bwanga(Dungeon):
         }
 
     def goto_dungeon(self):
-        LOGGER.info("Start to go to dungeons")
+        LOGGER.info(f"Start to go to {self.name}")
         self.ui_ctx.click_ui_element(ui_elements.Common.Adventure)
         self.ui_ctx.click_ui_element(ui_elements.Common.AdventureReward, delay=1)
         self.ui_ctx.click_ui_element(ui_elements.Common.AdventureRewardAdventureLevel)
@@ -61,7 +61,7 @@ class Bwanga(Dungeon):
             self.ui_ctx.double_check()
             self.wait_in_dungeon()
 
-        LOGGER.info("Succeed to go to dungeons")
+        LOGGER.info(f"Succeed to go to {self.name}")
 
     def register_rooms(self):
         champion_handlers = champion_init_handlers(self)
