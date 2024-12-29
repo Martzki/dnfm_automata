@@ -9,3 +9,5 @@ class CharacterClass(object):
     SilentEye = "silent_eye"
     Trickster = "trickster"
     WreckingBall = "wrecking_ball"
+    GrandMaster = "grand_master"
+    Desperado = "desperado"

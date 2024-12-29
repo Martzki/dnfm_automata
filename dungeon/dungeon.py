@@ -42,9 +42,9 @@ class DungeonRoomHandler(object):
         self.battle_strategy = strategy if strategy else BattleStrategy()
 
     def check_room_change(self):
-        room_id = self.dungeon.get_battle_metadata().room_id
-        if room_id != self.room_id:
-            raise DungeonRoomChanged(f"Room changed from {self.room_id} to {room_id}")
+        metadata = self.dungeon.get_battle_metadata()
+        if metadata.is_empty or (metadata.room_id != BattleMetadata.UnknownRoomId and metadata.room_id != self.room_id):
+            raise DungeonRoomChanged(f"Room changed from {self.room_id} to {metadata.room_id}")
 
     def re_search_dungeon(self, character, ignore_room_change=False):
         LOGGER.info("re-search dungeon")
@@ -185,6 +185,10 @@ class DungeonRoomHandler(object):
         while True:
             while True:
                 meta = self.dungeon.get_battle_metadata()
+                if meta.has_monster():
+                    LOGGER.info("Found monster, stop moving to next room")
+                    return
+
                 next_gate = get_gate(meta, gate_direction)
                 if next_gate and next_gate.is_open and meta.character:
                     break
@@ -435,7 +439,7 @@ class Dungeon(object):
 
     def continue_battle(self):
         LOGGER.info("Continue battle")
-        self.ui_ctx.click_ui_element(ui_elements.Dungeon.ContinueBattle, double_check=True, timeout=15)
+        self.ui_ctx.click_ui_element(ui_elements.Dungeon.ContinueBattle, double_check=True, timeout=5)
 
     @func_set_timeout(10)
     def wait_in_dungeon(self):
@@ -637,7 +641,7 @@ class Dungeon(object):
                 dungeon_finished = True
             finally:
                 LOGGER.info(f"Room {room.room_id} finished")
-                last_room_id = -1 if dungeon_re_entered else room.room_id
+                last_room_id = room.room_id
 
             if dungeon_finished:
                 LOGGER.info("Dungeon finished")
@@ -645,6 +649,7 @@ class Dungeon(object):
 
             if room.is_last or dungeon_re_entered:
                 LOGGER.info("Dungeon re-entered" if dungeon_re_entered else "Battle finished")
+                last_room_id = -1
                 self.clear()
                 visited_room_list = []
                 battle_cnt += 1

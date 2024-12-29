@@ -145,6 +145,24 @@ character:
         cool_down: 1
         exec_limit:
           min_distance: 10
+      repentant_smash:
+        type: touch
+        duration: 0.2
+        cool_down: 0
+        exec_limit:
+          min_distance: 400
+      pure_light:
+        type: touch
+        duration: 0.2
+        cool_down: 0
+        exec_limit:
+          min_distance: 500
+      holy_circlet:
+        type: touch
+        duration: 2
+        cool_down: 0
+        exec_limit:
+          min_distance: 800
   hell_bringer:
     skill:
       attack:
@@ -397,6 +415,13 @@ character:
         delay: 0
         exec_limit:
           min_distance: 250
+      asura_spirit_slash:
+        type: touch
+        duration: 0.2
+        cool_down: 0
+        delay: 0.5
+        exec_limit:
+          min_distance: 600
   trickster:
     skill:
       attack:
@@ -565,3 +590,182 @@ character:
         delay: 0
         exec_limit:
           min_distance: 600
+      railgun:
+        type: touch
+        duration: 0.1
+        cool_down: 0
+        delay: 0.5
+        exec_limit:
+          min_distance: 80
+          vertical_only: true
+  grand_master:
+    skill:
+      attack:
+        type: touch
+        duration: 2
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      overdrive:
+        type: swipe_right
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      charge_crash:
+        type: touch
+        duration: 1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      charge_burst:
+        type: touch
+        duration: 1.5
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      illusion_sword_dance:
+        type: swipe_down
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 0
+        delay: 3
+        exec_limit:
+          min_distance: 300
+      draw_sword:
+        type: touch
+        duration: 1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 700
+      ultimate_slay_tempest:
+        type: touch
+        duration: 5
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 700
+      omnislay_shooting_star:
+        type: touch
+        duration: 0.1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      flowing_stance_swift:
+        type: touch
+        duration: 0.5
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 500
+      continuous_slash:
+        type: touch
+        duration: 0.1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 300
+      raging_dragon_slash:
+        type: touch
+        duration: 0.1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 1000
+  desperado:
+    skill:
+      attack:
+        type: touch
+        duration: 2
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 500
+      headshot:
+        type: touch
+        duration: 0.1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 500
+      western_fire:
+        type: touch
+        duration: 0.1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 500
+      death_by_revolver:
+        type: swipe_left
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 0
+      wild_shot:
+        type: touch
+        duration: 3
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 400
+      multi_headshot:
+        type: touch
+        duration: 1.5
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 400
+      death_hawk:
+        type: swipe_right
+        coordinate: *default_swipe_skill
+        duration: 1.5
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 400
+      scud_genocide:
+        type: swipe_up
+        coordinate: *default_swipe_skill
+        duration: 8
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 600
+      deadly_approach:
+        type: touch
+        duration: 1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 500
+      windmill:
+        type: touch
+        duration: 1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 250
+      strike_kick:
+        type: touch
+        duration: 1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 250
+      silver_bullet:
+        type: swipe_down
+        coordinate: *default_swipe_skill
+        duration: 0.1
+        cool_down: 0
+        delay: 0
+        exec_limit:
+          min_distance: 0

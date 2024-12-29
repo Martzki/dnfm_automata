@@ -17,6 +17,7 @@ class WreckingBall(Character):
     Shotgun = "shotgun"
     SteyrAmr = "steyr_amr"
     X1Extruder = "x_1_extruder"
+    Railgun = "railgun"
 
     def __init__(self, device, ui_ctx):
         super().__init__(device, ui_ctx, CharacterClass.WreckingBall)
@@ -142,5 +143,15 @@ class WreckingBall(Character):
                 "cool_down": 1,
                 "delay": 0,
                 "exec_limit": {"min_distance": 600},
+            },
+        )
+        self.railgun = self.register_skill(
+            WreckingBall.Railgun,
+            {
+                "type": "touch",
+                "duration": 0.1,
+                "cool_down": 0,
+                "delay": 0.5,
+                "exec_limit": {"min_distance": 80, "vertical_only": True},
             },
         )

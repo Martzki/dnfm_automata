@@ -113,11 +113,15 @@ class BattleMetadata(object):
         self.down_gate = None
         self.room_id = BattleMetadata.UnknownRoomId
         self.room_confidence = 0
+        self.is_empty = True
 
         if frame is None or detector is None:
             return
 
         result = detector.inference(dungeon, frame)
+        if result:
+            self.is_empty = False
+
         for obj in result:
             if obj.category == BattleObjectCategory.Character:
                 self.character = Character(obj.left_top, obj.right_bottom)

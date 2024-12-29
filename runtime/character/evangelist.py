@@ -14,6 +14,9 @@ class Evangelist(Character):
     ShiningCross = "shining_cross"
     SpearOfVictory = "spear_of_victory"
     ValiantAria = "valiant_aria"
+    RepentantSmash = "repentant_smash"
+    PureLight = "pure_light"
+    HolyCirclet = "holy_circlet"
 
     def __init__(self, device, ui_ctx):
         super().__init__(device, ui_ctx, CharacterClass.Evangelist)
@@ -98,5 +101,32 @@ class Evangelist(Character):
                 "duration": 1,
                 "cool_down": 1,
                 "exec_limit": {"min_distance": 10},
+            },
+        )
+        self.repentant_smash = self.register_skill(
+            Evangelist.RepentantSmash,
+            {
+                "type": "touch",
+                "duration": 0.2,
+                "cool_down": 0,
+                "exec_limit": {"min_distance": 400},
+            },
+        )
+        self.pure_light = self.register_skill(
+            Evangelist.PureLight,
+            {
+                "type": "touch",
+                "duration": 0.2,
+                "cool_down": 0,
+                "exec_limit": {"min_distance": 500},
+            },
+        )
+        self.holy_circlet = self.register_skill(
+            Evangelist.HolyCirclet,
+            {
+                "type": "touch",
+                "duration": 1,
+                "cool_down": 0,
+                "exec_limit": {"min_distance": 800},
             },
         )

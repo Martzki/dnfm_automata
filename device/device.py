@@ -13,3 +13,6 @@ class Device(object):
 
     def back(self):
         pass
+
+    def swipe(self, start, end, move_step_length=50, move_steps_delay=0.05):
+        pass

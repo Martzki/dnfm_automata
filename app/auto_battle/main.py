@@ -3,13 +3,15 @@ import os
 import random
 
 import yaml
-from func_timeout import func_set_timeout, FunctionTimedOut
+from func_timeout import FunctionTimedOut
 
-from app.auto_battle.dungeons.bwanga import bwanga
-from app.auto_battle.dungeons.bwanga.bwanga import Bwanga
+from app.auto_battle.dungeons.pirates import pirates
+from app.auto_battle.dungeons.pirates.pirates import Pirates
 from app.base_app import BaseApp
 from runtime.character.champion import Champion
+from runtime.character.desperado import Desperado
 from runtime.character.evangelist import Evangelist
+from runtime.character.grand_master import GrandMaster
 from runtime.character.hell_bringer import HellBringer
 from runtime.character.noblesse import Noblesse
 from runtime.character.silent_eye import SilentEye
@@ -29,7 +31,7 @@ class AutoBattleApp(BaseApp):
     def __init__(self, device: Device, detector: Detector, character_list: list, ui_ctx: UIElementCtx):
         super(AutoBattleApp, self).__init__(device, ui_ctx)
         self.dungeons = {
-            bwanga.DUNGEON_NAME: Bwanga(device, detector, ui_ctx)
+            pirates.DUNGEON_NAME: Pirates(device, detector, ui_ctx)
         }
         for dungeon in self.dungeons.values():
             dungeon.register_rooms()
@@ -45,12 +47,12 @@ class AutoBattleApp(BaseApp):
             for each in self.character_list:
                 dungeon = self.dungeons.get(each["dungeon"])
                 if not dungeon:
-                    LOGGER.error(f"Ignore {each['id']} which has invalid dungeon config: {each['dungeon']}")
+                    LOGGER.error(f"Ignore {each['id']} which has unregistered dungeon config: {each['dungeon']}")
                     continue
 
                 self.change_character(each["id"])
                 self.return_to_base_scenario()
-                fatigue_points = self.dungeon.get_fatigue_points()
+                fatigue_points = dungeon.get_fatigue_points()
                 LOGGER.info(f"{each['id']}'s fatigue points: {fatigue_points}")
 
                 character = each["character"]
@@ -73,6 +75,8 @@ class AutoBattleApp(BaseApp):
                     LOGGER.info(f"Get original suit id: {original_suit_id}")
                     if original_suit_id != suit_id:
                         self.change_suit(suit_id)
+
+                self.set_fatigue_points_config(each.get("gain_tradable_item", True), each.get("fatigue_points_burn", False))
 
                 try:
                     self.return_to_base_scenario()
@@ -100,8 +104,10 @@ class AutoBattleApp(BaseApp):
 def get_character_list(device, app_config):
     init_func = {
         "champion": Champion,
+        "desperado": Desperado,
         "evangelist": Evangelist,
         "hell_bringer": HellBringer,
+        "grand_master": GrandMaster,
         "noblesse": Noblesse,
         "silent_eye": SilentEye,
         "trickster": Trickster,
