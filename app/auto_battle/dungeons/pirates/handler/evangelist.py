@@ -1,8 +1,6 @@
-import time
-
 from app.auto_battle.dungeons.pirates.handler.room_handler import *
-from runtime.character.character_class import CharacterClass
 from dungeon.strategy import BattleStrategy
+from runtime.character.character_class import CharacterClass
 from runtime.character.evangelist import Evangelist
 
 
@@ -101,7 +99,6 @@ class Room6Handler(PiratesRoom6Handler):
 
         evangelist.move(0, 0.3)
         evangelist.exec_skill(evangelist.grand_crashing_cross)
-
 
 
 class Room7Handler(PiratesRoom7Handler):

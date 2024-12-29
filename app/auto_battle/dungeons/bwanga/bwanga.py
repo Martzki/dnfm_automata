@@ -1,9 +1,5 @@
 from func_timeout import FunctionTimedOut
 
-from common.log import Logger
-from detector.detector import Detector
-from device.device import Device
-from dungeon.dungeon import Dungeon, DungeonRoom
 from app.auto_battle.dungeons.bwanga.handler.champion import init_handlers as champion_init_handlers
 from app.auto_battle.dungeons.bwanga.handler.evangelist import init_handlers as evangelist_init_handlers
 from app.auto_battle.dungeons.bwanga.handler.hell_bringer import init_handlers as hell_bringer_init_handlers
@@ -11,6 +7,10 @@ from app.auto_battle.dungeons.bwanga.handler.noblesse import init_handlers as no
 from app.auto_battle.dungeons.bwanga.handler.silent_eye import init_handlers as silent_sys_init_handlers
 from app.auto_battle.dungeons.bwanga.handler.trickster import init_handlers as trickster_init_handlers
 from app.auto_battle.dungeons.bwanga.handler.wrecking_ball import init_handlers as wrecking_ball_init_handlers
+from common.log import Logger
+from detector.detector import Detector
+from device.device import Device
+from dungeon.dungeon import Dungeon, DungeonRoom
 from runtime.ui import ui_elements
 from ui.ui import UIElementCtx
 
